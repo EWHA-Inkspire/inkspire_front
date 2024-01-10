@@ -3359,7 +3359,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC2A4\uD0EF \uD655\uC815"
+  m_text: "\uAC8C\uC784 \uC2DC\uC791"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c69a3263375cb04409f096eb62724eb7, type: 2}
   m_sharedMaterial: {fileID: -148280505652046821, guid: c69a3263375cb04409f096eb62724eb7, type: 2}
@@ -3948,8 +3948,9 @@ GameObject:
   - component: {fileID: 1744628988}
   - component: {fileID: 1744628987}
   - component: {fileID: 1744628986}
+  - component: {fileID: 1744628989}
   m_Layer: 5
-  m_Name: SignupButton
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4019,7 +4020,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1744628987}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1744628989}
+        m_TargetAssemblyTypeName: SceneChange, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1744628987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4058,6 +4071,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1744628984}
   m_CullTransparentMesh: 1
+--- !u!114 &1744628989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1744628984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89ffe40cd6475c742b9809204c0a0c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next_scene: Play
 --- !u!1 &1762483332
 GameObject:
   m_ObjectHideFlags: 0
