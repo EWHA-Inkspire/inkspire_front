@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterList : MonoBehaviour
-{
+{/*
     public Text displayText;
     List<string> CharacterNames = new List<string>();
     void Start()
@@ -37,5 +37,5 @@ public class CharacterList : MonoBehaviour
         }
 
         displayText.text = nameList;
-    }
+    }*/
 }
