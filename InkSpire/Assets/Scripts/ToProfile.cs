@@ -7,6 +7,6 @@ public class ToProfile : MonoBehaviour
 {
     public void SceneChange()
     {
-        SceneManager.LoadScene("Profile2");
+        SceneManager.LoadScene("Profile");
     }
 }
