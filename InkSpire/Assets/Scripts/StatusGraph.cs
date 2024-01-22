@@ -24,6 +24,7 @@ public class StatusGraph : MonoBehaviour
     private void OnStatsChanged(object sender, System.EventArgs e){
         UpdateStatsVisual();
     }
+
     private void UpdateStatsVisual(){
         Mesh mesh = new Mesh();
 
