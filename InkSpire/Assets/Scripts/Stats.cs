@@ -6,7 +6,7 @@ using UnityEngine;
 public class Stats
 {
     public event EventHandler OnStatsChanged;
-    public static int STAT_MIN = 1;
+    public static int STAT_MIN = 0;
     public static int STAT_MAX = 20;
 
     public enum Type {
