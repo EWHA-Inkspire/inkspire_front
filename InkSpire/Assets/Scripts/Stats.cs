@@ -14,7 +14,9 @@ public class Stats
         Defence, 
         Luck, 
         Intelligence,
-        Dexterity
+        Dexterity,
+        MaxHP,
+        CurrHP
     }
 
     private SingleStat stat_luk;
@@ -22,6 +24,8 @@ public class Stats
     private SingleStat stat_atk;
     private SingleStat stat_int;
     private SingleStat stat_dex;
+    private SingleStat stat_maxhp;
+    private SingleStat stat_currhp;
 
     public Stats (int luck, int defence, int intelligence, int dexterity, int attack){
         stat_atk = new SingleStat(attack);
@@ -29,23 +33,20 @@ public class Stats
         stat_luk = new SingleStat(luck);
         stat_int = new SingleStat(intelligence);
         stat_dex = new SingleStat(dexterity);
-
-
-        // SetStatAmount(Type.Attack,attack);
-        // SetStatAmount(Type.Defence,defence);
-        // SetStatAmount(Type.Luck,luck);
-        // SetStatAmount(Type.Intelligence,intelligence);
-        // SetStatAmount(Type.Dexterity,dexterity);
+        stat_maxhp = new SingleStat(1000);
+        stat_currhp = new SingleStat(1000);
     }
 
     private SingleStat GetSingleStat(Type stat_type){
      switch(stat_type)  {
         default:
-        case Type.Attack: return stat_atk;
-        case Type.Defence: return stat_def;
-        case Type.Luck: return stat_luk;
+        case Type.Attack:       return stat_atk;
+        case Type.Defence:      return stat_def;
+        case Type.Luck:         return stat_luk;
         case Type.Intelligence: return stat_int;
-        case Type.Dexterity: return stat_dex;
+        case Type.Dexterity:    return stat_dex;
+        case Type.MaxHP:        return stat_maxhp;
+        case Type.CurrHP:       return stat_currhp;
      }
     }
 
@@ -60,6 +61,16 @@ public class Stats
 
     public float GetStatAmountNormalized(Type stat_type){
         return GetSingleStat(stat_type).GetStatAmountNormalized();
+    }
+
+    public Type parseEnumType(string orgstring){
+        if(Enum.IsDefined(typeof(Type),orgstring)){
+            return (Type)Enum.Parse(typeof(Type),orgstring);
+        }
+        else
+        {
+            return Type.Attack;
+        }
     }
 
 

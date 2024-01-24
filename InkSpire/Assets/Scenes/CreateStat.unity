@@ -3948,7 +3948,6 @@ GameObject:
   - component: {fileID: 1744628988}
   - component: {fileID: 1744628987}
   - component: {fileID: 1744628986}
-  - component: {fileID: 1744628989}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -4021,9 +4020,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1744628989}
-        m_TargetAssemblyTypeName: SceneChange, Assembly-CSharp
-        m_MethodName: ChangeScene
+      - m_Target: {fileID: 1856482241}
+        m_TargetAssemblyTypeName: CreateStatScene, Assembly-CSharp
+        m_MethodName: SetCharacterStat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4071,19 +4070,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1744628984}
   m_CullTransparentMesh: 1
---- !u!114 &1744628989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1744628984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89ffe40cd6475c742b9809204c0a0c66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  next_scene: Play
 --- !u!1 &1762483332
 GameObject:
   m_ObjectHideFlags: 0
@@ -4441,6 +4427,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1856482239}
   - component: {fileID: 1856482240}
+  - component: {fileID: 1856482241}
   m_Layer: 5
   m_Name: Components
   m_TagString: Untagged
@@ -4500,6 +4487,23 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1856482241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856482238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c1f761ec2d2cc04f8f2749ab05590ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  atk: {fileID: 408357144}
+  def: {fileID: 4178584}
+  luk: {fileID: 607131811}
+  intl: {fileID: 381875742}
+  dex: {fileID: 1874792525}
 --- !u!1 &1872481015
 GameObject:
   m_ObjectHideFlags: 0
