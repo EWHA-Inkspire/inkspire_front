@@ -11,9 +11,12 @@ public class PlayScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI title_chapnum;
     [SerializeField] TextMeshProUGUI battle_stat;
 
+    [SerializeField] GameObject item_list;
     [SerializeField] Slider slider_HP;
 
     public int int_chapnum;
+    public InventorySlot slotPrefab;
+    public InventorySlot[] slot_list = new InventorySlot[8];
 
     void Start(){
         string rome_chapnum;
@@ -41,6 +44,18 @@ public class PlayScene : MonoBehaviour
         header_HP.text = PlayerStatManager.playerstat.GetStatAmount("CurrHP").ToString()+" / "+PlayerStatManager.playerstat.GetStatAmount("MaxHP").ToString();
         title_chapnum.text = "Chapter "+rome_chapnum;
         battle_stat.text = "공격: "+PlayerStatManager.playerstat.GetStatAmount("Attack").ToString()+" | 방어: "+PlayerStatManager.playerstat.GetStatAmount("Defence").ToString()+" | 민첩: "+PlayerStatManager.playerstat.GetStatAmount("Dexterity").ToString()+" | 행운: "+PlayerStatManager.playerstat.GetStatAmount("Luck").ToString();
+        
+        if(slotPrefab!=null){
+            for(int i = 0; i<8; i++){
+                InventorySlot newSlot = Instantiate(slotPrefab);
+                if(i<InventoryManager.inventory.next_idx){
+                    newSlot.setItem(InventoryManager.inventory.inventorylist[i].GetItemName(),InventoryManager.inventory.inventorylist[i].GetItemQuant());
+                }
+                newSlot.name = "ItemSlot_"+i;
+                newSlot.transform.SetParent(item_list.transform);
+                slot_list[i] = newSlot;
+            }
+        }
     }
 
     void Update(){
