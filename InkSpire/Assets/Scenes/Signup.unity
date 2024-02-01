@@ -819,7 +819,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1516905530}
+        m_TargetAssemblyTypeName: SIgnUpScene, Assembly-CSharp
+        m_MethodName: SetCheckPW
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1101,7 +1113,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1516905530}
+        m_TargetAssemblyTypeName: SIgnUpScene, Assembly-CSharp
+        m_MethodName: SetEmail
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1535,7 +1559,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1516905530}
+        m_TargetAssemblyTypeName: SIgnUpScene, Assembly-CSharp
+        m_MethodName: SetNickname
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1711,7 +1747,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1516905530}
+        m_TargetAssemblyTypeName: SIgnUpScene, Assembly-CSharp
+        m_MethodName: SetPassword
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1796,6 +1844,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1516905528}
   - component: {fileID: 1516905529}
+  - component: {fileID: 1516905530}
   m_Layer: 5
   m_Name: Components
   m_TagString: Untagged
@@ -1857,6 +1906,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1516905530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516905527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 988946fb231cfd6479c9a301a2ed91e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input_email: {fileID: 1129066881}
+  input_nickname: {fileID: 1256204562}
+  input_pw: {fileID: 1363538318}
+  input_pwcheck: {fileID: 675277862}
 --- !u!1 &1620274679
 GameObject:
   m_ObjectHideFlags: 0
@@ -2998,7 +3063,6 @@ GameObject:
   - component: {fileID: 2066770475}
   - component: {fileID: 2066770474}
   - component: {fileID: 2066770473}
-  - component: {fileID: 2066770476}
   m_Layer: 5
   m_Name: SignupButton
   m_TagString: Untagged
@@ -3071,9 +3135,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2066770476}
-        m_TargetAssemblyTypeName: SceneChange, Assembly-CSharp
-        m_MethodName: ChangeScene
+      - m_Target: {fileID: 1516905530}
+        m_TargetAssemblyTypeName: SIgnUpScene, Assembly-CSharp
+        m_MethodName: SignupButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3121,16 +3185,3 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2066770471}
   m_CullTransparentMesh: 1
---- !u!114 &2066770476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066770471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89ffe40cd6475c742b9809204c0a0c66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  next_scene: Login
