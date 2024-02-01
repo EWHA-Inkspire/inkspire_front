@@ -13,6 +13,7 @@ public class PlayerStatManager : MonoBehaviour
     public string charname;
     public string time_background;
     public string space_background;
+    public string genre;
 
     // 플레이어 스탯을 싱글톤으로 관리
     public static PlayerStatManager playerstat;
@@ -33,12 +34,14 @@ public class PlayerStatManager : MonoBehaviour
     }
     
     public int GetStatAmount(string stat_type){
-        // stats에 enum 변경하는 함수 만들고 수정 
         return p_stats.GetStatAmount(p_stats.parseEnumType(stat_type));
+    }
+    public void SetSingleStat(string stat_type, int stat_amount){
+        p_stats.SetStatAmount(p_stats.parseEnumType(stat_type),stat_amount);
+        p_stats.OnStatsChanged += OnStatsChanged;
     }
 
     public void ChangeSingleStat(string stat_type, int delta_amount){
-        // stats에 enum 변경하는 함수 만들고 수정 
         p_stats.SetStatAmount(p_stats.parseEnumType(stat_type),p_stats.GetStatAmount(p_stats.parseEnumType(stat_type))+delta_amount);
         p_stats.OnStatsChanged += OnStatsChanged;
     }
