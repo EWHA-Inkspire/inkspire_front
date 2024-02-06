@@ -19,7 +19,7 @@ public class LoginScene : MonoBehaviour
             string login_json = JsonUtility.ToJson(login_info);
             Debug.Log(login_json);
             // 서버와 통신하여 로그인
-            //SceneManager.LoadScene("");
+            SceneManager.LoadScene("");
         }
         else{
             Debug.Log("SignupError: pw and pwcheck not same");
