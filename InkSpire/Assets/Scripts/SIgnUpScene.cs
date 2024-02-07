@@ -12,6 +12,8 @@ public class SIgnUpScene : MonoBehaviour
     [SerializeField] TMP_InputField input_pw;
     [SerializeField] TMP_InputField input_pwcheck;
 
+    [SerializeField] TextMeshProUGUI wrong_pw;
+
     string new_email;
     string new_nickname;
     string new_password;
@@ -26,10 +28,11 @@ public class SIgnUpScene : MonoBehaviour
             string account_json = JsonUtility.ToJson(account);
             Debug.Log(account_json);
             // 서버와 통신하여 계정 생성
-            //SceneManager.LoadScene("Login");
+            SceneManager.LoadScene("Login");
         }
         else{
             Debug.Log("SignupError: pw and pwcheck not same");
+            wrong_pw.text = "비밀번호가 맞는지 다시 확인해주세요";
         }
     }
 
