@@ -11,9 +11,7 @@ public class PlayerStatManager : MonoBehaviour
     public int intl;
     public int dex;
     public string charname;
-    public string time_background;
-    public string space_background;
-    public string genre;
+    
 
     // 플레이어 스탯을 싱글톤으로 관리
     public static PlayerStatManager playerstat;
