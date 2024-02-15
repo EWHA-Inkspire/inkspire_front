@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Items
 {
-    public enum Type{
-        Heal,
-        Battle,
-        Wheapone, 
-        Chapter
+    public enum Type
+    {
+        Recover,
+        Mob,
+        Weapon
     }
 
     int item_id;
@@ -19,7 +19,8 @@ public class Items
     Type type;
     int quantity;
 
-    public Items(int itemid,int mapid,string itemname,string itemdetail,string itemtype, int iquant){
+    public Items(int itemid, int mapid, string itemname, string itemdetail, string itemtype, int iquant)
+    {
         item_id = itemid;
         map_id = mapid;
         name = itemname;
@@ -28,19 +29,23 @@ public class Items
         quantity = iquant;
 
     }
-    public string GetItemName(){
+    public string GetItemName()
+    {
         return name;
     }
-    public int GetItemQuant(){
+    public int GetItemQuant()
+    {
         return quantity;
     }
-    public Type parseEnumType(string orgstring){
-        if(Enum.IsDefined(typeof(Type),orgstring)){
-            return (Type)Enum.Parse(typeof(Type),orgstring);
+    public Type parseEnumType(string orgstring)
+    {
+        if (Enum.IsDefined(typeof(Type), orgstring))
+        {
+            return (Type)Enum.Parse(typeof(Type), orgstring);
         }
         else
         {
-            return Type.Heal;
+            return Type.Recover;
         }
     }
 }
