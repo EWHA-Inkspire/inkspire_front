@@ -8,7 +8,7 @@ public class PlayerStatManager : MonoBehaviour
     public int atk;
     public int def;
     public int luk;
-    public int intl;
+    public int mental;
     public int dex;
     public string charname;
     
@@ -26,7 +26,7 @@ public class PlayerStatManager : MonoBehaviour
             playerstat=this;
         }
 
-        p_stats = new Stats(luk,def,intl,dex,atk);
+        p_stats = new Stats(luk,def,mental,dex,atk);
         p_stats.SetStatAmount(Stats.Type.CurrHP,5);
 
     }

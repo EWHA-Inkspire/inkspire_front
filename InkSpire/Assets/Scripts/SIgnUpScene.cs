@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class SIgnUpScene : MonoBehaviour
 {
@@ -27,12 +27,13 @@ public class SIgnUpScene : MonoBehaviour
             account.password = new_password;
             string account_json = JsonUtility.ToJson(account);
             Debug.Log(account_json);
-            // 서버와 통신하여 계정 생성
-            SceneManager.LoadScene("Login");
+            StartCoroutine(PostNewAccount(new_email,new_password,new_nickname));
+            //씬이 넘어가면 코루틴 안되는듯 수정할것
+            //SceneManager.LoadScene("Login");
         }
         else{
             Debug.Log("SignupError: pw and pwcheck not same");
-            wrong_pw.text = "비밀번호가 맞는지 다시 확인해주세요";
+            wrong_pw.text = "비밀번호가 일치하지 않습니다.";
         }
     }
 
@@ -56,5 +57,23 @@ public class SIgnUpScene : MonoBehaviour
         public string email;
         public string nickname;
         public string password;
+    }
+
+    IEnumerator PostNewAccount(string email, string password, string nickname){
+        Debug.Log("upload start");
+        WWWForm form = new WWWForm();
+        form.AddField("email",email);
+        form.AddField("password",password);
+        form.AddField("nickname",nickname);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://3.35.61.61:8080/users/signup",form);
+        yield return www.SendWebRequest();
+
+        if(www.result != UnityWebRequest.Result.Success){
+            Debug.Log(www.error);
+        }
+        else{
+            Debug.Log(">>NewAccount upload complete.");
+        }
     }
 }

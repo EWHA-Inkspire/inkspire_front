@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
-using System;
+
+
 
 public class CreateCharacterScene : MonoBehaviour
 {

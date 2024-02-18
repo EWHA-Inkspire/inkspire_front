@@ -13,7 +13,7 @@ public class Stats
         Attack,
         Defence, 
         Luck, 
-        Intelligence,
+        Mental,
         Dexterity,
         MaxHP,
         CurrHP
@@ -22,16 +22,16 @@ public class Stats
     private SingleStat stat_luk;
     private SingleStat stat_def;
     private SingleStat stat_atk;
-    private SingleStat stat_int;
+    private SingleStat stat_mntl;
     private SingleStat stat_dex;
     private SingleStat stat_maxhp;
     private SingleStat stat_currhp;
 
-    public Stats (int luck, int defence, int intelligence, int dexterity, int attack){
+    public Stats (int luck, int defence, int mental, int dexterity, int attack){
         stat_atk = new SingleStat(attack);
         stat_def = new SingleStat(defence);
         stat_luk = new SingleStat(luck);
-        stat_int = new SingleStat(intelligence);
+        stat_mntl = new SingleStat(mental);
         stat_dex = new SingleStat(dexterity);
         stat_maxhp = new SingleStat(1000);
         stat_currhp = new SingleStat(1000);
@@ -43,7 +43,7 @@ public class Stats
         case Type.Attack:       return stat_atk;
         case Type.Defence:      return stat_def;
         case Type.Luck:         return stat_luk;
-        case Type.Intelligence: return stat_int;
+        case Type.Mental:       return stat_mntl;
         case Type.Dexterity:    return stat_dex;
         case Type.MaxHP:        return stat_maxhp;
         case Type.CurrHP:       return stat_currhp;

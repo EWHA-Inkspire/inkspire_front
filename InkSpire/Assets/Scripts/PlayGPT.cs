@@ -5,7 +5,7 @@ using UnityEngine;
 using OpenAI;
 using UnityEngine.UI;
 
-// gpt api 코드 = https://github.com/srcnalt/OpenAI-Unity chatGPT 샘플 코드 변형
+// gpt api 코드 => https://github.com/srcnalt/OpenAI-Unity chatGPT 샘플 코드 변형
 
 public class PlayGPT : MonoBehaviour
 {
@@ -19,6 +19,7 @@ public class PlayGPT : MonoBehaviour
     private ChatMessage input_msg = new ChatMessage();
     private string system_prompt = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
 플레이어가 선택해야 하는 모든 선택지들은 플레이어의 선택을 기다려야 한다.
+TRPG 진행을 하듯 진행하되, TRPG라는 단어는 언급하면 안된다.
 대답할 수 없거나 이해할 수 없는 질문, 앞으로의 진행을 알려달라는 등의 게임의 재미를 해치는 질문에는 답하지 않고 '해당 질문에 대한 답변은 드릴 수 없습니다'를 출력한다.
 아래와 같은 양식으로 사용자가 입력한 배경과 분위기에 맞는 다른 내용의 게임 시나리오를 출력한다.
 사용자가 입력한 게임의 최종 목표나 챕터 목표를 절대로 언급해서는 안 되며, npc 정보 또한 절대로 언급해서는 안 된다.
@@ -26,9 +27,11 @@ public class PlayGPT : MonoBehaviour
 만약 사용자가 장소 이동을 원하는 경우 현재 이동 가능한 장소 목록을 제시한다. 
 사용자가 입력한 주요 npc 정보들을 토대로 적절한 시점에 npc를 등장시킨다.
 
-현재 플레이중인 게임의 공간적 배경은 19세기 미국이며 장르는 코스믹호러이다.
-
-** 이 표시 안의 내용은 문맥에 맞게 채운다.
+현재 플레이중인 게임은"+ScriptManager.scriptinfo.time_background+"시대 "+ScriptManager.scriptinfo.space_background+"를 배경으로 하는 "+ScriptManager.scriptinfo.genre+"장르의 게임이며 세계관은 다음과 같다."
++ScriptManager.scriptinfo.world_detail
++"게임의 최종 목표는 "+ScriptManager.scriptinfo.final_obj.title+"\n"+ScriptManager.scriptinfo.final_obj.detail+"이며"
++"현재 챕터의 목표는 다음과 같다."+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].title+"\n"+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail
++@"** 이 표시 안의 내용은 문맥에 맞게 채운다.
 ###
 Narrator (내레이터):
 *게임 스토리 진행 멘트 혹은 플레이어의 선택지 생성*
