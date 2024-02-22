@@ -13,8 +13,8 @@ public class MapManager : MonoBehaviour
         public string place_name; //장소 이름
         public string place_info; //장소 설명
         public string item_name; //아이템 이름
-        public string item_type; //recover, weapon, mob, null (목표이벤트일 경우 report 추가)
-        public bool event_type; //일반 이벤트 == 0, 목표 이벤트 == 1 
+        public string item_type; //일반 이벤트일 경우 아이템, 목표 이벤트일 경우 목표
+        public bool event_type; //일반 이벤트인지 목표 이벤트인지
         public bool ANPC_exist; //ANPC 등장 여부
     }
 
@@ -24,6 +24,14 @@ public class MapManager : MonoBehaviour
         Recover,
         Mob,
         Weapon
+    }
+
+    //이것도 목표 스크립트에서 가져오는걸로
+    public enum GoalType
+    {
+        Item,
+        Report,
+        Monster
     }
     public place[] map = new place[14];
     public string PNPC_place;
@@ -61,16 +69,34 @@ public class MapManager : MonoBehaviour
 
     }
 
-    public void ChooseItemType()
+    public static string? ChooseItemType()
     {
-        if (place.event_type == 1)
-            place.ANPC_exist = 0;
-        else
+        if (place.event_type == 0) //일반 이벤트일 경우
         {
+            //enum의 모든 값 리스트로 가져오기 : Recover, Mob, Weapon
+            List<string> values = new List<string>(Enum.GetNames(typeof(ItemType)));
+            //null 항목 4개 추가
+            for (int i = 0; i < 4; i++)
+                values.Add("NULL");
+            //돌려돌려돌림판
             Random random = new Random();
-            place.ANPC_exist = random.Next(2);
+            int randomIdx = random.Next(values.Count);
+
+            place.item_type = values[randomidx];
+        }
+        else //목표 이벤트일 경우
+        {
+            //enum의 모든 값 리스트로 가져오기 : Item, Report, Monster
+            List<string> values = new List<string>(Enum.GetNames(typeof(GoalType)));
+            //돌려돌려돌림판
+            Random random = new Random();
+            int randomIdx = random.Next(values.Count);
+
+            place.item_type = values[randomIdx];
         }
     }
+
+    //일반 이벤트 == 0, 목표 이벤트 == 1 
     public void ChooseEventType()
     {
         if (place.event_type == 1)
