@@ -45,9 +45,11 @@ Narrator (내레이터):
     private string system_setting;
     
 
-    void Awake(){
+    void Awake()
+    {
         story_object.text = "";
-        if(messages.Count == 0){
+        if (messages.Count == 0)
+        {
             var newMessage = new ChatMessage()
             {
                 Role = "system",
@@ -60,28 +62,31 @@ Narrator (내레이터):
         //                     적대자 NPC 이름은 "+ANPC_name + "이고," + ANPC_info + "처럼 행동해야 해";
         // system_setting += "이 게임의 최종 목표는 " + final_title + final_content + "이고 현재 챕터의 목표는 " + chapter_title + chapter_content + "이야.";
     }
-    
-    public void SendButton(){
+
+    public void SendButton()
+    {
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
-        
+
         AppendMsg(input_msg);
         SendReply();
 
         
         dice_event.SetDiceEvent(50);
     }
-    void AppendMsg(ChatMessage msg){
+    void AppendMsg(ChatMessage msg)
+    {
         string add_text = "";
-        if(msg.Role =="user"){
-            add_text += PlayerStatManager.playerstat.charname+"> ";
+        if (msg.Role == "user")
+        {
+            add_text += PlayerStatManager.playerstat.charname + "> ";
         }
 
         add_text += msg.Content;
 
-        story_object.text += add_text+"\n\n";
+        story_object.text += add_text + "\n\n";
         LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
-        scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,scroll.content.sizeDelta.y);
+        scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scroll.content.sizeDelta.y);
         scroll.verticalNormalizedPosition = 0f;
     }
 
@@ -92,13 +97,13 @@ Narrator (내레이터):
             Role = "user",
             Content = player_input.text
         };
-        
+
         messages.Add(newMessage);
-        
+
         button.enabled = false;
         player_input.text = "";
         player_input.enabled = false;
-        
+
         // Complete the instruction
         var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
         {
@@ -110,7 +115,7 @@ Narrator (내레이터):
         {
             var message = completionResponse.Choices[0].Message;
             message.Content = message.Content.Trim();
-            
+
             messages.Add(message);
             AppendMsg(message);
         }
