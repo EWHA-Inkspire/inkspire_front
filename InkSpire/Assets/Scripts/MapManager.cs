@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using OpenAI;
@@ -9,12 +10,20 @@ public class MapManager : MonoBehaviour
     public static MapManager mapinfo;
     public struct place
     {
-        public string place_name;
+        public string place_name; //장소 이름
         public string place_info; //장소 설명
-        public string item_name;
+        public string item_name; //아이템 이름
         public string item_type; //recover, weapon, mob, null (목표이벤트일 경우 report 추가)
         public bool event_type; //일반 이벤트 == 0, 목표 이벤트 == 1 
-        public bool ANPC_exist; //ANPC 미등장 == 0, 등장 == 1 (목표이벤트일 경우 무조건 0)
+        public bool ANPC_exist; //ANPC 등장 여부
+    }
+
+    //이거 나중에 아이템 스크립트에서 가져오는걸로 수정해야 함
+    public enum ItemType
+    {
+        Recover,
+        Mob,
+        Weapon
     }
     public place[] map = new place[14];
     public string PNPC_place;
@@ -23,21 +32,6 @@ public class MapManager : MonoBehaviour
     private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> messages = new List<ChatMessage>();
     private ChatMessage input_msg = new ChatMessage();
-    private string system_prompt = "너는 플레이어가 탐색할 수 있는 장소를 한 단어로 출력해야 해.";
-    //background + " 배경의 " + genre + "분위기에 어울리는 장소명 1개를 출력해줘";
-
-    // def getProtaNPCName(background, genre):
-    // npc_setting = "너는 조력자 NPC 캐릭터의 이름을 한 단어로 출력해야 해."
-    // query = background + " 배경의 " + genre + "분위기에 어울리는 조력자 NPC 이름 1개를 출력해줘"
-
-    // messages = [
-    //     {"role": "system", "content": npc_setting},
-    //     {"role": "user", "content": query}
-    // ]
-
-    // PNPC_name = callGPT(messages=messages, stream=False)
-
-    // return PNPC_name
 
     void Awake()
     {
@@ -62,13 +56,50 @@ public class MapManager : MonoBehaviour
     {
 
     }
+    private async void CreateEventTrigger()
+    {
+
+    }
+
+    public void ChooseItemType()
+    {
+        if (place.event_type == 1)
+            place.ANPC_exist = 0;
+        else
+        {
+            Random random = new Random();
+            place.ANPC_exist = random.Next(2);
+        }
+    }
+    public void ChooseEventType()
+    {
+        if (place.event_type == 1)
+            place.ANPC_exist = 0;
+        else
+        {
+            Random random = new Random();
+            place.ANPC_exist = random.Next(2);
+        }
+    }
+
+    //ANPC 미등장 == 0, 등장 == 1 (목표이벤트일 경우 무조건 0)
+    public void isANPCexists()
+    {
+        if (place.event_type == 1)
+            place.ANPC_exist = 0;
+        else
+        {
+            Random random = new Random();
+            place.ANPC_exist = random.Next(2);
+        }
+    }
     private async void CreatePlace(int place_idx)
     {
         Debug.Log(">>Call Create Place GPT");
         Debug.Log(">>현재 장소 인덱스: " + place_idx);
         gpt_messages.Clear();
 
-        if (place_idx == 0)
+        if (place_idx == 0) //장소 인덱스가 0일 경우 PNPC 장소 생성
         {
             var prompt_msg = new ChatMessage()
             {
@@ -84,7 +115,7 @@ public class MapManager : MonoBehaviour
             장소설명: *장소에 대한 설명을 50자 내외로 설명 * "
             };
         }
-        else
+        else //장소 인덱스가 0이 아닐 경우 일반 장소 생성
         {
             var prompt_msg = new ChatMessage()
             {
@@ -119,9 +150,9 @@ public class MapManager : MonoBehaviour
             var message = completionResponse.Choices[0].Message;
             message.Content = message.Content.Trim();
             Debug.Log(message.Content);
-            chapter_obj[chapter_num + 1] = StringToObjective(message.Content);
-            curr_chapter = chapter_num + 1;
-            if (curr_chapter != 1)
+            map[place_idx] = StringToPlace(message.Content);
+            curr_place = place_idx; //curr_chapter가 어디에서 i++되는 변수인지 확인하기
+            if (curr_place != 1)
             {
                 //StartCoroutine(PostChapterObjective(curr_chapter));
             }
