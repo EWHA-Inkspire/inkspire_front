@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class PlayGPT : MonoBehaviour
 {
+    [SerializeField] DiceEvent dice_event;
     [SerializeField] private TMP_InputField player_input;
     [SerializeField] private TextMeshProUGUI story_object;
     [SerializeField] private Button button;
@@ -42,6 +43,7 @@ Narrator (내레이터):
 *npc 대사 내용*
 ###";
     private string system_setting;
+    
 
     void Awake(){
         story_object.text = "";
@@ -66,8 +68,8 @@ Narrator (내레이터):
         AppendMsg(input_msg);
         SendReply();
 
-
-
+        
+        dice_event.SetDiceEvent(50);
     }
     void AppendMsg(ChatMessage msg){
         string add_text = "";
