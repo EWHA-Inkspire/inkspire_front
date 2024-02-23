@@ -52,21 +52,17 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    //맵 생성 함수
+    //맵 생성 함수 (GPT 사용하지 않는 기능)
     public void DrawMap()
     {
         //PNPC 장소 생성
         place_idx = 0;
         CreatePlace();
         place_idx++;
-        // 모든 챕터의 장소 이벤트 타입 생성
+        // 모든 챕터의 장소 설정
         ChooseEventType();
-
-        CreatePlace();
-        CreateItem();
+        IsANPCexists();
         ChooseItemType();
-        isANPCexists();
-        CreateEventTrigger();
     }
     public void setBackground(string time, string space, string gen)
     {
@@ -189,42 +185,50 @@ public class MapManager : MonoBehaviour
 
     }
 
-    public static string? ChooseItemType()
+    //아이템 타입 결정 함수
+    public static void ChooseItemType()
     {
-        if (place.event_type == 0) //일반 이벤트일 경우
+        int i = 0;
+        Random random = new Random();
+        while (i < 13)
         {
-            //enum의 모든 값 리스트로 가져오기 : Recover, Mob, Weapon
-            List<string> values = new List<string>(Enum.GetNames(typeof(ItemType)));
-            //null 항목 4개 추가
-            for (int i = 0; i < 4; i++)
-                values.Add("NULL");
-            //돌려돌려돌림판
-            Random random = new Random();
-            int randomIdx = random.Next(values.Count);
+            if (map[i].event_type == 0) //일반 이벤트일 경우
+            {
+                //enum의 모든 값 리스트로 가져오기 : Recover, Mob, Weapon
+                List<string> values = new List<string>(Enum.GetNames(typeof(ItemType)));
+                //null 항목 4개 추가
+                for (int idx = 0; idx < 4; idx++)
+                    values.Add("NULL");
+                //돌려돌려돌림판
+                int randomIdx = random.Next(values.Count);
 
-            place.item_type = values[randomidx];
-        }
-        else //목표 이벤트일 경우
-        {
-            //enum의 모든 값 리스트로 가져오기 : Item, Report, Monster
-            List<string> values = new List<string>(Enum.GetNames(typeof(GoalType)));
-            //돌려돌려돌림판
-            Random random = new Random();
-            int randomIdx = random.Next(values.Count);
+                map[i].item_type = values[randomIdx];
+            }
+            else //목표 이벤트일 경우
+            {
+                //enum의 모든 값 리스트로 가져오기 : Item, Report, Monster
+                List<string> values = new List<string>(Enum.GetNames(typeof(GoalType)));
+                //돌려돌려돌림판
+                int randomIdx = random.Next(values.Count);
 
-            place.item_type = values[randomIdx];
+                map[i].item_type = values[randomIdx];
+            }
+            i++;
         }
     }
 
     //ANPC 미등장 == 0, 등장 == 1 (목표이벤트일 경우 무조건 0)
-    public void isANPCexists()
+    public void IsANPCexists()
     {
-        if (place.event_type == 1)
-            place.ANPC_exist = 0;
-        else
+        Random random = new Random();
+        int i = 1;
+        while (i < 13)
         {
-            Random random = new Random();
-            place.ANPC_exist = random.Next(2);
+            if (map[i].event_type == 1)
+                map[i].ANPC_exist = 0;
+            else
+                map[i].ANPC_exist = random.Next(2);
+            i++;
         }
     }
     private async void CreatePlace(int place_idx)
