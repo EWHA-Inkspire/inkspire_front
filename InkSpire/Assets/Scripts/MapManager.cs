@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using OpenAI;
 using UnityEngine;
 using UnityEngine.Networking;
+using ScriptManagerNamespace;
 
 public class MapManager : MonoBehaviour
 {
@@ -166,11 +167,63 @@ public class MapManager : MonoBehaviour
         {
             Debug.LogWarning("No text was generated from this prompt.");
         }
-
     }
-    private async void CreateEventTrigger()
+    private async void CreateEventTrigger(int place_idx)
     {
+        Debug.Log(">>Call Create EventTrigger GPT");
+        Debug.Log(">>현재 장소 인덱스: " + place_idx);
+        gpt_messages.Clear();
+        if (map[place_idx].item_type == "Mob")
+            return null;
+        var prompt_msg = new ChatMessage()
+        {
+            Role = "system",
+            Content = @"당신은 진행될 게임에서 챕터 목표에 가까워지는 시점을 미리 판단하여 해당 시점을 주사위 이벤트 등장 조건으로 설정한다.
+    챕터 목표가 아이템 습득일 경우 해당 아이템을 얻을 수 있는 장소에 도달했을 때를 주사위 이벤트 등장 조건으로 하며, 적 처치일 경우 적을 마주친 순간을 주사위 이벤트 등장 조건으로 설정한다.
+    주사위 이벤트 등장 조건은 챕터 목표와 깊은 연관이 있으며 플레이어가 목표 달성에 근접하였을 때 발생해야 한다.
+    이벤트 내용은 구체적인 사건의 실마리가 포함되어야 한다." + "현재 진행 중인 챕터의 목표는" + chapter_obj + "이며 목표 달성 조건은 " + obj_require + "이다.다음은 게임의 배경인 "
+    + background + "배경의 마을에 대한 설명이다.\n" + town_detail +
 
+    @"아래와 같은 양식으로 주사위 이벤트 등장 조건과 내용을 설정한다. * *이 표시 안의 내용은 문맥에 맞게 채운다.
+    
+    주사위 이벤트 등장 조건:*챕터 목표 달성과 직접적으로 관련이 있는 구체적인 상황 혹은 플레이어의 행동 묘사*
+    주사위 이벤트 내용:*주사위 판정을 통해 진행할 행동 또는 사건*
+    주사위 성공: *주사위 성공 시 진행될 스토리 요약*
+    주사위 실패: *주사위 실패 시 진행될 스토리 요약 * "
+        };
+        gpt_messages.Add(prompt_msg);
+
+        var query_msg = new ChatMessage()
+        {
+            Role = "user",
+            Content = "챕터 목표와 관련있는 주사위 이벤트 발생 조건 생성"
+        };
+        gpt_messages.Add(query_msg);
+
+        // Complete the instruction
+        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
+        {
+            Model = "gpt-3.5-turbo",
+            Messages = gpt_messages
+        });
+
+        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
+        {
+            var message = completionResponse.Choices[0].Message;
+            message.Content = message.Content.Trim();
+            Debug.Log(message.Content);
+            map[place_idx].event_trigger = message.Content; //이거 파싱 어케할지 고민
+            curr_place = place_idx; //curr_chapter가 어디에서 i++되는 변수인지 확인하기
+            if (curr_place != 1)
+            {
+                //StartCoroutine(PostChapterObjective(curr_chapter));
+            }
+
+        }
+        else
+        {
+            Debug.LogWarning("No text was generated from this prompt.");
+        }
     }
 
     //아이템 타입 결정 함수
