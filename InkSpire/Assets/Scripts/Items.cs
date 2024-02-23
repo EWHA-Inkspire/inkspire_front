@@ -9,7 +9,8 @@ public class Items
     {
         Recover,
         Mob,
-        Weapon
+        Weapon, 
+        Report
     }
 
     int item_id;

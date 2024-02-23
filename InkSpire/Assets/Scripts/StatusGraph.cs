@@ -37,7 +37,7 @@ public class StatusGraph : MonoBehaviour
 
         Vector3 vertex_luk = Quaternion.Euler(0,0,-angle*0)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(Stats.Type.Luck);
         Vector3 vertex_def = Quaternion.Euler(0,0,-angle*1)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(Stats.Type.Defence);
-        Vector3 vertex_int = Quaternion.Euler(0,0,-angle*2)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(Stats.Type.Intelligence);
+        Vector3 vertex_int = Quaternion.Euler(0,0,-angle*2)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(Stats.Type.Mental);
         Vector3 vertex_dex = Quaternion.Euler(0,0,-angle*3)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(Stats.Type.Dexterity);
         Vector3 vertex_atk = Quaternion.Euler(0,0,-angle*4)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(Stats.Type.Attack);
 
