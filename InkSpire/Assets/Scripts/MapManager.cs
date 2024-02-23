@@ -76,37 +76,38 @@ public class MapManager : MonoBehaviour
     public void ChooseEventType()
     {
         Random random = new Random();
+        int i = 1;
         int flag = 0;
-        while (place_idx < 13)
+        while (i < 13)
         {
             flag = random.Next(3);
             if (flag == 0)
-                map[place_idx].event_type = 1;
+                map[i].event_type = 1;
             else
-                map[place_idx].event_type = 0;
-            if (map[place_idx].event_type == 1) //100
+                map[i].event_type = 0;
+            if (map[i].event_type == 1) //100
             {
-                map[place_idx + 1].event_type = 0;
-                map[place_idx + 2].event_type = 0;
-                place_idx += 3;
+                map[i + 1].event_type = 0;
+                map[i + 2].event_type = 0;
+                i += 3;
                 continue;
             }
             else
             {
-                place_idx++;
-                map[place_idx].event_type = random.Next(2);
-                if (map[place_idx].event_type == 1) //010
-                    map[place_idx + 1].event_type = 0;
+                i++;
+                map[i].event_type = random.Next(2);
+                if (map[i].event_type == 1) //010
+                    map[i + 1].event_type = 0;
                 else
-                    map[place_idx + 1].event_type = 1; //001
-                place_idx += 2;
+                    map[i + 1].event_type = 1; //001
+                i += 2;
             }
         }
-        if (place_idx == 13) //최종 에필로그 보스방
+        if (i == 13) //최종 에필로그 보스방
         {
-            map[place_idx].item_type = "NULL";
-            map[place_idx].event_type = 1;
-            map[place_idx].ANPC_exist = 0;
+            map[i].item_type = "NULL";
+            map[i].event_type = 1;
+            map[i].ANPC_exist = 0;
         }
     }
     private async void CreateItem()
