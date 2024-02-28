@@ -11,7 +11,8 @@ public class ScriptManager : MonoBehaviour
     // 스크립트 정보를 싱글톤으로 관리
     public static ScriptManager scriptinfo;
 
-    public struct objective{
+    public struct objective
+    {
         public string type;
         public string title;
         public string detail;
@@ -31,29 +32,33 @@ public class ScriptManager : MonoBehaviour
     public string genre;
 
 
-    public string world_detail="세계관이 아직 생성되지 않았으므로 사용자가 제시한 장르와 배경에 맞는 목표를 적절히 제시한다.";
+    public string world_detail = "세계관이 아직 생성되지 않았으므로 사용자가 제시한 장르와 배경에 맞는 목표를 적절히 제시한다.";
 
 
 
     private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
 
-    void Awake(){
+    void Awake()
+    {
         // 씬이 바뀔 때 파괴되지 않음
         DontDestroyOnLoad(this.gameObject);
 
-        if(scriptinfo == null){
-            scriptinfo=this;
+        if (scriptinfo == null)
+        {
+            scriptinfo = this;
         }
     }
-    public void setBackground(string time, string space, string gen){
+    public void setBackground(string time, string space, string gen)
+    {
         time_background = time;
         space_background = space;
         genre = gen;
         FinalObjectiveGPT();
     }
 
-    private async void FinalObjectiveGPT(){
+    private async void FinalObjectiveGPT()
+    {
         Debug.Log(">>Call Final Objective GPT");
         gpt_messages.Clear();
 
@@ -73,7 +78,7 @@ public class ScriptManager : MonoBehaviour
             비고:*얻어야 할 정보의 진상을 한문장으로 출력*
 
             다음은 게임의 배경인 
-            "+time_background+"시대"+space_background+"를 배경으로 하는 세계관에 대한 설명이다."+world_detail+
+            " + time_background + "시대" + space_background + "를 배경으로 하는 세계관에 대한 설명이다." + world_detail +
             @"아래와 같은 양식으로 게임의 목표를 설정한다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
 
             최종목표유형: *위의 유형 1~3 중 하나를 숫자만 출력*
@@ -82,11 +87,11 @@ public class ScriptManager : MonoBehaviour
             비고:*반드시 해당하는 최종목표 유형에 제시된 형식과 내용에 맞춰 출력*"
         };
         gpt_messages.Add(prompt_msg);
-        
+
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "진행될 게임의 "+genre+"장르에 어울리는 최종 목표 생성"
+            Content = "진행될 게임의 " + genre + "장르에 어울리는 최종 목표 생성"
         };
         gpt_messages.Add(query_msg);
 
@@ -113,19 +118,20 @@ public class ScriptManager : MonoBehaviour
         {
             Debug.LogWarning("No text was generated from this prompt.");
         }
-        
+
     }
 
-    private async void ChapterObjectiveGPT(int chapter_num){
+    private async void ChapterObjectiveGPT(int chapter_num)
+    {
         Debug.Log(">>Call Chapter Objective GPT");
-        Debug.Log(">>curr chapter: "+(chapter_num+1));
+        Debug.Log(">>curr chapter: " + (chapter_num + 1));
         gpt_messages.Clear();
 
         var prompt_msg = new ChatMessage()
         {
             Role = "system",
             Content = @"당신은 진행되는 게임의 챕터 목표를 제시한다.
-            게임은 총 5개의 챕터로 구성되어있으며 현재 생성할 목표의 챕터 번호는"+(chapter_num+1)+"이다."+
+            게임은 총 5개의 챕터로 구성되어있으며 현재 생성할 목표의 챕터 번호는" + (chapter_num + 1) + "이다." +
             @"챕터 목표의 유형은 반드시 다음 세가지 중 하나이며 게임의 배경에 맞춰 하나만 생성된다.
 
             - 최종목표 유형 1: 적대 npc나 보스 몬스터를 처치
@@ -138,15 +144,16 @@ public class ScriptManager : MonoBehaviour
             비고:*얻어야 할 정보의 진상을 한문장으로 출력*
 
             다음은 게임의 배경인 
-            "+time_background+"시대"+space_background+"를 배경으로 하는 세계관에 대한 설명이다."+world_detail+
-            "게임의 최종 목표는 다음과 같다.\n"+final_obj.title+"\n"+final_obj.detail
+            " + time_background + "시대" + space_background + "를 배경으로 하는 세계관에 대한 설명이다." + world_detail +
+            "게임의 최종 목표는 다음과 같다.\n" + final_obj.title + "\n" + final_obj.detail
 
         };
-        if(chapter_num!=0){
-            prompt_msg.Content+="다음은 이전 챕터의 진행 줄거리이다. 챕터 목표는 이전 챕터의 진행과 자연스럽게 이어져야 한다."+chapter_summary[chapter_num];
+        if (chapter_num != 0)
+        {
+            prompt_msg.Content += "다음은 이전 챕터의 진행 줄거리이다. 챕터 목표는 이전 챕터의 진행과 자연스럽게 이어져야 한다." + chapter_summary[chapter_num];
         }
 
-        prompt_msg.Content+=@"아래와 같은 양식으로 게임의 목표를 설정한다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
+        prompt_msg.Content += @"아래와 같은 양식으로 게임의 목표를 설정한다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
 
             챕터목표유형: *위의 유형 1~3 중 하나를 숫자만 출력*
             챕터목표: *챕터 목표의 제목 출력*
@@ -157,7 +164,7 @@ public class ScriptManager : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "진행중인 게임의 "+genre+"장르에 어울리는 챕터"+curr_chapter.ToString()+"의 챕터 목표 생성"
+            Content = "진행중인 게임의 " + genre + "장르에 어울리는 챕터" + curr_chapter.ToString() + "의 챕터 목표 생성"
         };
         gpt_messages.Add(query_msg);
 
@@ -174,9 +181,10 @@ public class ScriptManager : MonoBehaviour
             var message = completionResponse.Choices[0].Message;
             message.Content = message.Content.Trim();
             Debug.Log(message.Content);
-            chapter_obj[chapter_num+1] = StringToObjective(message.Content);
-            curr_chapter = chapter_num+1;
-            if(curr_chapter!=1){
+            chapter_obj[chapter_num + 1] = StringToObjective(message.Content);
+            curr_chapter = chapter_num + 1;
+            if (curr_chapter != 1)
+            {
                 //StartCoroutine(PostChapterObjective(curr_chapter));
             }
 
@@ -189,12 +197,13 @@ public class ScriptManager : MonoBehaviour
 
     }
 
-    objective StringToObjective(string obj_string){
+    objective StringToObjective(string obj_string)
+    {
         objective obj = new objective();
         obj.clear = false;
 
         string[] obj_arr;
-        obj_string = obj_string.Replace("\n",":");
+        obj_string = obj_string.Replace("\n", ":");
         obj_arr = obj_string.Split(':');
 
         obj.type = obj_arr[1];
@@ -205,9 +214,11 @@ public class ScriptManager : MonoBehaviour
         return obj;
     }
 
-    IEnumerator PostChapterObjective(int chap){
+    IEnumerator PostChapterObjective(int chap)
+    {
         string obj_type;
-        switch(int.Parse(chapter_obj[chap].type)){
+        switch (int.Parse(chapter_obj[chap].type))
+        {
             case 1:
                 obj_type = "MONSTER";
                 break;
@@ -220,25 +231,29 @@ public class ScriptManager : MonoBehaviour
                 break;
         }
         WWWForm form = new WWWForm();
-        form.AddField("scriptId",character_id);
-        if(chap == 0){
-            form.AddField("chapter",5);
+        form.AddField("scriptId", character_id);
+        if (chap == 0)
+        {
+            form.AddField("chapter", 5);
         }
-        else{
-            form.AddField("chapter",chap);
+        else
+        {
+            form.AddField("chapter", chap);
         }
-        form.AddField("content",chapter_obj[chap].title);
-        form.AddField("type",obj_type);
-        form.AddField("require",chapter_obj[chap].detail);
-        form.AddField("etc",chapter_obj[chap].etc);
+        form.AddField("content", chapter_obj[chap].title);
+        form.AddField("type", obj_type);
+        form.AddField("require", chapter_obj[chap].detail);
+        form.AddField("etc", chapter_obj[chap].etc);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://3.35.61.61:8080/scripts/goal",form);
+        UnityWebRequest www = UnityWebRequest.Post("http://3.35.61.61:8080/scripts/goal", form);
         yield return www.SendWebRequest();
 
-        if(www.result != UnityWebRequest.Result.Success){
+        if (www.result != UnityWebRequest.Result.Success)
+        {
             Debug.Log(www.error);
         }
-        else{
+        else
+        {
             Debug.Log(">>ChapterObjective upload complete.");
         }
 
