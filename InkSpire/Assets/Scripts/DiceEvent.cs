@@ -16,6 +16,7 @@ public class DiceEvent : MonoBehaviour,IPointerClickHandler
     int req_value = 0;
     bool result = false;
     int pl_value = 0;
+    int luk_value = 0;
 
     public void SetDiceEvent(int val){
         dicewindow.gameObject.SetActive(true);
@@ -37,6 +38,8 @@ public class DiceEvent : MonoBehaviour,IPointerClickHandler
         ones_dice.text = ones.ToString();
         tens_dice.text = tens.ToString();
         pl_value = tens*10+ones;
+        //행운 스탯은 모든 판정에 int(rand(0,행운)*0.5)만큼의 보정치를 더해준다.
+        luk_value = Random.Range(0,PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Luck)/2);
 
         Invoke("ResultActive",0.5f);
     }
@@ -50,9 +53,9 @@ public class DiceEvent : MonoBehaviour,IPointerClickHandler
 
     void ResultActive(){
         
-        result_txt.text = pl_value.ToString()+"\n";
+        result_txt.text = pl_value.ToString()+" + "+luk_value.ToString()+"(Bonus)\n";
         resultwindow.gameObject.SetActive(true);
-        if(pl_value>=req_value){
+        if(pl_value+luk_value>=req_value){
             result_txt.text += "<color=\"blue\">Success</color>";
         }
         else{
