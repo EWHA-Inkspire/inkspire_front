@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using System.Linq;
 using TMPro;
 
+
+// 죽은 적 토글 비활성화, 보너스 주사위 텍스트 초기화!!!!!!!!!!!!!!!!!!!!!!!!
 public class BattleEvent : MonoBehaviour
 {
     [SerializeField] GameObject battle_window;  // 전체 전투창
@@ -25,8 +27,9 @@ public class BattleEvent : MonoBehaviour
     BType bType;    // 전투 타입 구분 -> 보스, 일반
     Turn curr_turn; //현재 공격 턴인 쪽을 의미
     Stats pl_stat = PlayerStatManager.playerstat.p_stats;   //플레이어 스탯
-    List<Stats> enm_stat; // 적 스탯
-    List<bool> is_dead; // 적 생존 여부
+    Stats[] enm_stat = new Stats[5]; // 적 스탯
+    bool[] is_dead = new bool[5]; // 적 생존 여부
+    int m_num = 1;
     int target = 0;
     int pl_action;
 
@@ -48,11 +51,13 @@ public class BattleEvent : MonoBehaviour
 
 
     public void SetBattle(BType battle_type, int mob_num){
+        battle_window.gameObject.SetActive(true);
         bType = battle_type;
+        m_num = mob_num;
         int[] tmp_stat = new int[5];
         int enm_dex = 0;
         if(bType == BType.BOSS){
-            mob_num = 1;
+            m_num = 1;
         }
 
         // 타겟몬스터 토글 개수 셋팅
@@ -69,21 +74,26 @@ public class BattleEvent : MonoBehaviour
             for(int j = 0; j<5; j++){
                 tmp_stat[j] = BOSS_BASE+(int)Mathf.Pow(-1,Random.Range(0,2))*Random.Range(0,11);
             }
-            enm_stat.Add(new Stats(tmp_stat[0],tmp_stat[1],tmp_stat[2],tmp_stat[3],tmp_stat[4]));
+            Stats tmp = new Stats(tmp_stat[0],tmp_stat[1],tmp_stat[2],tmp_stat[3],tmp_stat[4]);
+            Debug.Log(tmp.GetStatAmount(Stats.Type.Defence));
+            enm_stat[0] = tmp;
             enm_dex = enm_stat[0].GetStatAmount(Stats.Type.Dexterity);
-            is_dead.Add(false);
+            is_dead[0] = false;
         }
         else{
             //일반몬스터 스탯 셋팅
             for(int i = 0; i<mob_num; i++){
                 for(int j = 0; j<5; j++){
                     tmp_stat[j] = MOB_BASE+(int)Mathf.Pow(-1,Random.Range(0,2))*Random.Range(0,11);
+                    Debug.Log(">>tmpstat"+j+": "+tmp_stat[j]);
                 }
-                enm_stat.Add(new Stats(tmp_stat[0],tmp_stat[1],tmp_stat[2],tmp_stat[3],tmp_stat[4]));
+                Stats tmp = new Stats(tmp_stat[0],tmp_stat[1],tmp_stat[2],tmp_stat[3],tmp_stat[4]);
+                Debug.Log(tmp.GetStatAmount(Stats.Type.Defence));
+                enm_stat[i]=tmp;
                 enm_stat[i].SetStatAmount(Stats.Type.MaxHP,500);
                 enm_stat[i].SetStatAmount(Stats.Type.CurrHP,500);
                 enm_dex = Mathf.Max(enm_dex,enm_stat[i].GetStatAmount(Stats.Type.Dexterity));
-                is_dead.Add(false);
+                is_dead[i] = false;
             }
             
         }
@@ -91,15 +101,19 @@ public class BattleEvent : MonoBehaviour
         //민첩스탯이 높은 쪽이 선공
         if(pl_stat.GetStatAmount(Stats.Type.Dexterity)>enm_dex){
             curr_turn = Turn.PL;
-            SetAttackTurn();
+            
             // 선공 메시지 append
-            AppendMsg("<b>:: 전투 시작 ::</b>\n>> 선공: "+PlayerStatManager.playerstat.name);
+            AppendMsg("\n<b>:: 전투 시작 ::</b>\n>> 선공: "+PlayerStatManager.playerstat.charname);
+
+            SetAttackTurn();
         }
         else{
             curr_turn = Turn.ENM;
-            SetDefenceTurn();
+            
             // 선공 메시지 append
-            AppendMsg("<b>:: 전투 시작 ::</b>\n>> 선공: Enemy");
+            AppendMsg("\n<b>:: 전투 시작 ::</b>\n>> 선공: Enemy");
+            
+            SetDefenceTurn();
         }
 
     }
@@ -108,12 +122,14 @@ public class BattleEvent : MonoBehaviour
         // "공격 턴 시작" 메시지 append
         AppendMsg("\n<i>- 공격 턴 시작 -</i>");
         // 플레이어 체력 로그, 적 스탯 로그 append
-        AppendMsg("\n>> "+PlayerStatManager.playerstat.name);
+        AppendMsg("\n>> "+PlayerStatManager.playerstat.charname+"\tHP: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP)+"/"+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP));
         AppendMsg("공격: "+pl_stat.GetStatAmount(Stats.Type.Attack).ToString()+" | 방어: "+pl_stat.GetStatAmount(Stats.Type.Defence).ToString()+" | 민첩: "+pl_stat.GetStatAmount(Stats.Type.Dexterity).ToString()+" | 행운: "+pl_stat.GetStatAmount(Stats.Type.Luck).ToString());
-        for(int i = 0; i<enm_stat.Count; i++){
-            AppendMsg("\n>> Enemy"+i);
+
+        for(int i = 0; i<m_num; i++){
+            AppendMsg("\n>> Enemy"+(i+1)+"\tHP: "+enm_stat[i].GetStatAmount(Stats.Type.CurrHP)+"/"+enm_stat[i].GetStatAmount(Stats.Type.MaxHP));
             AppendMsg("공격: "+enm_stat[i].GetStatAmount(Stats.Type.Attack).ToString()+" | 방어: "+enm_stat[i].GetStatAmount(Stats.Type.Defence).ToString()+" | 민첩: "+enm_stat[i].GetStatAmount(Stats.Type.Dexterity).ToString()+" | 행운: "+enm_stat[i].GetStatAmount(Stats.Type.Luck).ToString());
         }
+        AppendMsg(" ");
         inventory_window.gameObject.SetActive(false);
         bdice_window.gameObject.SetActive(false);
         def_window.gameObject.SetActive(false);
@@ -124,12 +140,14 @@ public class BattleEvent : MonoBehaviour
         // "방어 턴 시작" 메시지 append
         AppendMsg("\n<i>- 방어 턴 시작 -</i>");
         // 플레이어 체력 로그, 적 스탯 로그 append
-        AppendMsg("\n>> "+PlayerStatManager.playerstat.name);
+        AppendMsg("\n>> "+PlayerStatManager.playerstat.charname+"\tHP: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP)+"/"+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP));
         AppendMsg("공격: "+pl_stat.GetStatAmount(Stats.Type.Attack).ToString()+" | 방어: "+pl_stat.GetStatAmount(Stats.Type.Defence).ToString()+" | 민첩: "+pl_stat.GetStatAmount(Stats.Type.Dexterity).ToString()+" | 행운: "+pl_stat.GetStatAmount(Stats.Type.Luck).ToString());
-        for(int i = 0; i<enm_stat.Count; i++){
-            AppendMsg("\n>> Enemy"+i);
+        
+        for(int i = 0; i<m_num; i++){
+            AppendMsg("\n>> Enemy"+(i+1)+"\tHP: "+enm_stat[i].GetStatAmount(Stats.Type.CurrHP)+"/"+enm_stat[i].GetStatAmount(Stats.Type.MaxHP));
             AppendMsg("공격: "+enm_stat[i].GetStatAmount(Stats.Type.Attack).ToString()+" | 방어: "+enm_stat[i].GetStatAmount(Stats.Type.Defence).ToString()+" | 민첩: "+enm_stat[i].GetStatAmount(Stats.Type.Dexterity).ToString()+" | 행운: "+enm_stat[i].GetStatAmount(Stats.Type.Luck).ToString());
         }
+        AppendMsg(" ");
         inventory_window.gameObject.SetActive(false);
         bdice_window.gameObject.SetActive(false);
         atk_window.gameObject.SetActive(false);
@@ -142,10 +160,12 @@ public class BattleEvent : MonoBehaviour
         switch(action){
             case 1: // 공격
             case 3: // 도망
+                atk_window.gameObject.SetActive(false);
                 SetBDiceWindow();
                 break;
             case 2: // 아이템
                 inventory_window.gameObject.SetActive(true);
+                atk_window.gameObject.SetActive(false);
                 break;
             default:
                 Debug.Log(">> AtkTurn: Wrong Action");
@@ -161,9 +181,11 @@ public class BattleEvent : MonoBehaviour
             case 2: // 회피
             case 4: // 도망
                 SetBDiceWindow();
+                def_window.gameObject.SetActive(false);
                 break;
             case 3: // 아이템
                 inventory_window.gameObject.SetActive(true);
+                def_window.gameObject.SetActive(false);
                 break;
             default:
                 Debug.Log(">> DefTurn: Wrong Action");
@@ -186,7 +208,9 @@ public class BattleEvent : MonoBehaviour
     public void BattleRollButton(){
         // 전투용 주사위 창 Roll 버튼에 붙여놓기
         if(curr_turn == Turn.PL && pl_action == 1){
+            Debug.Log(">> target setting");
             target = int.Parse(mobgroup.ActiveToggles().FirstOrDefault().transform.name);
+            Debug.Log("target:"+target);
         }
         int ones = Random.Range(0,10);
         int tens = Random.Range(0,10);
@@ -199,7 +223,7 @@ public class BattleEvent : MonoBehaviour
         bonus_dice.text = luk_value.ToString();
 
         // 텍스트박스에 결과값(결괏값 행운값 나눠서) 메시지 append
-        AppendMsg(PlayerStatManager.playerstat.name+" DICE>> "+pl_value.ToString()+" + "+luk_value.ToString()+"(Bonus)");
+        AppendMsg(PlayerStatManager.playerstat.charname+" DICE>> "+pl_value.ToString()+" + "+luk_value.ToString()+"(Bonus)");
         EnemyAI(pl_value+luk_value);
     }
 
@@ -212,7 +236,7 @@ public class BattleEvent : MonoBehaviour
         if((curr_turn == Turn.ENM && pl_action == 3) || (curr_turn == Turn.PL && pl_action ==4)){
             // 도망
             int enm_dex = 0;
-            for(int j = 0; j<enm_stat.Count; j++){  // 몬스터 민첩스탯 중 가장 큰 값 기준
+            for(int j = 0; j<m_num; j++){  // 몬스터 민첩스탯 중 가장 큰 값 기준
                 enm_dex = Mathf.Max(enm_dex,enm_stat[j].GetStatAmount(Stats.Type.Dexterity));
             }
 
@@ -233,22 +257,25 @@ public class BattleEvent : MonoBehaviour
 
         if(curr_turn == Turn.ENM){
             // 적 공격 턴
-            for(int j = 0; j<enm_stat.Count; j++){
+            for(int j = 0; j<m_num; j++){
                 enm_dice = Random.Range(0,100);
                 // 적 주사위 결과 메시지 append
-                AppendMsg("Enemy"+j.ToString()+" DICE>> "+enm_dice.ToString());
+                if(is_dead[j]){
+                    continue;
+                }
+                AppendMsg("Enemy"+(j+1).ToString()+" DICE>> "+enm_dice.ToString());
                 if(pl_action == 1 && enm_dice>=90 && pl_dice>=90){
                     // 방어 공격 크리 상쇄 메시지 append
                     AppendMsg("!! 크리티컬 상쇄 !!");
                     enm_dice = pl_dice = 50;
                 }
-                damage = CalcATKDamage("Enemy"+j.ToString(),enm_dice,enm_stat[j].GetStatAmount(Stats.Type.Luck),enm_stat[j].GetStatAmount(Stats.Type.Attack));
+                damage = CalcATKDamage("Enemy"+(j+1).ToString(),enm_dice,enm_stat[j].GetStatAmount(Stats.Type.Luck),enm_stat[j].GetStatAmount(Stats.Type.Attack));
                 switch(pl_action){
                     case 1: // 방어
-                        d_damage = CalcDEFDamage(PlayerStatManager.playerstat.name,pl_dice,pl_stat.GetStatAmount(Stats.Type.Defence),damage);
+                        d_damage = CalcDEFDamage(PlayerStatManager.playerstat.charname,pl_dice,pl_stat.GetStatAmount(Stats.Type.Defence),damage);
                         break;
                     case 2: // 회피
-                        d_damage = CalcDodgeDamage(PlayerStatManager.playerstat.name,pl_dice,pl_stat.GetStatAmount(Stats.Type.Dexterity),damage);
+                        d_damage = CalcDodgeDamage(PlayerStatManager.playerstat.charname,pl_dice,pl_stat.GetStatAmount(Stats.Type.Dexterity),damage);
                         break;
                     default:
                         break;
@@ -256,7 +283,7 @@ public class BattleEvent : MonoBehaviour
                 }
                 damage -= d_damage;
                 // 데미지 로그 append
-                AppendMsg("DAMAGE>> "+PlayerStatManager.playerstat.name+" HP"+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" -> "+(PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP)-damage).ToString());
+                AppendMsg("DAMAGE>> "+PlayerStatManager.playerstat.charname+" HP"+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" -> "+(PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP)-damage).ToString()+"\n");
                 PlayerStatManager.playerstat.p_stats.SetStatAmount(Stats.Type.CurrHP,PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP)-damage);
                 pl_stat = PlayerStatManager.playerstat.p_stats;
             }
@@ -270,36 +297,36 @@ public class BattleEvent : MonoBehaviour
             if(enm_action == 1){
                 // 방어
                 // 적 주사위 결과 메시지 append
-                AppendMsg("Enemy"+target.ToString()+" DICE>> "+enm_dice.ToString());
+                AppendMsg("Enemy"+(target+1).ToString()+" DICE>> "+enm_dice.ToString());
                 if(pl_action == 1 && enm_dice>=90 && pl_dice>=90){
                     // 방어 공격 크리 상쇄 메시지 append
                     AppendMsg("!! 크리티컬 상쇄 !!");
                     enm_dice = pl_dice = 50;
                 }
-                damage = CalcATKDamage(PlayerStatManager.playerstat.name,pl_dice,pl_stat.GetStatAmount(Stats.Type.Luck),pl_stat.GetStatAmount(Stats.Type.Attack));
-                d_damage = CalcDEFDamage("Enemy"+target.ToString(),enm_dice,enm_stat[target].GetStatAmount(Stats.Type.Defence),damage);
+                damage = CalcATKDamage(PlayerStatManager.playerstat.charname,pl_dice,pl_stat.GetStatAmount(Stats.Type.Luck),pl_stat.GetStatAmount(Stats.Type.Attack));
+                d_damage = CalcDEFDamage("Enemy"+(target+1).ToString(),enm_dice,enm_stat[target].GetStatAmount(Stats.Type.Defence),damage);
                 
             }
             else{
                 // 회피
                 // 적 주사위 결과 메시지 append
-                AppendMsg("Enemy"+target.ToString()+" DICE>> "+enm_dice.ToString());
-                damage = CalcATKDamage(PlayerStatManager.playerstat.name,pl_dice,pl_stat.GetStatAmount(Stats.Type.Luck),pl_stat.GetStatAmount(Stats.Type.Attack));
-                d_damage = CalcDodgeDamage("Enemy"+target.ToString(),enm_dice,enm_stat[target].GetStatAmount(Stats.Type.Dexterity),damage);
+                AppendMsg("Enemy"+(target+1).ToString()+" DICE>> "+enm_dice.ToString());
+                damage = CalcATKDamage(PlayerStatManager.playerstat.charname,pl_dice,pl_stat.GetStatAmount(Stats.Type.Luck),pl_stat.GetStatAmount(Stats.Type.Attack));
+                d_damage = CalcDodgeDamage("Enemy"+(target+1).ToString(),enm_dice,enm_stat[target].GetStatAmount(Stats.Type.Dexterity),damage);
 
             }
             damage -= d_damage;
-            AppendMsg("DAMAGE>> Enemy"+target.ToString()+" HP"+enm_stat[target].GetStatAmount(Stats.Type.CurrHP).ToString()+" -> "+(enm_stat[target].GetStatAmount(Stats.Type.CurrHP)-damage).ToString());
+            AppendMsg("DAMAGE>> Enemy"+(target+1).ToString()+" HP"+enm_stat[target].GetStatAmount(Stats.Type.CurrHP).ToString()+" -> "+(enm_stat[target].GetStatAmount(Stats.Type.CurrHP)-damage).ToString()+"\n");
             enm_stat[target].SetStatAmount(Stats.Type.CurrHP,enm_stat[target].GetStatAmount(Stats.Type.CurrHP)-damage);
             curr_turn = Turn.ENM;
         }
 
-        for(int i = 0; i<enm_stat.Count; i++){
+        for(int i = 0; i<m_num; i++){
             int mob_HP = enm_stat[i].GetStatAmount(Stats.Type.CurrHP);
             hp_sum += mob_HP;
             if(enm_stat[i].GetStatAmount(Stats.Type.CurrHP)==0 && !is_dead[i]){
                 // 적 처치 메시지 출력
-                AppendMsg("DEFEAT>> Enemy"+i.ToString()+" 처치!!");
+                AppendMsg("DEFEAT>> Enemy"+(i+1).ToString()+" 처치!!");
                 is_dead[i] = true;
             }
         }
@@ -350,7 +377,7 @@ public class BattleEvent : MonoBehaviour
         }
 
         // 공격 메시지 append
-        AppendMsg(name+"| 공격>> "+result+"\t공격량:"+damage.ToString());
+        AppendMsg(name+" | 공격>> "+result+"\t  공격량:"+damage.ToString());
         return damage;
     }
 
@@ -371,7 +398,7 @@ public class BattleEvent : MonoBehaviour
             d_damage = Mathf.Clamp(d_damage,0,damage-DAMAGE_BASE);
         }
         // 방어 메시지 append
-        AppendMsg(name+"| 방어>> "+result);
+        AppendMsg(name+" | 방어>> "+result);
         return d_damage;
     }
 
@@ -380,12 +407,12 @@ public class BattleEvent : MonoBehaviour
         int d_damage = 0;
         if(dice>(100-dex_stat)*2){  // 회피 성공
             // 회피 성공 메시지 append
-            AppendMsg(name+"| 회피>> 회피 성공!!\t*모든 데미지 무효화");
+            AppendMsg(name+" | 회피>> 회피 성공!!\t*모든 데미지 무효화");
             d_damage = damage;
         }
         else{   // 회피 실패(방어펌블과 동일)
             // 회피 실패 메시지 append
-            AppendMsg(name+"| 회피>> 회피 실패!!");
+            AppendMsg(name+" | 회피>> 회피 실패!!");
             d_damage = CalcDEFDamage(name, 0,0,damage);
         }
         return d_damage;
@@ -421,8 +448,9 @@ public class BattleEvent : MonoBehaviour
         mobgroup.gameObject.SetActive(false);
         bdice_window.gameObject.SetActive(false);
 
-        enm_stat.Clear();
-        is_dead.Clear();
+        //enm_stat.Clear();
+        //is_dead.Clear();
+        m_num = 0;
         
         atk_window.gameObject.SetActive(false);
         def_window.gameObject.SetActive(false);

@@ -16,6 +16,7 @@ public class InventorySlot : MonoBehaviour
     private int quant = 0;
     private int type = 0;
 
+    private int id;
     public void SetSprites(){
         if(!exist){
             Debug.Log("false item call");
@@ -26,11 +27,12 @@ public class InventorySlot : MonoBehaviour
         text_quant.text = quant.ToString();
     }
 
-    public void setItem(string iname, int iquant){
+    public void setItem(string iname, int iquant, int i_id){
         exist = true;
         itemname = iname;
         quant = iquant;
         //type = itype;
+        id = i_id;
         SetSprites();
     }
 
@@ -55,6 +57,10 @@ public class InventorySlot : MonoBehaviour
         itemname = null;
         quant = 0;
         type = 0;
+    }
+
+    public void setUseItem(){
+        InventoryManager.inventory.SetTarget(id);
     }
 
 }

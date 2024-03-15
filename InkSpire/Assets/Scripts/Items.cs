@@ -34,6 +34,9 @@ public class Items
     {
         return name;
     }
+    public int GetItemID(){
+        return item_id;
+    }
     public int GetItemQuant()
     {
         return quantity;

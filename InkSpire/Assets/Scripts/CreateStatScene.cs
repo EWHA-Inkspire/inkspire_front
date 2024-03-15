@@ -52,9 +52,9 @@ public class CreateStatScene : MonoBehaviour
 
     public void GameStartButton(){
         SetCharacterStat();
-        while(ScriptManager.scriptinfo.curr_chapter!=1){
-            Debug.Log(">>Wating for GPT Response");
-        }
+        // while(ScriptManager.scriptinfo.curr_chapter!=1){
+        //     Debug.Log(">>Wating for GPT Response");
+        // }
         //StartCoroutine(PostCharacterScriptInfo());
         SceneManager.LoadScene("Play");
     }
