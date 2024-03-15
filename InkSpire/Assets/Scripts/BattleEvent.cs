@@ -33,7 +33,6 @@ public class BattleEvent : MonoBehaviour
     int target = 0;
     int pl_action;
 
-
     // *****열거형, 상수 선언 및 정의*****
     public enum BType{
         BOSS,
@@ -98,6 +97,8 @@ public class BattleEvent : MonoBehaviour
             
         }
 
+        InventoryManager.inventory.is_battle = true;
+        
         //민첩스탯이 높은 쪽이 선공
         if(pl_stat.GetStatAmount(Stats.Type.Dexterity)>enm_dex){
             curr_turn = Turn.PL;
@@ -203,6 +204,7 @@ public class BattleEvent : MonoBehaviour
         }
         tens_dice.text = "00";
         ones_dice.text = "00";
+        bonus_dice.text = "00";
     }
 
     public void BattleRollButton(){
@@ -233,8 +235,9 @@ public class BattleEvent : MonoBehaviour
         int damage;
         int d_damage = 0;
 
-        if((curr_turn == Turn.ENM && pl_action == 3) || (curr_turn == Turn.PL && pl_action ==4)){
+        if((curr_turn == Turn.ENM && pl_action == 4) || (curr_turn == Turn.PL && pl_action == 3)){
             // 도망
+            AppendMsg("RESULT>> 도망 시도!!");
             int enm_dex = 0;
             for(int j = 0; j<m_num; j++){  // 몬스터 민첩스탯 중 가장 큰 값 기준
                 enm_dex = Mathf.Max(enm_dex,enm_stat[j].GetStatAmount(Stats.Type.Dexterity));
@@ -287,7 +290,6 @@ public class BattleEvent : MonoBehaviour
                 PlayerStatManager.playerstat.p_stats.SetStatAmount(Stats.Type.CurrHP,PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP)-damage);
                 pl_stat = PlayerStatManager.playerstat.p_stats;
             }
-            curr_turn = Turn.PL;
         }
 
         else{
@@ -318,7 +320,6 @@ public class BattleEvent : MonoBehaviour
             damage -= d_damage;
             AppendMsg("DAMAGE>> Enemy"+(target+1).ToString()+" HP"+enm_stat[target].GetStatAmount(Stats.Type.CurrHP).ToString()+" -> "+(enm_stat[target].GetStatAmount(Stats.Type.CurrHP)-damage).ToString()+"\n");
             enm_stat[target].SetStatAmount(Stats.Type.CurrHP,enm_stat[target].GetStatAmount(Stats.Type.CurrHP)-damage);
-            curr_turn = Turn.ENM;
         }
 
         for(int i = 0; i<m_num; i++){
@@ -342,14 +343,20 @@ public class BattleEvent : MonoBehaviour
             return;
         }
         else{
-            if(curr_turn == Turn.PL){
-                Invoke("SetAttackTurn", 0.5f);
-            }
-            else{
-                Invoke("SetDefenceTurn",0.5f);
-            }
+            SetNextTurn();
         }
 
+    }
+
+    public void SetNextTurn(){
+        if(curr_turn == Turn.PL){
+            curr_turn = Turn.ENM;
+            Invoke("SetDefenceTurn",0.5f);
+        }
+        else{
+            curr_turn = Turn.PL;
+            Invoke("SetAttackTurn", 0.5f);   
+        }
     }
 
     int CalcATKDamage(string name, int dice, int luk_stat, int atk_stat){
@@ -419,6 +426,7 @@ public class BattleEvent : MonoBehaviour
     }
 
     void EndBattle(int result){
+        InventoryManager.inventory.is_battle = false;
         string result_str;
         if(result==0){
             result_str = "WIN";
@@ -451,7 +459,6 @@ public class BattleEvent : MonoBehaviour
         //enm_stat.Clear();
         //is_dead.Clear();
         m_num = 0;
-        
         atk_window.gameObject.SetActive(false);
         def_window.gameObject.SetActive(false);
         inventory_window.gameObject.SetActive(false);

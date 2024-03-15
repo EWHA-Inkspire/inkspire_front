@@ -70,11 +70,11 @@ Narrator (내레이터):
         input_msg.Content = player_input.text;
 
         AppendMsg(input_msg);
-        SendReply();
+        //SendReply();
 
         
         //dice_event.SetDiceEvent(50);
-        //battle_event.SetBattle(BattleEvent.BType.MOB,3);
+        battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     }
     void AppendMsg(ChatMessage msg)
