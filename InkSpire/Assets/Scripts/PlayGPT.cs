@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class PlayGPT : MonoBehaviour
 {
     [SerializeField] DiceEvent dice_event;
+    [SerializeField] BattleEvent battle_event;
     [SerializeField] private TMP_InputField player_input;
     [SerializeField] private TextMeshProUGUI story_object;
     [SerializeField] private Button button;
@@ -72,7 +73,9 @@ Narrator (내레이터):
         SendReply();
 
         
-        dice_event.SetDiceEvent(50);
+        //dice_event.SetDiceEvent(50);
+        //battle_event.SetBattle(BattleEvent.BType.MOB,3);
+        
     }
     void AppendMsg(ChatMessage msg)
     {
