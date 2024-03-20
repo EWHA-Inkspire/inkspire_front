@@ -7,7 +7,6 @@ public class StatModalButton : MonoBehaviour
     [SerializeField] GameObject mesh_obj;
     [SerializeField] GameObject modal_obj;
     [SerializeField] StatGraphTest stattest;
-    [SerializeField] PlayScene play_scene;
     private CanvasRenderer radarMeshCanvasRenderer;
 
     private void Awake(){
@@ -18,9 +17,6 @@ public class StatModalButton : MonoBehaviour
         
         modal_obj.gameObject.SetActive(true);
         stattest.ModalActivate();
-        for(int i = 0; i<8; i++){
-            play_scene.slot_list[i].SetSprites();
-        }
     }
 
     public void OnModalClose(){

@@ -16,7 +16,6 @@ public class PlayScene : MonoBehaviour
 
 
     public InventorySlot slotPrefab;
-    public InventorySlot[] slot_list = new InventorySlot[8];
 
     void Start(){
 
@@ -36,7 +35,7 @@ public class PlayScene : MonoBehaviour
                 }
                 newSlot.name = "ItemSlot_"+i;
                 newSlot.transform.SetParent(item_list.transform);
-                slot_list[i] = newSlot;
+                InventoryManager.inventory.slotlist[i] = newSlot;
             }
         }
     }

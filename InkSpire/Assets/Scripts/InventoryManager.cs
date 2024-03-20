@@ -12,8 +12,10 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] GameObject battle_window;
     [SerializeField] GameObject inventory_window;
     [SerializeField] Image[] item_bg = new Image[8];
-    [SerializeField] BattleEvent battle;
+    [SerializeField] public BattleEvent battle;
     public Items[] inventorylist = new Items[8];
+    public InventorySlot[] slotlist = new InventorySlot[8];
+
     public int next_idx = 0;
     public int target_idx = 0;
     public bool is_battle = false;
@@ -26,18 +28,19 @@ public class InventoryManager : MonoBehaviour
             inventory=this;
         }
 
-        AddItem(1,3,"테스트테스트","이것은 테스트용 아이템 설명입니다.","Battle",3);
-        AddItem(2,4,"테스트2","이것은 테스트용 아이템 설명입니다.","Battle",1);
+        AddItem(1,3,"테스트테스트",50,"Recover",3);
+        AddItem(2,4,"테스트2",5,"Weapon",1);
     }
 
-    public void AddItem(int itemid, int mapid, string itemname, string itemdetail, string itemtype, int iquant){
+    public void AddItem(int itemid, int mapid, string itemname, int itemdetail, string itemtype, int iquant){
         inventorylist[next_idx] = new Items(itemid,mapid,itemname, itemdetail, itemtype,iquant);
         next_idx++;
     }
 
     public void SetTarget(int item_id){
         for(int i = 0; i<next_idx;i++){
-            if(item_id == inventorylist[i].GetItemID()){
+            if(item_id == inventorylist[i].GetItemID() && inventorylist[i].GetItemQuant()>0){
+                Debug.Log("itemQ: "+inventorylist[i].GetItemQuant());
                 item_bg[target_idx].color = new Color32(237,237,233,255);
                 target_idx = i;
                 item_bg[target_idx].color = new Color32(212,204,195,255);
@@ -66,8 +69,22 @@ public class InventoryManager : MonoBehaviour
     }
 
     public void UseTargetItem(){
+        inventorylist[target_idx].UseItem();
+        slotlist[target_idx].delQuant(1);
+        if(inventorylist[target_idx].GetItemQuant()<=0){
+            for(int i = target_idx+1; i<next_idx; i++){
+                inventorylist[i-1]=inventorylist[i];
+                slotlist[i-1].setItem(inventorylist[i].GetItemName(),inventorylist[i].GetItemQuant(),inventorylist[i].GetItemID());
+                slotlist[i-1].SetSprites();
+                Debug.Log(inventorylist[i-1].GetItemName());
+            }
+            inventorylist[next_idx-1] = new Items();
+            slotlist[next_idx-1].delItem();
+            next_idx--;
+        }
 
         if(is_battle){
+            Debug.Log(">>is_battle:"+is_battle);
             inventory_window.gameObject.SetActive(false);
             battle.SetNextTurn();
         }

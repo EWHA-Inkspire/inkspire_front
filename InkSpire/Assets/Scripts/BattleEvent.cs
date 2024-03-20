@@ -305,7 +305,7 @@ public class BattleEvent : MonoBehaviour
                     AppendMsg("!! 크리티컬 상쇄 !!");
                     enm_dice = pl_dice = 50;
                 }
-                damage = CalcATKDamage(PlayerStatManager.playerstat.charname,pl_dice,pl_stat.GetStatAmount(Stats.Type.Luck),pl_stat.GetStatAmount(Stats.Type.Attack));
+                damage = CalcATKDamage(PlayerStatManager.playerstat.charname,pl_dice,pl_stat.GetStatAmount(Stats.Type.Luck),pl_stat.GetStatAmount(Stats.Type.Attack)+PlayerStatManager.playerstat.wheapone);
                 d_damage = CalcDEFDamage("Enemy"+(target+1).ToString(),enm_dice,enm_stat[target].GetStatAmount(Stats.Type.Defence),damage);
                 
             }
@@ -313,7 +313,7 @@ public class BattleEvent : MonoBehaviour
                 // 회피
                 // 적 주사위 결과 메시지 append
                 AppendMsg("Enemy"+(target+1).ToString()+" DICE>> "+enm_dice.ToString());
-                damage = CalcATKDamage(PlayerStatManager.playerstat.charname,pl_dice,pl_stat.GetStatAmount(Stats.Type.Luck),pl_stat.GetStatAmount(Stats.Type.Attack));
+                damage = CalcATKDamage(PlayerStatManager.playerstat.charname,pl_dice,pl_stat.GetStatAmount(Stats.Type.Luck),pl_stat.GetStatAmount(Stats.Type.Attack)+PlayerStatManager.playerstat.wheapone);
                 d_damage = CalcDodgeDamage("Enemy"+(target+1).ToString(),enm_dice,enm_stat[target].GetStatAmount(Stats.Type.Dexterity),damage);
 
             }
@@ -456,6 +456,8 @@ public class BattleEvent : MonoBehaviour
         mobgroup.gameObject.SetActive(false);
         bdice_window.gameObject.SetActive(false);
 
+        PlayerStatManager.playerstat.wheapone = 0;
+
         //enm_stat.Clear();
         //is_dead.Clear();
         m_num = 0;
@@ -466,7 +468,7 @@ public class BattleEvent : MonoBehaviour
 
     }
 
-    void AppendMsg(string msg)
+    public void AppendMsg(string msg)
     {
         story_object.text += "\n"+msg;
         LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);

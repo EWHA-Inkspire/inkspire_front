@@ -11,6 +11,8 @@ public class PlayerStatManager : MonoBehaviour
     public int mental;
     public int dex;
     public string charname;
+
+    public int wheapone=0;
     
 
     // 플레이어 스탯을 싱글톤으로 관리

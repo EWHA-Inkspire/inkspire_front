@@ -42,14 +42,8 @@ public class InventorySlot : MonoBehaviour
     }
 
     public void delQuant(int num){
-        if(quant== 1){
-            delItem();
-            return;
-        }
-        else{
-            quant-=num;
-            SetSprites();
-        }
+        quant-=num;
+        SetSprites();
     }
 
     public void delItem(){
@@ -57,6 +51,8 @@ public class InventorySlot : MonoBehaviour
         itemname = null;
         quant = 0;
         type = 0;
+        SetSprites();
+        InventoryManager.inventory.SetTarget(InventoryManager.inventory.inventorylist[0].GetItemID());
     }
 
     public void setUseItem(){
