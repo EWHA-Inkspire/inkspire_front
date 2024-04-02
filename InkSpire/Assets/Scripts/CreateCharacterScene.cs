@@ -6,8 +6,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
 
-
-
 public class CreateCharacterScene : MonoBehaviour
 {
     [SerializeField] TMP_InputField charname;
@@ -23,7 +21,7 @@ public class CreateCharacterScene : MonoBehaviour
 
     public void SetCharacterInfo(){
         PlayerStatManager.playerstat.charname = charname.text;
-        //ScriptManager.scriptinfo.setBackground(timebackground.text, spacebackground.text, GetGenre());
+        ScriptManager.scriptinfo.setBackground(timebackground.text, spacebackground.text, GetGenre());
         SceneManager.LoadScene("CreateStat");
     }
 }

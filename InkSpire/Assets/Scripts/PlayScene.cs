@@ -21,7 +21,7 @@ public class PlayScene : MonoBehaviour
 
         Changechap(ScriptManager.scriptinfo.curr_chapter);
         header_name.text = PlayerStatManager.playerstat.charname+" HP";
-        header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" / "+PlayerStatManager.playerstat.GetStatAmount("MaxHP").ToString();
+        header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP).ToString();
         battle_stat.text = "공격: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Attack).ToString()+" | 방어: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Defence).ToString()+" | 민첩: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Dexterity).ToString()+" | 행운: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Luck).ToString();
         
         if(slotPrefab!=null){
@@ -41,8 +41,8 @@ public class PlayScene : MonoBehaviour
     }
 
     void Update(){
-        slider_HP.value=(float)PlayerStatManager.playerstat.GetStatAmount("CurrHP")/PlayerStatManager.playerstat.GetStatAmount("MaxHP");
-        header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" / "+PlayerStatManager.playerstat.GetStatAmount("MaxHP").ToString();
+        slider_HP.value=(float)PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP)/PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP);
+        header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP).ToString();
     }
 
     public void Changechap(int int_chapnum){

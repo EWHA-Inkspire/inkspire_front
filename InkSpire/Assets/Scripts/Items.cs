@@ -87,7 +87,7 @@ public class Items
         switch(type){
             case Type.Recover:
                 AppendMsg(">> 아이템 사용: 체력 회복(+"+detail.ToString()+")");
-                PlayerStatManager.playerstat.ChangeSingleStat("CurrHP",detail);
+                PlayerStatManager.playerstat.p_stats.SetStatAmount(Stats.Type.CurrHP,PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP)+detail);
                 break;
             case Type.Mob:
                 break;
