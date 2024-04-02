@@ -50,7 +50,59 @@ public class ScriptManager : MonoBehaviour
         time_background = time;
         space_background = space;
         genre = gen;
-        FinalObjectiveGPT();
+        WorldDetailGPT();
+        // FinalObjectiveGPT();
+    }
+
+    private async void WorldDetailGPT(){
+        Debug.Log(">>Call World Detail GPT");
+        gpt_messages.Clear();
+
+        var newMessage = new ChatMessage()
+        {
+            Role = "system",
+            Content = @"당신은 TRPG 게임 세계관을 기획하는 게임 기획자이다. 세계관 기획을 위해 아래의 요소를 고려하여야 한다.
+            - 이 세계는 어떻게 만들어졌는가?
+            - 이 세계의 독특한 점은 무엇인가?
+            - 이 세계의 모습이 어떤지 묘사해라.
+            - 어떤 종족들이 있는가?
+            - 독특한 캐릭터가 있는가?
+            - 캐릭터들은 왜 그런 특징들을 가지고 있는가?
+            - 주요한 갈등이 무엇인가?
+            - 인물들에게 어떤 문제가 생기는가?
+            게임의 장르는 "+genre+"이고, 배경은 "+time_background+" 시대"+space_background+"를 배경으로 한다."
+        };
+
+        gpt_messages.Add(newMessage);
+
+        newMessage = new ChatMessage()
+        {
+            Role = "user",
+            Content = "게임의 세계관 생성"
+        };
+
+        gpt_messages.Add(newMessage);
+
+        // Complete the instruction
+        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
+        {
+            Model = "gpt-3.5-turbo",
+            Messages = gpt_messages
+        });
+
+        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
+        {
+            var message = completionResponse.Choices[0].Message;
+            world_detail = message.Content.Trim();
+            
+            Debug.Log(world_detail);
+            FinalObjectiveGPT();
+        }
+        else
+        {
+            Debug.LogWarning("No text was generated from this prompt.");
+        }
+
     }
 
     private async void FinalObjectiveGPT(){
