@@ -5,8 +5,6 @@ using OpenAI;
 
 public class IntroGpt
 {
-
-    private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> messages = new List<ChatMessage>();
     public async void IntroGPT(){
         Debug.Log(">>Call Intro GPT");
@@ -24,13 +22,7 @@ public class IntroGpt
             *게임 시작 멘트*
             ###"
         };
-        // Debug.Log(PlayerStatManager.playerstat.charname);
-        // Debug.Log(ScriptManager.scriptinfo.time_background);
-        // Debug.Log(ScriptManager.scriptinfo.space_background);
-        // Debug.Log(ScriptManager.scriptinfo.genre);
-        // Debug.Log(ScriptManager.scriptinfo.world_detail);
         
-
         messages.Add(newMessage);
 
         newMessage = new ChatMessage()
@@ -45,24 +37,7 @@ public class IntroGpt
 
         messages.Add(newMessage);
 
-        // Complete the instruction
-        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
-        {
-            Model = "gpt-3.5-turbo",
-            Messages = messages
-        });
-
-        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
-        {
-            var message = completionResponse.Choices[0].Message;
-            message.Content = message.Content.Trim();
-            
-            Debug.Log(message.Content);
-            ScriptManager.scriptinfo.intro_string = message.Content;
-        }
-        else
-        {
-            Debug.LogWarning("No text was generated from this prompt.");
-        }
+        var response = await GptManager.gpt.CallGpt(messages);
+        Debug.Log(response);
     }
 }
