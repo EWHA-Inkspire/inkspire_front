@@ -15,6 +15,7 @@ public class MapManager : MonoBehaviour
         public string item_name; //아이템 이름 
         public string item_info; //아이템 설명
         public string item_type; //일반 이벤트일 경우 아이템, 목표 이벤트일 경우 목표
+        public int item_stat; //아이템 기능치
         public string event_trigger; //이벤트 트리거
         public int event_type; //일반 이벤트 == 0, 목표 이벤트 == 1;
         public int ANPC_exist; //ANPC 등장 여부
@@ -75,6 +76,7 @@ public class MapManager : MonoBehaviour
         ChooseEventType();
         IsANPCexists();
         ChooseItemType();
+        ItemStat();
     }
     // public void setBackground(string time, string space, string gen)
     // {
@@ -293,6 +295,21 @@ public class MapManager : MonoBehaviour
             i++;
         }
     }
+
+    //아이템 기능치: 1~5 사이의 정수 랜덤 생성
+    public void ItemStat()
+    {
+        int i = 1;
+        while (i < 13)
+        {
+            if (map[i].item_type != "NULL")
+            {
+                map[i].item_stat = UnityEngine.Random.Range(1, 6);
+            }
+            i++;
+        }
+    }
+
 
 
     //ANPC 미등장 == 0, 등장 == 1 (목표이벤트일 경우 무조건 0)
