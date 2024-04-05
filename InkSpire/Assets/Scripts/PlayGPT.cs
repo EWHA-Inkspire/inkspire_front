@@ -30,7 +30,7 @@ TRPG 진행을 하듯 진행하되, TRPG라는 단어는 언급하면 안된다.
 사용자가 입력한 주요 npc 정보들을 토대로 적절한 시점에 npc를 등장시킨다.
 
 현재 플레이중인 게임은"+ScriptManager.scriptinfo.time_background+"시대 "+ScriptManager.scriptinfo.space_background+"를 배경으로 하는 "+ScriptManager.scriptinfo.genre+"장르의 게임이며 세계관은 다음과 같다."
-+ScriptManager.scriptinfo.world_detail
++ScriptManager.scriptinfo.world_detail+"\n\n"
 +"게임의 최종 목표는 "+ScriptManager.scriptinfo.final_obj.title+"\n"+ScriptManager.scriptinfo.final_obj.detail+"이며"
 +"현재 챕터의 목표는 다음과 같다."+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].title+"\n"+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail
 +@"** 이 표시 안의 내용은 문맥에 맞게 채운다.
@@ -43,12 +43,11 @@ Narrator (내레이터):
 *NPC 이름*:
 *npc 대사 내용*
 ###";
-    private string system_setting;
-    
 
     void Awake()
     {
         story_object.text = "";
+        
         if (messages.Count == 0)
         {
             var newMessage = new ChatMessage()
@@ -57,11 +56,18 @@ Narrator (내레이터):
                 Content = system_prompt
             };
             messages.Add(newMessage);
+
+            newMessage.Role = "user";
+            newMessage.Content = "게임을 시작하고 게임의 인트로를 보여줘";
+            messages.Add(newMessage);
+
+            var introMessage = new ChatMessage(){
+                Role = "assistant",
+                Content = ScriptManager.scriptinfo.intro_string
+            };
+            messages.Add(introMessage);
+            AppendMsg(introMessage);
         }
-        // system_setting = "플레이어 이름은 " + player_name 
-        //                     + "이야. 조력자 NPC 이름은 "+PNPC_name + "이고," + PNPC_info + @"처럼 행동해야 해. 
-        //                     적대자 NPC 이름은 "+ANPC_name + "이고," + ANPC_info + "처럼 행동해야 해";
-        // system_setting += "이 게임의 최종 목표는 " + final_title + final_content + "이고 현재 챕터의 목표는 " + chapter_title + chapter_content + "이야.";
     }
 
     public void SendButton()
@@ -70,11 +76,11 @@ Narrator (내레이터):
         input_msg.Content = player_input.text;
 
         AppendMsg(input_msg);
-        //SendReply();
+        SendReply();
 
         
         //dice_event.SetDiceEvent(50);
-        battle_event.SetBattle(BattleEvent.BType.MOB,3);
+        //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     }
     void AppendMsg(ChatMessage msg)

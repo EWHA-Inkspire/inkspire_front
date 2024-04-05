@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using OpenAI;
 
-public class IntroGpt : MonoBehaviour
+public class IntroGpt
 {
 
     private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> messages = new List<ChatMessage>();
-
-    private void Start() {
-        IntroGPT();
-    }
-
-    private async void IntroGPT(){
+    public async void IntroGPT(){
         Debug.Log(">>Call Intro GPT");
         messages.Clear();
         
@@ -21,7 +16,7 @@ public class IntroGpt : MonoBehaviour
         {
             Role = "system",
             Content = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
-            게임의 배경과 세계관 설정을 참고하여 게임의 시작 멘트인 인트로를 아래의 양식대로 출력한다.
+            게임의 배경과 세계관 설정을 참고하여 게임의 시작 멘트인 인트로를 아래의 양식대로 출력하되, 직접적으로 게임이라는 언급은 하지 않는다.
             ** 이 표시 안의 내용은 문맥에 맞게 채운다.
             ###
             여기는 *시간적 배경* *공간적 배경*. *플레이어 이름*님, 당신은 이 도시로 들어오면서 새로운 모험을 시작하게 됩니다.
@@ -29,11 +24,11 @@ public class IntroGpt : MonoBehaviour
             *게임 시작 멘트*
             ###"
         };
-        Debug.Log(PlayerStatManager.playerstat.charname);
-        Debug.Log(ScriptManager.scriptinfo.time_background);
-        Debug.Log(ScriptManager.scriptinfo.space_background);
-        Debug.Log(ScriptManager.scriptinfo.genre);
-        Debug.Log(ScriptManager.scriptinfo.world_detail);
+        // Debug.Log(PlayerStatManager.playerstat.charname);
+        // Debug.Log(ScriptManager.scriptinfo.time_background);
+        // Debug.Log(ScriptManager.scriptinfo.space_background);
+        // Debug.Log(ScriptManager.scriptinfo.genre);
+        // Debug.Log(ScriptManager.scriptinfo.world_detail);
         
 
         messages.Add(newMessage);
@@ -63,6 +58,7 @@ public class IntroGpt : MonoBehaviour
             message.Content = message.Content.Trim();
             
             Debug.Log(message.Content);
+            ScriptManager.scriptinfo.intro_string = message.Content;
         }
         else
         {

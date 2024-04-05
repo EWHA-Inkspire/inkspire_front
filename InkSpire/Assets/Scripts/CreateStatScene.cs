@@ -4,9 +4,12 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+using Unity.VisualScripting;
 
 public class CreateStatScene : MonoBehaviour
 {
+    [SerializeField] GameObject LoadingPannel;
+    [SerializeField] TextMeshProUGUI LoadingText;
     [SerializeField] StatGraphTest testObj;
     [SerializeField] TMP_InputField atk;
     [SerializeField] TMP_InputField def;
@@ -51,12 +54,33 @@ public class CreateStatScene : MonoBehaviour
 
     public void GameStartButton(){
         SetCharacterStat();
-        StartCoroutine(PostCharacterScriptInfo());
-        while(ScriptManager.scriptinfo.curr_chapter!=1){
-            Debug.Log(">>Wating for GPT Response");
+        //StartCoroutine(PostCharacterScriptInfo());
+        LoadingText.text = "게임을 생성중입니다";
+        WaitForGPT();
+
+        //StartCoroutine(PostObjectiveInfo());
+    }
+
+    void WaitForGPT(){
+        if(!LoadingPannel.gameObject.activeSelf){
+            LoadingPannel.gameObject.SetActive(true);
         }
-        StartCoroutine(PostObjectiveInfo());
-        SceneManager.LoadScene("Play");
+        if(LoadingText.text=="게임을 생성중입니다 . . ."){
+            LoadingText.text = "게임을 생성중입니다";
+        }
+        else{
+            LoadingText.text+=" .";
+        }
+        if(ScriptManager.scriptinfo.intro_string=="placeholder" || ScriptManager.scriptinfo.intro_string=="" ||ScriptManager.scriptinfo.curr_chapter!=1){
+            Debug.Log(">>Wating for GPT Response");
+            Invoke("WaitForGPT",0.5f);
+        }
+        else{
+            Debug.Log(ScriptManager.scriptinfo.intro_string);
+            Debug.Log(ScriptManager.scriptinfo.curr_chapter);
+            LoadingPannel.gameObject.SetActive(false);
+            SceneManager.LoadScene("Play");
+        }
     }
 
     IEnumerator PostCharacterScriptInfo(){
