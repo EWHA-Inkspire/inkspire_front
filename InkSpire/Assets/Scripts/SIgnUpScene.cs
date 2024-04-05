@@ -18,6 +18,7 @@ public class SIgnUpScene : MonoBehaviour
     string new_nickname;
     string new_password;
     string checkpw;
+    bool post_done = false;
 
     public void SignupButton(){
         if(new_password == checkpw){
@@ -28,8 +29,10 @@ public class SIgnUpScene : MonoBehaviour
             string account_json = JsonUtility.ToJson(account);
             Debug.Log(account_json);
             StartCoroutine(PostNewAccount(new_email,new_password,new_nickname));
-            //씬이 넘어가면 코루틴 안되는듯 수정할것
-            //SceneManager.LoadScene("Login");
+            while(!post_done){
+                Debug.Log(">>Wating for web POST");
+            }
+            SceneManager.LoadScene("Login");
         }
         else{
             Debug.Log("SignupError: pw and pwcheck not same");
@@ -66,13 +69,14 @@ public class SIgnUpScene : MonoBehaviour
         form.AddField("password",password);
         form.AddField("nickname",nickname);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://3.35.61.61:8080/users/signup",form);
+        UnityWebRequest www = UnityWebRequest.Post("http://3.38.126.43:8080/users/signup",form);
         yield return www.SendWebRequest();
 
         if(www.result != UnityWebRequest.Result.Success){
             Debug.Log(www.error);
         }
         else{
+            post_done = true;
             Debug.Log(">>NewAccount upload complete.");
         }
     }

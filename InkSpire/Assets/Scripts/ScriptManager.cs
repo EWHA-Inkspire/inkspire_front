@@ -30,10 +30,8 @@ public class ScriptManager : MonoBehaviour
     public string space_background;
     public string genre;
 
-
     public string world_detail="세계관이 아직 생성되지 않았으므로 사용자가 제시한 장르와 배경에 맞는 목표를 적절히 제시한다.";
-
-
+    public string intro_string="placeholder";
 
     private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
@@ -51,7 +49,6 @@ public class ScriptManager : MonoBehaviour
         space_background = space;
         genre = gen;
         WorldDetailGPT();
-        // FinalObjectiveGPT();
     }
 
     private async void WorldDetailGPT(){
@@ -61,15 +58,10 @@ public class ScriptManager : MonoBehaviour
         var newMessage = new ChatMessage()
         {
             Role = "system",
-            Content = @"당신은 TRPG 게임 세계관을 기획하는 게임 기획자이다. 세계관 기획을 위해 아래의 요소를 고려하여야 한다.
-            - 이 세계는 어떻게 만들어졌는가?
-            - 이 세계의 독특한 점은 무엇인가?
-            - 이 세계의 모습이 어떤지 묘사해라.
-            - 어떤 종족들이 있는가?
-            - 독특한 캐릭터가 있는가?
-            - 캐릭터들은 왜 그런 특징들을 가지고 있는가?
-            - 주요한 갈등이 무엇인가?
-            - 인물들에게 어떤 문제가 생기는가?
+            Content = @"당신은 TRPG 게임 세계관을 기획하는 게임 기획자이다. 시대와 공간적 배경의 정확한 명칭이 없어 '가상배경' 등의 단어로 제시되는 경우, 해당 배경의 이름 또한 생성하여 매끄럽게 출력한다. 
+            장르가 '판타지'가 아닌 경우 마법적 요소나 판타지적 요소는 일절 포함하지 않는다. 
+            당신은 반드시 게임의 장르와 시간, 공간적 배경에 알맞는 세계관을 생성해야 한다. 
+            
             게임의 장르는 "+genre+"이고, 배경은 "+time_background+" 시대"+space_background+"를 배경으로 한다."
         };
 
@@ -78,31 +70,20 @@ public class ScriptManager : MonoBehaviour
         newMessage = new ChatMessage()
         {
             Role = "user",
-            Content = "게임의 세계관 생성"
+            Content = "게임의 배경과 장르에 어울리는 세계관 생성"
         };
 
         gpt_messages.Add(newMessage);
 
-        // Complete the instruction
-        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
-        {
-            Model = "gpt-3.5-turbo",
-            Messages = gpt_messages
-        });
+        var response = await GptManager.gpt.CallGpt(gpt_messages);
+        Debug.Log(response);
 
-        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
-        {
-            var message = completionResponse.Choices[0].Message;
-            world_detail = message.Content.Trim();
-            
-            Debug.Log(world_detail);
+        if(response != "No text was generated from this prompt.") {
+            world_detail = response;
             FinalObjectiveGPT();
+            IntroGpt intro = new IntroGpt();
+            intro.IntroGPT();
         }
-        else
-        {
-            Debug.LogWarning("No text was generated from this prompt.");
-        }
-
     }
 
     private async void FinalObjectiveGPT(){
@@ -248,11 +229,24 @@ public class ScriptManager : MonoBehaviour
         string[] obj_arr;
         obj_string = obj_string.Replace("\n",":");
         obj_arr = obj_string.Split(':');
-
-        obj.type = obj_arr[1];
-        obj.title = obj_arr[3];
-        obj.detail = obj_arr[5];
-        obj.etc = obj_arr[7];
+        for(int i = 0; i<obj_arr.Length; i++ ){
+            switch(i){
+                case 1:
+                    obj.type = obj_arr[1];
+                    continue;
+                case 3:
+                    obj.title = obj_arr[3];
+                    continue;
+                case 5:
+                    obj.detail = obj_arr[5];
+                    continue;
+                case 7:
+                    obj.etc = obj_arr[7];
+                    continue;
+                default:
+                    continue;
+            }
+        }
 
         return obj;
     }

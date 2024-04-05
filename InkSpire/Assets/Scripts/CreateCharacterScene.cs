@@ -6,8 +6,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
 
-
-
 public class CreateCharacterScene : MonoBehaviour
 {
     [SerializeField] TMP_InputField charname;

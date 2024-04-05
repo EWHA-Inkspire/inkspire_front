@@ -32,21 +32,4 @@ public class PlayerStatManager : MonoBehaviour
         p_stats.SetStatAmount(Stats.Type.CurrHP,5);
 
     }
-    
-    public int GetStatAmount(string stat_type){
-        return p_stats.GetStatAmount(p_stats.parseEnumType(stat_type));
-    }
-    public void SetSingleStat(string stat_type, int stat_amount){
-        p_stats.SetStatAmount(p_stats.parseEnumType(stat_type),stat_amount);
-        p_stats.OnStatsChanged += OnStatsChanged;
-    }
-
-    public void ChangeSingleStat(string stat_type, int delta_amount){
-        p_stats.SetStatAmount(p_stats.parseEnumType(stat_type),p_stats.GetStatAmount(p_stats.parseEnumType(stat_type))+delta_amount);
-        p_stats.OnStatsChanged += OnStatsChanged;
-    }
-
-    private void OnStatsChanged(object sender, System.EventArgs e){
-        //Debug.Log("Stat Changed: ",p_stats.GetStatAmount(CurrHP),"/",p_stats.GetStatAmount(MaxHP),"\t",p_stats.GetStatAmount(Luck),"\t",p_stats.GetStatAmount(Defence),"\t",p_stats.GetStatAmount(Intelligence),"\t",p_stats.GetStatAmount(Dexterity),"\t",p_stats.GetStatAmount(Attack));
-    }
 }
