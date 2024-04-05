@@ -83,6 +83,7 @@ public class ScriptManager : MonoBehaviour
         Debug.Log(response);
 
         if(response != "No text was generated from this prompt.") {
+            world_detail = response;
             FinalObjectiveGPT();
         }
     }
