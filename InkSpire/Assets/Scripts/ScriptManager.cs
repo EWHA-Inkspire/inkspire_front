@@ -30,10 +30,7 @@ public class ScriptManager : MonoBehaviour
     public string space_background;
     public string genre;
 
-
     public string world_detail="세계관이 아직 생성되지 않았으므로 사용자가 제시한 장르와 배경에 맞는 목표를 적절히 제시한다.";
-
-
 
     private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
@@ -51,7 +48,6 @@ public class ScriptManager : MonoBehaviour
         space_background = space;
         genre = gen;
         WorldDetailGPT();
-        // FinalObjectiveGPT();
     }
 
     private async void WorldDetailGPT(){
@@ -83,26 +79,12 @@ public class ScriptManager : MonoBehaviour
 
         gpt_messages.Add(newMessage);
 
-        // Complete the instruction
-        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
-        {
-            Model = "gpt-3.5-turbo",
-            Messages = gpt_messages
-        });
+        var response = await GptManager.gpt.CallGpt(gpt_messages);
+        Debug.Log(response);
 
-        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
-        {
-            var message = completionResponse.Choices[0].Message;
-            world_detail = message.Content.Trim();
-            
-            Debug.Log(world_detail);
+        if(response != "No text was generated from this prompt.") {
             FinalObjectiveGPT();
         }
-        else
-        {
-            Debug.LogWarning("No text was generated from this prompt.");
-        }
-
     }
 
     private async void FinalObjectiveGPT(){
