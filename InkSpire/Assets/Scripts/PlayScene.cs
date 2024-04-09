@@ -10,7 +10,7 @@ public class PlayScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI header_HP;
     [SerializeField] TextMeshProUGUI title_chapnum;
     [SerializeField] TextMeshProUGUI battle_stat;
-
+    [SerializeField] GameObject place_list;
     [SerializeField] GameObject item_list;
     [SerializeField] Slider slider_HP;
 
@@ -38,6 +38,22 @@ public class PlayScene : MonoBehaviour
                 InventoryManager.inventory.slotlist[i] = newSlot;
             }
         }
+
+        place_list.transform.GetChild(12).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+MapManager.mapinfo.map[0].place_name;
+        for (int i = 0; i<14; i++){
+            if(i==12){
+                continue;
+            }
+            if(i/3 == 0){
+                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = MapManager.mapinfo.map[i+1].place_name;
+            }
+            else{
+                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
+            }
+            
+        }
+        MapManager.mapinfo.curr_place = 0;
     }
 
     void Update(){

@@ -63,7 +63,7 @@ Narrator (내레이터):
 
             var introMessage = new ChatMessage(){
                 Role = "assistant",
-                Content = ScriptManager.scriptinfo.intro_string
+                Content = ScriptManager.scriptinfo.intro_string+"\n\nNarrator:\n"+PlayerStatManager.playerstat.charname+"님, 처음으로 조사할 장소를 선택해주십시오. "
             };
             messages.Add(introMessage);
             AppendMsg(introMessage);
