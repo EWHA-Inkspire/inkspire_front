@@ -36,15 +36,14 @@ npc 정보들을 토대로 적절한 시점에 npc를 등장시킨다.
 +"현재 챕터의 목표는 다음과 같다."+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].title+"\n"+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail
 +" 현재 플레이어가 있는 장소는 "+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_name+"로, "+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_info
 +@"이 아래로 게임 진행 양식이 이어진다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
-###
+ ------------------------------------------------
 Narrator (내레이터):
 *게임 스토리 진행 멘트 혹은 플레이어의 선택지 생성*
 
 *필요할 경우 현재 상황에 대한 설명*
 
 *NPC 이름*:
-*npc 대사 내용*
-###";
+*npc 대사 내용*";
 
     void Awake()
     {
@@ -72,7 +71,7 @@ Narrator (내레이터):
         }
     }
 
-    public async void SendButton()
+    public void SendButton()
     {
         // 이벤트 체커 메시지 설정 (가장 마지막 gpt 대화 추가)
         var checkerMessage = new List<ChatMessage>();
@@ -93,8 +92,10 @@ Narrator (내레이터):
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
             Debug.Log(event_trigger);
 
-            if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
+            if(EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
                 // TODO: 주사위 이벤트 진행
+                // mapManager에서 event_trigger 만들 때 인트로 문구도 같이 만들도록 -> 출력 후 주사위 이벤트 진행
+                dice_event.SetDiceEvent(50);
             }
         }
         SendReply();

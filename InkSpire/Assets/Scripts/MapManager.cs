@@ -158,6 +158,7 @@ public class MapManager : MonoBehaviour
         gpt_messages.Clear();
         if (map[place_idx].item_type == "Mob" || map[place_idx].item_type == "Monster" || map[place_idx].item_type == "NULL")
             return;
+        Debug.Log(">>현재 챕터 목표: " + ScriptManager.scriptinfo.chapter_obj);
         var prompt_msg = new ChatMessage()
         {
             Role = "system",
