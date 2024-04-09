@@ -71,10 +71,10 @@ public class CreateStatScene : MonoBehaviour
         else{
             LoadingText.text+=" .";
         }
-        if(ScriptManager.scriptinfo.intro_string=="placeholder" || ScriptManager.scriptinfo.intro_string=="" ||ScriptManager.scriptinfo.curr_chapter!=1){
+        if(ScriptManager.scriptinfo.intro_string=="placeholder" || ScriptManager.scriptinfo.intro_string=="" ||ScriptManager.scriptinfo.curr_chapter!=1||!MapManager.mapinfo.is_drawmap){
             Debug.Log(">>Wating for GPT Response");
-            Debug.Log(ScriptManager.scriptinfo.intro_string);
-            Debug.Log(ScriptManager.scriptinfo.curr_chapter);
+            //Debug.Log(ScriptManager.scriptinfo.intro_string);
+            //Debug.Log(ScriptManager.scriptinfo.curr_chapter);
             Invoke("WaitForGPT",1f);
         }
         else{

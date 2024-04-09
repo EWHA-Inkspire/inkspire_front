@@ -92,6 +92,13 @@ public class ScriptManager : MonoBehaviour
             
             IntroGpt intro = new IntroGpt();
             intro.IntroGPT();
+            MapManager.mapinfo.DrawMap();
+
+            int i = 0;
+            while(i/3 == 0){
+                MapManager.mapinfo.CreatePlace(i+1);
+                i++;
+            }
         }
     }
 
@@ -132,29 +139,11 @@ public class ScriptManager : MonoBehaviour
         };
         gpt_messages.Add(query_msg);
 
-
-        // Complete the instruction
-        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
-        {
-            Model = "gpt-3.5-turbo",
-            Messages = gpt_messages
-        });
-
-        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
-        {
-            var message = completionResponse.Choices[0].Message;
-            message.Content = message.Content.Trim();
-            Debug.Log(message.Content);
-            final_obj = chapter_obj[5] = StringToObjective(message.Content);
+        final_obj = chapter_obj[5] = StringToObjective(await GptManager.gpt.CallGpt(gpt_messages));
 
             curr_chapter = 0;
             ChapterObjectiveGPT(0);
             //StartCoroutine(PostChapterObjective());
-        }
-        else
-        {
-            Debug.LogWarning("No text was generated from this prompt.");
-        }
         
     }
 
@@ -203,31 +192,11 @@ public class ScriptManager : MonoBehaviour
         };
         gpt_messages.Add(query_msg);
 
-
-        // Complete the instruction
-        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
-        {
-            Model = "gpt-3.5-turbo",
-            Messages = gpt_messages
-        });
-
-        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
-        {
-            var message = completionResponse.Choices[0].Message;
-            message.Content = message.Content.Trim();
-            Debug.Log(message.Content);
-            chapter_obj[chapter_num+1] = StringToObjective(message.Content);
+        chapter_obj[chapter_num+1] = StringToObjective(await GptManager.gpt.CallGpt(gpt_messages));
             curr_chapter = chapter_num+1;
             if(curr_chapter!=1){
                 //StartCoroutine(PostChapterObjective(curr_chapter));
             }
-
-        }
-        else
-        {
-            Debug.LogWarning("No text was generated from this prompt.");
-        }
-
 
     }
 

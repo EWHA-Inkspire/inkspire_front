@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 public class MapManager : MonoBehaviour
 {
     public static MapManager mapinfo;
+    public bool is_drawmap = false;
     public struct place
     {
         public string place_name; //장소 이름
@@ -77,6 +78,7 @@ public class MapManager : MonoBehaviour
         IsANPCexists();
         ChooseItemType();
         ItemStat();
+        is_drawmap = true;
     }
     // public void setBackground(string time, string space, string gen)
     // {
@@ -292,7 +294,7 @@ public class MapManager : MonoBehaviour
             i++;
         }
     }
-    private async void CreatePlace(int place_idx)
+    public async void CreatePlace(int place_idx)
     {
         string timeBackground = ScriptManager.scriptinfo.time_background;
         string spaceBackground = ScriptManager.scriptinfo.space_background;
@@ -342,13 +344,6 @@ public class MapManager : MonoBehaviour
             Content = "진행중인 게임의 " + genre + "장르와 세계관에 어울리는 장소 생성"
         };
         gpt_messages.Add(query_msg);
-
-        // Complete the instruction
-        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
-        {
-            Model = "gpt-3.5-turbo",
-            Messages = gpt_messages
-        });
 
         map[place_idx] = StringToPlace(await GptManager.gpt.CallGpt(gpt_messages));
         curr_place = place_idx; //curr_chapter가 어디에서 i++되는 변수인지 확인하기
