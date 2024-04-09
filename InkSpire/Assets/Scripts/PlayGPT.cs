@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -70,16 +71,26 @@ Narrator (내레이터):
         }
     }
 
-    public void SendButton()
+    public async void SendButton()
     {
+        // 이벤트 체커 메시지 설정 (가장 마지막 gpt 대화 추가)
+        var checkerMessage = new List<ChatMessage>();
+        checkerMessage.Add(messages.Last());
+
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
 
         AppendMsg(input_msg);
-        SendReply();
+        // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
+        checkerMessage.Add(input_msg);
+
+        if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, "아직 이벤트 트리거가 설정되지 않음")) {
+            SendReply();
+        }
+        // SendReply();
 
         
-        dice_event.SetDiceEvent(50);
+        // dice_event.SetDiceEvent(50);
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     }
