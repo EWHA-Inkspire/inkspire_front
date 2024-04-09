@@ -7,6 +7,6 @@ public class AddCharacter : MonoBehaviour
 {
     public void SceneChange()
     {
-        SceneManager.LoadScene("CreateCharacter");
+        SceneManager.LoadScene("3_CreateCharacter");
     }
 }
