@@ -18,7 +18,6 @@ public class PlayGPT : MonoBehaviour
     [SerializeField] private ScrollRect scroll;
     [SerializeField] private GameObject map_modal;
 
-    private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> messages = new List<ChatMessage>();
     private ChatMessage input_msg = new ChatMessage();
     private string system_prompt = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
