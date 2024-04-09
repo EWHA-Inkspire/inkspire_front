@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -69,14 +70,32 @@ Narrator (내레이터):
         }
     }
 
-    public void SendButton()
+    public async void SendButton()
     {
+        // 이벤트 체커 메시지 설정 (가장 마지막 gpt 대화 추가)
+        var checkerMessage = new List<ChatMessage>();
+        checkerMessage.Add(messages.Last());
+
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
 
         AppendMsg(input_msg);
-        SendReply();
 
+        // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
+        checkerMessage.Add(input_msg);
+
+        var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
+        if(item_type == "Recover" || item_type == "Weapon" ||
+        item_type == "Item" || item_type == "Report") {
+            Debug.Log(">>이벤트 트리거");
+            var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
+            Debug.Log(event_trigger);
+
+            if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
+                // TODO: 주사위 이벤트 진행
+            }
+        }
+        SendReply();
         
         //dice_event.SetDiceEvent(50);
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);
