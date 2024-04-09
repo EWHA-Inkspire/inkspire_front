@@ -23,7 +23,7 @@ public class GptManager : MonoBehaviour
         // gpt 호출
         var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
         {
-            Model = "gpt-4",
+            Model = "gpt-3.5-turbo",
             Messages = messages
         });
 
