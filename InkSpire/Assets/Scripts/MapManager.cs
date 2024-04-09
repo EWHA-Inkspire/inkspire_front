@@ -61,18 +61,7 @@ public class MapManager : MonoBehaviour
         //PNPC 장소 생성
         place_idx = 0;
         CreatePlace(place_idx);
-        //chapter index 설정
-        if (place_idx > 0 && place_idx < 4)
-            chapter_idx = 1;
-        else if (place_idx > 3 && place_idx < 7)
-            chapter_idx = 2;
-        else if (place_idx > 6 && place_idx < 10)
-            chapter_idx = 3;
-        else if (place_idx > 9 && place_idx < 13)
-            chapter_idx = 4;
-        else if (place_idx == 13)
-            chapter_idx = 5;
-        place_idx++;
+
         // 모든 챕터의 장소 설정
         ChooseEventType();
         IsANPCexists();
