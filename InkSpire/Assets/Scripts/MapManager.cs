@@ -40,7 +40,6 @@ public class MapManager : MonoBehaviour
     public string PNPC_place;
     public int curr_place;
     public int place_idx;
-    public int chapter_idx;
     private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
 
@@ -322,7 +321,7 @@ public class MapManager : MonoBehaviour
                 @"장소는 게임의 배경에 맞추어 플레이어가 흥미롭게 탐색할 수 있는 곳으로 생성된다. 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
             
             장소명: *장소 이름을 한 단어로 출력*
-            장소설명: *장소에 대한 설명을 50자 내외로 설명*"
+            장소설명: *장소에 대한 설명을 50자 내외로 설명, 어미는 ~ㅂ니다.체로 통일한다.*"
             };
         }
         gpt_messages.Add(prompt_msg);
