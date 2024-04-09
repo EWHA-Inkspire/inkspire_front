@@ -16,6 +16,7 @@ public class PlayGPT : MonoBehaviour
     [SerializeField] private TextMeshProUGUI story_object;
     [SerializeField] private Button button;
     [SerializeField] private ScrollRect scroll;
+    [SerializeField] private GameObject map_modal;
 
     private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> messages = new List<ChatMessage>();
@@ -34,6 +35,7 @@ TRPG 진행을 하듯 진행하되, TRPG라는 단어는 언급하면 안된다.
 +ScriptManager.scriptinfo.world_detail+"\n\n"
 +"게임의 최종 목표는 "+ScriptManager.scriptinfo.final_obj.title+"\n"+ScriptManager.scriptinfo.final_obj.detail+"이며"
 +"현재 챕터의 목표는 다음과 같다."+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].title+"\n"+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail
++" 현재 플레이어가 있는 장소는 "+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_name+"로, "+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_info
 +@"** 이 표시 안의 내용은 문맥에 맞게 채운다.
 ###
 Narrator (내레이터):
@@ -64,7 +66,7 @@ Narrator (내레이터):
 
             var introMessage = new ChatMessage(){
                 Role = "assistant",
-                Content = ScriptManager.scriptinfo.intro_string+"\n\nNarrator:\n"+PlayerStatManager.playerstat.charname+"님, 처음으로 조사할 장소를 선택해주십시오. "
+                Content = ScriptManager.scriptinfo.intro_string+"\n\nNarrator:\n"+PlayerStatManager.playerstat.charname+"님, 처음으로 조사할 장소를 선택해주십시오. \n Map 창의 "+MapManager.mapinfo.map[0].place_name+"를 선택할 시, "+ScriptManager.scriptinfo.pNPC.name+"가 당신을 반겨줄 것입니다."
             };
             messages.Add(introMessage);
             AppendMsg(introMessage);
@@ -90,7 +92,7 @@ Narrator (내레이터):
         // SendReply();
 
         
-        // dice_event.SetDiceEvent(50);
+        //dice_event.SetDiceEvent(50);
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     }
@@ -124,27 +126,28 @@ Narrator (내레이터):
         player_input.text = "";
         player_input.enabled = false;
 
-        // Complete the instruction
-        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
-        {
-            Model = "gpt-3.5-turbo",
-            Messages = messages
-        });
-
-        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
-        {
-            var message = completionResponse.Choices[0].Message;
-            message.Content = message.Content.Trim();
-
-            messages.Add(message);
-            AppendMsg(message);
-        }
-        else
-        {
-            Debug.LogWarning("No text was generated from this prompt.");
-        }
+        var message = await GptManager.gpt.CallGpt(messages);
+        newMessage.Role = "assistant";
+        newMessage.Content = message;
+        AppendMsg(newMessage);
 
         button.enabled = true;
         player_input.enabled = true;
+    }
+
+    public void PlaceButton(int place_idx){
+        MapManager.mapinfo.curr_place = place_idx;
+        var query_msg = new ChatMessage(){
+            Role = "user",
+            Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_name+"으로 이동"
+        };
+        messages.Add(query_msg);
+        var newMessage = new ChatMessage(){
+            Role = "assistant",
+            Content = "Narrator: \n이곳은 "+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_name+"입니다.\n"+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_info
+        };
+        messages.Add(newMessage);
+        AppendMsg(newMessage);
+        map_modal.gameObject.SetActive(false);
     }
 }
