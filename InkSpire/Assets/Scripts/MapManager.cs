@@ -152,17 +152,18 @@ public class MapManager : MonoBehaviour
     private async void CreateEventTrigger(int place_idx)
     {
         string worldDetail = ScriptManager.scriptinfo.world_detail;
+        int curr_chapter = ScriptManager.scriptinfo.curr_chapter;
 
         Debug.Log(">>Call Create EventTrigger GPT");
         Debug.Log(">>현재 장소 인덱스: " + place_idx);
         gpt_messages.Clear();
         if (map[place_idx].item_type == "Mob" || map[place_idx].item_type == "Monster" || map[place_idx].item_type == "NULL")
             return;
-        Debug.Log(">>현재 챕터 목표: " + ScriptManager.scriptinfo.chapter_obj);
+        Debug.Log(">>현재 챕터 목표: " + ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail);
         var prompt_msg = new ChatMessage()
         {
             Role = "system",
-            Content = @"당신은 챕터 목표에 맞는 게임 아이템의 위치를 생성한다. 챕터 목표는 " + ScriptManager.scriptinfo.chapter_obj + "이며 게임의 세계관 배경은 다음과 같다. " + worldDetail
+            Content = @"당신은 챕터 목표에 맞는 게임 아이템의 위치를 생성한다. 챕터 목표는 " + ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail + "이며 게임의 세계관 배경은 다음과 같다. " + worldDetail
             + "플레이어가 현재 위치한 장소 이름은 " + map[place_idx].place_name + "이며 이 장소에서 게임 아이템인 " + map[place_idx].item_name + @"가 존재하는 위치를 생성한다. 
             위치의 이름은 장소 이름 및 게임 아이템과 자연스럽게 어울려야 하며 반드시 한 단어로 출력한다." // 장소 이름, 아이템 이름, 월드디테일 전달, 챕터목표 -> 이 물건이 있을만한 위치를 생성  
         };
@@ -176,6 +177,7 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
 
         map[place_idx].event_trigger = await GptManager.gpt.CallGpt(gpt_messages); //이거 파싱 어케할지 고민
+        Debug.Log(">>이벤트 트리거: "+map[place_idx].event_trigger);
         curr_place = place_idx;
         if (curr_place != 1)
         {
