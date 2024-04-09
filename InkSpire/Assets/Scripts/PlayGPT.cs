@@ -86,6 +86,7 @@ Narrator (내레이터):
         // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
         checkerMessage.Add(input_msg);
 
+        var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
         if(item_type == "Recover" || item_type == "Weapon" ||
         item_type == "Item" || item_type == "Report") {
             Debug.Log(">>이벤트 트리거");
