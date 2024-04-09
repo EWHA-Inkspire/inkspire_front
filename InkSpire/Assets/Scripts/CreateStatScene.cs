@@ -73,7 +73,9 @@ public class CreateStatScene : MonoBehaviour
         }
         if(ScriptManager.scriptinfo.intro_string=="placeholder" || ScriptManager.scriptinfo.intro_string=="" ||ScriptManager.scriptinfo.curr_chapter!=1){
             Debug.Log(">>Wating for GPT Response");
-            Invoke("WaitForGPT",0.5f);
+            Debug.Log(ScriptManager.scriptinfo.intro_string);
+            Debug.Log(ScriptManager.scriptinfo.curr_chapter);
+            Invoke("WaitForGPT",1f);
         }
         else{
             Debug.Log(ScriptManager.scriptinfo.intro_string);

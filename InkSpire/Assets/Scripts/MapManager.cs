@@ -124,6 +124,7 @@ public class MapManager : MonoBehaviour
             map[i].ANPC_exist = 0;
         }
     }
+
     private async void CreateItem(int place_idx)
     {
         string timeBackground = ScriptManager.scriptinfo.time_background;
@@ -159,31 +160,14 @@ public class MapManager : MonoBehaviour
         };
         gpt_messages.Add(query_msg);
 
-        // Complete the instruction
-        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
+        map[place_idx].item_name = await GptManager.gpt.CallGpt(gpt_messages);
+        curr_place = place_idx;
+        if (curr_place != 1)
         {
-            Model = "gpt-3.5-turbo",
-            Messages = gpt_messages
-        });
-
-        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
-        {
-            var message = completionResponse.Choices[0].Message;
-            message.Content = message.Content.Trim();
-            Debug.Log(message.Content);
-            map[place_idx].item_name = message.Content;
-            curr_place = place_idx;
-            if (curr_place != 1)
-            {
-                //StartCoroutine(PostChapterObjective(curr_chapter));
-            }
-
-        }
-        else
-        {
-            Debug.LogWarning("No text was generated from this prompt.");
+            //StartCoroutine(PostChapterObjective(curr_chapter));
         }
     }
+
     private async void CreateEventTrigger(int place_idx)
     {
         string worldDetail = ScriptManager.scriptinfo.world_detail;
@@ -209,29 +193,11 @@ public class MapManager : MonoBehaviour
         };
         gpt_messages.Add(query_msg);
 
-        // Complete the instruction
-        var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
+        map[place_idx].event_trigger = await GptManager.gpt.CallGpt(gpt_messages); //이거 파싱 어케할지 고민
+        curr_place = place_idx;
+        if (curr_place != 1)
         {
-            Model = "gpt-3.5-turbo",
-            Messages = gpt_messages
-        });
-
-        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
-        {
-            var message = completionResponse.Choices[0].Message;
-            message.Content = message.Content.Trim();
-            Debug.Log(message.Content);
-            map[place_idx].event_trigger = message.Content; //이거 파싱 어케할지 고민
-            curr_place = place_idx;
-            if (curr_place != 1)
-            {
-                //StartCoroutine(PostChapterObjective(curr_chapter));
-            }
-
-        }
-        else
-        {
-            Debug.LogWarning("No text was generated from this prompt.");
+            //StartCoroutine(PostChapterObjective(curr_chapter));
         }
     }
 
@@ -384,22 +350,11 @@ public class MapManager : MonoBehaviour
             Messages = gpt_messages
         });
 
-        if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
+        map[place_idx] = StringToPlace(await GptManager.gpt.CallGpt(gpt_messages));
+        curr_place = place_idx; //curr_chapter가 어디에서 i++되는 변수인지 확인하기
+        if (curr_place != 1)
         {
-            var message = completionResponse.Choices[0].Message;
-            message.Content = message.Content.Trim();
-            Debug.Log(message.Content);
-            map[place_idx] = StringToPlace(message.Content);
-            curr_place = place_idx; //curr_chapter가 어디에서 i++되는 변수인지 확인하기
-            if (curr_place != 1)
-            {
-                //StartCoroutine(PostChapterObjective(curr_chapter));
-            }
-
-        }
-        else
-        {
-            Debug.LogWarning("No text was generated from this prompt.");
+            //StartCoroutine(PostChapterObjective(curr_chapter));
         }
     }
 

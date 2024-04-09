@@ -30,8 +30,11 @@ public class ScriptManager : MonoBehaviour
     public string space_background;
     public string genre;
 
-    public string world_detail="세계관이 아직 생성되지 않았으므로 사용자가 제시한 장르와 배경에 맞는 목표를 적절히 제시한다.";
+    public string world_detail="placeholder";
     public string intro_string="placeholder";
+
+    public NpcGPT.NPCinfo pNPC;
+    public NpcGPT.NPCinfo aNPC;
 
     private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
@@ -81,6 +84,12 @@ public class ScriptManager : MonoBehaviour
         if(response != "No text was generated from this prompt.") {
             world_detail = response;
             FinalObjectiveGPT();
+            NpcGPT npc = new NpcGPT();
+            pNPC = await npc.CreatePNPC();
+            Debug.Log("pNPC: "+pNPC.name);
+            aNPC = await npc.CreateANPC();
+            Debug.Log("aNPC: "+aNPC.name);
+            
             IntroGpt intro = new IntroGpt();
             intro.IntroGPT();
         }
