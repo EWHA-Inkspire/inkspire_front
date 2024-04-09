@@ -58,15 +58,15 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
 
     void ResultActive()
     {
-        result_calc.text = pl_value.ToString() + " + " + luk_value.ToString() + "(Bonus)\n";
         resultwindow.gameObject.SetActive(true);
+        result_calc.text = pl_value.ToString() + " + " + luk_value.ToString() + "(Bonus)\n";
         if (pl_value + luk_value >= req_value)
         {
-            result_txt.text = "<color=\"#074AB0\">Success</color>";
+            result_txt.text = "<color=#074AB0>Success</color>";
         }
         else
         {
-            result_txt.text = "<color=\"#B40000\">Fail</color>";
+            result_txt.text = "<color=#B40000>Fail</color>";
         }
     }
 
