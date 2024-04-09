@@ -64,7 +64,7 @@ public class CreateStatScene : MonoBehaviour
         //StartCoroutine(PostCharacterScriptInfo());
         LoadingText.text = "게임을 생성중입니다";
         SceneManager.LoadScene("5_Play");
-        //WaitForGPT();
+        WaitForGPT();
 
         //StartCoroutine(PostObjectiveInfo());
     }
