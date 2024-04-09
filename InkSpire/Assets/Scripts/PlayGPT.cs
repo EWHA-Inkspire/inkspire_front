@@ -83,14 +83,21 @@ Narrator (내레이터):
         input_msg.Content = player_input.text;
 
         AppendMsg(input_msg);
+
         // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
         checkerMessage.Add(input_msg);
 
-        if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, "아직 이벤트 트리거가 설정되지 않음")) {
-            SendReply();
-        }
-        // SendReply();
+        if(item_type == "Recover" || item_type == "Weapon" ||
+        item_type == "Item" || item_type == "Report") {
+            Debug.Log(">>이벤트 트리거");
+            var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
+            Debug.Log(event_trigger);
 
+            if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
+                // TODO: 주사위 이벤트 진행
+            }
+        }
+        SendReply();
         
         //dice_event.SetDiceEvent(50);
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);

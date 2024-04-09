@@ -114,8 +114,6 @@ public class MapManager : MonoBehaviour
         string spaceBackground = ScriptManager.scriptinfo.space_background;
         string worldDetail = ScriptManager.scriptinfo.world_detail;
 
-        Debug.Log(">>Call Create ITEM GPT");
-        Debug.Log(">>현재 장소 인덱스: " + place_idx);
         gpt_messages.Clear();
         string about_item = "";
         if (map[place_idx].item_type == "Recover")
@@ -158,7 +156,7 @@ public class MapManager : MonoBehaviour
         Debug.Log(">>Call Create EventTrigger GPT");
         Debug.Log(">>현재 장소 인덱스: " + place_idx);
         gpt_messages.Clear();
-        if (map[place_idx].item_type == "Mob")
+        if (map[place_idx].item_type == "Mob" || map[place_idx].item_type == "Monster" || map[place_idx].item_type == "NULL")
             return;
         var prompt_msg = new ChatMessage()
         {
@@ -282,7 +280,7 @@ public class MapManager : MonoBehaviour
                 @"장소는 게임의 배경에 맞추어 플레이어가 흥미롭게 탐색할 수 있는 곳으로 생성된다. 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
             
             장소명: *장소 이름을 한 단어로 출력*
-            장소설명: *장소에 대한 설명을 50자 내외로 설명, 어미는 ~ㅂ니다.체로 통일한다.*"
+            장소설명: *장소에 대한 설명을 50자 내외로 설명, 어미는 입니다 체로 통일한다.*"
             };
         }
         gpt_messages.Add(prompt_msg);
@@ -303,18 +301,20 @@ public class MapManager : MonoBehaviour
         
         gpt_messages.Add(query_msg);
 
-        map[place_idx] = StringToPlace(await GptManager.gpt.CallGpt(gpt_messages));
+        map[place_idx] = StringToPlace(await GptManager.gpt.CallGpt(gpt_messages), map[place_idx]);
         curr_place = place_idx; //curr_chapter가 어디에서 i++되는 변수인지 확인하기
         if (curr_place != 1)
         {
             //StartCoroutine(PostChapterObjective(curr_chapter));
         }
+
+        // 이벤트 트리거 생성
+        CreateEventTrigger(place_idx);
     }
 
     //장소 이름 및 장소 설명 파싱 함수
-    place StringToPlace(string plc_string)
+    place StringToPlace(string plc_string, place plc)
     {
-        place plc = new place();
         plc.clear = false;
 
         string[] plc_arr;
