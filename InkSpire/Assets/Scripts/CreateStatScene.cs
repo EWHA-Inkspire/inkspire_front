@@ -81,7 +81,7 @@ public class CreateStatScene : MonoBehaviour
             Debug.Log(ScriptManager.scriptinfo.intro_string);
             Debug.Log(ScriptManager.scriptinfo.curr_chapter);
             LoadingPannel.gameObject.SetActive(false);
-            SceneManager.LoadScene("Play");
+            SceneManager.LoadScene("5_Play");
         }
     }
 

@@ -22,6 +22,6 @@ public class CreateCharacterScene : MonoBehaviour
     public void SetCharacterInfo(){
         PlayerStatManager.playerstat.charname = charname.text;
         ScriptManager.scriptinfo.setBackground(timebackground.text, spacebackground.text, GetGenre());
-        SceneManager.LoadScene("CreateStat");
+        SceneManager.LoadScene("4_CreateStat");
     }
 }
