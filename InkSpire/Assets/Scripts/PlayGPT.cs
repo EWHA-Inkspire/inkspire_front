@@ -79,7 +79,7 @@ Narrator (내레이터):
         SendReply();
 
         
-        //dice_event.SetDiceEvent(50);
+        dice_event.SetDiceEvent(50);
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     }
