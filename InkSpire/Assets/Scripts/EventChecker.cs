@@ -27,7 +27,7 @@ public class EventChecker : MonoBehaviour {
         {
             Role = "system",
             Content = @"당신은 게임의 플레이 데이터를 분석하여 이벤트 발생 여부를 판단하는 Checker이다. 
-            대답은 반드시 T 혹은 F로 해야한다. 이벤트 발생 조건은 " + event_trigger + "이다."
+            대답은 반드시 T 혹은 F로 해야한다. 이벤트는 플레이어가 " + event_trigger + "에 접근했을 때 발생한다."
         };
         play_messages.Insert(0, newMessage);
 
