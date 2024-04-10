@@ -102,7 +102,6 @@ public class MapManager : MonoBehaviour
         }
         if (i == 13) //최종 에필로그 보스방
         {
-            map[i].item_type = "NULL";
             map[i].event_type = 1;
             map[i].ANPC_exist = 0;
         }
@@ -151,19 +150,20 @@ public class MapManager : MonoBehaviour
 
     private async void CreateEventTrigger(int place_idx)
     {
+        // 전투 이벤트(잡몹, 적 처치)일 경우에는 이벤트 트리거 생성하지 않음
+        if (map[place_idx].item_type == "Mob" || map[place_idx].item_type == "Monster")
+            return;
+        
         string worldDetail = ScriptManager.scriptinfo.world_detail;
         int curr_chapter = ScriptManager.scriptinfo.curr_chapter;
+        int event_type = map[place_idx].event_type;
 
-        Debug.Log(">>Call Create EventTrigger GPT");
-        Debug.Log(">>현재 장소 인덱스: " + place_idx);
         gpt_messages.Clear();
-        if (map[place_idx].item_type == "Mob" || map[place_idx].item_type == "Monster" || map[place_idx].item_type == "NULL")
-            return;
-        Debug.Log(">>현재 챕터 목표: " + ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail);
+        
         var prompt_msg = new ChatMessage()
         {
             Role = "system",
-            Content = @"당신은 챕터 목표에 맞는 게임 아이템의 위치를 생성한다. 챕터 목표는 " + ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail + "이며 게임의 세계관 배경은 다음과 같다. " + worldDetail
+            Content = @"당신은 챕터 목표에 맞는 게임 아이템의 위치를 생성한다. "+(event_type==1 ? "챕터 목표는 "+ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail+"이며 " : "") + "게임의 세계관 배경은 다음과 같다. " + worldDetail
             + "플레이어가 현재 위치한 장소 이름은 " + map[place_idx].place_name + "이며 이 장소에서 게임 아이템인 " + map[place_idx].item_name + @"가 존재하는 위치를 생성한다. 
             위치의 이름은 장소 이름 및 게임 아이템과 자연스럽게 어울려야 하며 반드시 한 단어로 출력한다." // 장소 이름, 아이템 이름, 월드디테일 전달, 챕터목표 -> 이 물건이 있을만한 위치를 생성  
         };
@@ -205,7 +205,7 @@ public class MapManager : MonoBehaviour
                 // 목표 이벤트일 때의 항목 정의
                 GoalType[] goalEventItems = { GoalType.Item, GoalType.Report, GoalType.Monster };
 
-                //돌려돌려돌림판
+                //돌려돌려돌림판 -> TODO: 챕터 목표의 유형을 받아와야 함
                 int randomIdx = UnityEngine.Random.Range(0, goalEventItems.Length);
 
                 map[i].item_type = goalEventItems[randomIdx].ToString(); // 열거형을 문자열로 변환하여 할당
