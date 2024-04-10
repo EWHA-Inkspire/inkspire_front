@@ -94,9 +94,14 @@ Narrator (내레이터):
             Debug.Log(event_trigger);
 
             if(EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
-                // TODO: 주사위 이벤트 진행
-                // mapManager에서 event_trigger 만들 때 인트로 문구도 같이 만들도록 -> 출력 후 주사위 이벤트 진행
-                dice_event.SetDiceEvent(50);
+                 battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
+                if(dice_num==0){
+                    dice_event.SetDiceEvent(dice_num);
+                    dice_num = 200;
+                }
+                else{
+                    dice_event.SetDiceEvent(dice_num);
+                }
             }
         }
         SendReply();
@@ -123,13 +128,11 @@ Narrator (내레이터):
 
     private async void SendReply()
     {
-        List<ChatMessage> checker_messages = new List<ChatMessage>();
         var newMessage = new ChatMessage()
         {
             Role = "user",
             Content = player_input.text
         };
-        checker_messages.Add(newMessage);
         messages.Add(newMessage);
 
         button.enabled = false;
@@ -139,23 +142,10 @@ Narrator (내레이터):
         var message = await GptManager.gpt.CallGpt(messages);
         newMessage.Role = "assistant";
         newMessage.Content = message;
-        checker_messages.Add(newMessage);
         messages.Add(newMessage);
 
         AppendMsg(newMessage);
 
-        if(EventChecker.eventChecker.EventCheckerGPT(checker_messages,MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger)){
-            battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
-            if(dice_num==0){
-                dice_event.SetDiceEvent(dice_num);
-                dice_num = 200;
-            }
-            else{
-                dice_event.SetDiceEvent(dice_num);
-            }
-        }
-        
-        checker_messages.Clear();
         button.enabled = true;
         player_input.enabled = true;
     }
