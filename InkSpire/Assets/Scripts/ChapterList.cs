@@ -7,9 +7,9 @@ using UnityEngine.EventSystems;
 
 public class ChapterList : MonoBehaviour
 {
-    string characterName = GetComponentInChildren<Text>().text;
+    //string characterName = GetComponentInChildren<Text>().text;
     void SetTitle()
     {
-        ModalTitle.text = characterName + " 's Story";
+        //ModalTitle.text = characterName + " 's Story";
     }
 }

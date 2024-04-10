@@ -145,6 +145,7 @@ Narrator (내레이터):
         AppendMsg(newMessage);
 
         if(EventChecker.eventChecker.EventCheckerGPT(checker_messages,MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger)){
+            battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
             if(dice_num==0){
                 dice_event.SetDiceEvent(dice_num);
                 dice_num = 200;
