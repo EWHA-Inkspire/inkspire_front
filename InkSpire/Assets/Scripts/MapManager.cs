@@ -149,11 +149,7 @@ public class MapManager : MonoBehaviour
     }
 
     private async void CreateEventTrigger(int place_idx)
-    {
-        // 전투 이벤트(잡몹, 적 처치)일 경우에는 이벤트 트리거 생성하지 않음
-        if (map[place_idx].item_type == "Mob" || map[place_idx].item_type == "Monster")
-            return;
-        
+    { 
         string worldDetail = ScriptManager.scriptinfo.world_detail;
         int curr_chapter = ScriptManager.scriptinfo.curr_chapter;
         int event_type = map[place_idx].event_type;
@@ -180,6 +176,7 @@ public class MapManager : MonoBehaviour
 
         map[place_idx].event_trigger = await GptManager.gpt.CallGpt(gpt_messages); //이거 파싱 어케할지 고민
 
+        gpt_messages.Clear();
         prompt_msg.Content = @"당신은 trpg 게임의 기획자 역할을 하며 챕터 목표와 관련있으며 현재 플레이어가 있는 장소 내에 이벤트 트리거가 위치한 곳과 자연스럽게 어울리는 판정 이벤트를 생성한다. 챕터 목표는 " + ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail + "이며 게임의 세계관 배경은 다음과 같다. " + worldDetail
             + "플레이어가 현재 위치한 장소 이름은 " + map[place_idx].place_name + "이며 이 장소의 이벤트 트리거인 "+map[place_idx].event_trigger+"를 통해 생성되는 이벤트 성공시 유저는 게임 아이템인 " + map[place_idx].item_name + @"을 획득한다. 
             발생한 이벤트의 내용은 장소 이름, 챕터 목표, 게임 아이템과 자연스럽게 어울려야 한다.
@@ -190,9 +187,13 @@ public class MapManager : MonoBehaviour
             성공 스크립트: *이벤트 판정에 성공했을 때 출력될 아이템 획득 게임 시나리오 스크립트*
             실패 스크립트: *이벤트 판정에 실패했을 때 출력될 게임 시나리오 스크립트*
             ";
+        gpt_messages.Add(prompt_msg);
+
         query_msg.Content = "판정 이벤트 생성";
-        gpt_messages.Clear();
+        gpt_messages.Add(query_msg);
+        
         string response = await GptManager.gpt.CallGpt(gpt_messages); 
+        Debug.Log(">>이벤트 제목, 스크립트 결과 출력: "+response);
         StringToPlace(response,map[place_idx],false);
     }
 
@@ -316,7 +317,10 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
 
         map[place_idx] = StringToPlace(await GptManager.gpt.CallGpt(gpt_messages), map[place_idx],true);
-        CreateEventTrigger(place_idx);
+        // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
+        if (map[place_idx].item_type != "Mob" && map[place_idx].item_type != "Monster" && map[place_idx].item_type != null) {
+            CreateEventTrigger(place_idx);
+        }
     }
 
     //장소 이름 및 장소 설명 파싱 함수
