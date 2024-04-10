@@ -18,6 +18,8 @@ public class PlayGPT : MonoBehaviour
     [SerializeField] private ScrollRect scroll;
     [SerializeField] private GameObject map_modal;
 
+    private int dice_num = 0;
+
     private List<ChatMessage> messages = new List<ChatMessage>();
     private ChatMessage input_msg = new ChatMessage();
     private string system_prompt = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
@@ -103,7 +105,7 @@ Narrator (내레이터):
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     }
-    void AppendMsg(ChatMessage msg)
+    public void AppendMsg(ChatMessage msg)
     {
         string add_text = "";
         if (msg.Role == "user")
@@ -121,12 +123,13 @@ Narrator (내레이터):
 
     private async void SendReply()
     {
+        List<ChatMessage> checker_messages = new List<ChatMessage>();
         var newMessage = new ChatMessage()
         {
             Role = "user",
             Content = player_input.text
         };
-
+        checker_messages.Add(newMessage);
         messages.Add(newMessage);
 
         button.enabled = false;
@@ -136,8 +139,22 @@ Narrator (내레이터):
         var message = await GptManager.gpt.CallGpt(messages);
         newMessage.Role = "assistant";
         newMessage.Content = message;
+        checker_messages.Add(newMessage);
+        messages.Add(newMessage);
+
         AppendMsg(newMessage);
 
+        if(EventChecker.eventChecker.EventCheckerGPT(checker_messages,MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger)){
+            if(dice_num==0){
+                dice_event.SetDiceEvent(dice_num);
+                dice_num = 200;
+            }
+            else{
+                dice_event.SetDiceEvent(dice_num);
+            }
+        }
+        
+        checker_messages.Clear();
         button.enabled = true;
         player_input.enabled = true;
     }
@@ -156,5 +173,9 @@ Narrator (내레이터):
         messages.Add(newMessage);
         AppendMsg(newMessage);
         map_modal.gameObject.SetActive(false);
+    }
+
+    public void AddToMessagesGPT(ChatMessage msg){
+        messages.Add(msg);
     }
 }

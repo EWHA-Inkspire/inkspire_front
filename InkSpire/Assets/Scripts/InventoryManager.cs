@@ -34,6 +34,8 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(int itemid, int mapid, string itemname, int itemdetail, string itemtype, int iquant){
         inventorylist[next_idx] = new Items(itemid,mapid,itemname, itemdetail, itemtype,iquant);
+        slotlist[next_idx].setItem(inventorylist[next_idx].GetItemName(),inventorylist[next_idx].GetItemQuant(),inventorylist[next_idx].GetItemID());
+        slotlist[next_idx].SetSprites();
         next_idx++;
     }
 
