@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using OpenAI;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -133,7 +134,7 @@ public class MapManager : MonoBehaviour
             Role = "system",
             Content = @"당신은 게임 진행에 필요한 아이템의 이름을 한 단어로 제시한다.
             다음은 게임의 배경인 
-            " + timeBackground + "시대 " + spaceBackground + "를 배경으로 하는 세계관에 대한 설명이다. " + worldDetail +
+            " + timeBackground + " 시대 " + spaceBackground + "를 배경으로 하는 세계관에 대한 설명이다. " + worldDetail +
             @" 당신이 생성해야할 아이템은 " + about_item + "이다."
         };
         gpt_messages.Add(prompt_msg);
@@ -141,7 +142,7 @@ public class MapManager : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "진행중인 게임에 필요한" + about_item + "생성"
+            Content = "진행중인 게임에 필요한 " + about_item + " 생성"
         };
         gpt_messages.Add(query_msg);
 
@@ -156,8 +157,6 @@ public class MapManager : MonoBehaviour
 
         gpt_messages.Clear();
 
-        if (map[place_idx].item_type == "Mob" || map[place_idx].item_type == "Monster" || map[place_idx].item_type == "NULL")
-            return;
         var prompt_msg = new ChatMessage()
         {
             Role = "system",
@@ -204,8 +203,8 @@ public class MapManager : MonoBehaviour
         {
             if (map[i].event_type == 0) //일반 이벤트일 경우
             {
-                // 일반 이벤트일 때의 항목 정의
-                ItemType?[] normalEventItems = { ItemType.Recover, ItemType.Mob, ItemType.Weapon, null, null, null, null };
+                // 일반 이벤트일 때의 항목 정의 -> TODO: 실제 최종에서는 Mob, null 4개 추가해야 함!!
+                ItemType?[] normalEventItems = { ItemType.Recover, ItemType.Weapon };
 
                 //돌려돌려돌림판
                 int randomIdx = UnityEngine.Random.Range(0, normalEventItems.Length);
@@ -214,8 +213,8 @@ public class MapManager : MonoBehaviour
             }
             else //목표 이벤트일 경우
             {
-                // 목표 이벤트일 때의 항목 정의
-                GoalType[] goalEventItems = { GoalType.Item, GoalType.Report, GoalType.Monster };
+                // 목표 이벤트일 때의 항목 정의 -> TODO: 실제 최종에서는 Monster 추가해야 함!!
+                GoalType[] goalEventItems = { GoalType.Item, GoalType.Report };
 
                 //돌려돌려돌림판 -> TODO: 챕터 목표의 유형을 받아와야 함
                 int randomIdx = UnityEngine.Random.Range(0, goalEventItems.Length);
@@ -303,7 +302,7 @@ public class MapManager : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "와 겹치지 않는 진행중인 게임의 " + genre + "장르와 세계관에 어울리는 장소 생성"
+            Content = "와 장소 이름이 겹치지 (must not same) 않는 진행중인 게임의 " + genre + " 장르와 세계관에 어울리는 장소 생성"
         };
         for(int i = 0; i<place_idx; i++){
             if(i!=0){
@@ -322,6 +321,7 @@ public class MapManager : MonoBehaviour
         }
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (map[place_idx].item_type != "Mob" && map[place_idx].item_type != "Monster" && map[place_idx].item_type != null) {
+            CreateItem(place_idx);
             CreateEventTrigger(place_idx);
         }
         
@@ -339,7 +339,10 @@ public class MapManager : MonoBehaviour
         plc_arr = plc_string.Split(':');
 
         if(is_plc){
-            plc.place_name = plc_arr[1];
+            // plc.place_name = plc_arr[1];
+            // 특수문자, 괄호, 점 제거를 위한 정규 표현식
+            Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
+            plc.place_name = regex.Replace(plc_arr[1], "");
             plc.place_info = plc_arr[3];
         }
         else{
@@ -348,7 +351,6 @@ public class MapManager : MonoBehaviour
             plc.event_succ = plc_arr[5];
             plc.event_fail = plc_arr[7];
         }
-
 
         return plc;
     }

@@ -7,6 +7,7 @@ using OpenAI;
 public class GptManager : MonoBehaviour
 {
     public static GptManager gpt;
+    private int cnt = 0;
 
     void Awake(){
         // 씬이 바뀔 때 파괴되지 않음
@@ -30,11 +31,18 @@ public class GptManager : MonoBehaviour
         // 응답이 있을 경우 응답 내용 반환
         if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
         {
+            cnt = 0;
             return completionResponse.Choices[0].Message.Content;
+        }
+        else if(cnt != 3)
+        {
+            cnt++;
+            return await CallGpt(messages);
         }
         else
         {
-            return await CallGpt(messages);
+            cnt = 0;
+            return "No text was generated from this prompt.";
         }
     }
 }
