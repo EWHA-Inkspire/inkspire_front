@@ -19,6 +19,7 @@ public class PlayGPT : MonoBehaviour
     [SerializeField] private GameObject map_modal;
 
     private int dice_num = 0;
+    private int cnt = 0;
 
     private List<ChatMessage> messages = new List<ChatMessage>();
     private ChatMessage input_msg = new ChatMessage();
@@ -74,6 +75,9 @@ Narrator (내레이터):
 
     public async void SendButton()
     {
+        // 핑퐁 횟수 체크
+        cnt++;
+
         // 이벤트 체커 메시지 설정 (가장 마지막 gpt 대화 추가)
         var checkerMessage = new List<ChatMessage>();
         var assistant_msg = messages.Last();
@@ -89,7 +93,7 @@ Narrator (내레이터):
         checkerMessage.Add(input_msg);
 
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
-        if(item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report") {
+        if(cnt == 3 && item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report") {
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
             if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
                 // 이벤트 트리거 도입 스크립트 출력
@@ -115,9 +119,6 @@ Narrator (내레이터):
         } else {
             SendReply();
         }
-        
-        //dice_event.SetDiceEvent(50);
-        //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     }
 
