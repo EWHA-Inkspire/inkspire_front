@@ -44,6 +44,6 @@ public class EventChecker : MonoBehaviour {
         //     }
         // }
 
-        return false;
+        return true; // 임시 조정
     }
 }

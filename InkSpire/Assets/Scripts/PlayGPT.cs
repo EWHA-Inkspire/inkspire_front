@@ -19,6 +19,7 @@ public class PlayGPT : MonoBehaviour
     [SerializeField] private GameObject map_modal;
 
     private int dice_num = 0;
+    private int cnt = 0;
 
     private List<ChatMessage> messages = new List<ChatMessage>();
     private ChatMessage input_msg = new ChatMessage();
@@ -74,6 +75,9 @@ Narrator (내레이터):
 
     public async void SendButton()
     {
+        // 핑퐁 횟수 체크
+        cnt++;
+
         // 이벤트 체커 메시지 설정 (가장 마지막 gpt 대화 추가)
         var checkerMessage = new List<ChatMessage>();
         var assistant_msg = messages.Last();
@@ -88,9 +92,8 @@ Narrator (내레이터):
         // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
         checkerMessage.Add(input_msg);
 
-        bool event_occur = false;
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
-        if(item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report") {
+        if(cnt == 3 && (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report")) {
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
             // if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
             //     // 이벤트 트리거 도입 스크립트 출력
@@ -103,16 +106,17 @@ Narrator (내레이터):
             //     AppendMsg(newMessage);
             // }
             if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
-                 battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
-                 ChatMessage event_msg = new ChatMessage{
+                // 이벤트 트리거 도입 스크립트 출력
+                battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
+                ChatMessage event_msg = new ChatMessage{
                     Role = "user",
                     Content = "판정 이벤트 발생"
-                 };
-                 AddToMessagesGPT(event_msg);
-                 event_msg.Role = "assistant";
-                 event_msg.Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_title+"\n"+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_intro;
-                 AddToMessagesGPT(event_msg);
-                 battle_event.AppendMsg(event_msg.Content);
+                };
+                AddToMessagesGPT(event_msg);
+                event_msg.Role = "assistant";
+                event_msg.Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_title+"\n"+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_intro;
+                AddToMessagesGPT(event_msg);
+                battle_event.AppendMsg(event_msg.Content);
 
                 if(dice_num==0){
                     dice_event.SetDiceEvent(dice_num);
@@ -121,22 +125,12 @@ Narrator (내레이터):
                 else{
                     dice_event.SetDiceEvent(dice_num);
                 }
-                event_occur = true;
+            } else {
+                SendReply();
             }
         } else {
             SendReply();
         }
-        if(event_occur){
-            event_occur = false;
-            player_input.text = "";
-        }
-        else{
-            SendReply();
-        }
-        
-        
-        //dice_event.SetDiceEvent(50);
-        //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     
     }
