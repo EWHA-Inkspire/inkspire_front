@@ -191,8 +191,8 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
         
         string response = await GptManager.gpt.CallGpt(gpt_messages); 
-        Debug.Log(">>이벤트 제목, 스크립트 결과 출력: "+response);
-        StringToPlace(response,map[place_idx],false);
+        Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n"+response);
+        map[place_idx] = StringToPlace(response,map[place_idx],false);
     }
 
     public void ChooseItemType()
@@ -331,7 +331,9 @@ public class MapManager : MonoBehaviour
         plc.clear = false;
 
         string[] plc_arr;
+        plc_string = plc_string.Replace("\n\n", ":");
         plc_string = plc_string.Replace("\n", ":");
+        
         plc_arr = plc_string.Split(':');
 
         if(is_plc){

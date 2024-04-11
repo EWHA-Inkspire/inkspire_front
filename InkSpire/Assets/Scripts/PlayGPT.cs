@@ -88,6 +88,7 @@ Narrator (내레이터):
         // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
         checkerMessage.Add(input_msg);
 
+        bool event_occur = false;
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
         if(item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report") {
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
@@ -101,7 +102,18 @@ Narrator (내레이터):
                 Debug.Log(newMessage.Content);
                 AppendMsg(newMessage);
 
-                battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
+            if(EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
+                 battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
+                 ChatMessage event_msg = new ChatMessage{
+                    Role = "user",
+                    Content = "판정 이벤트 발생"
+                 };
+                 AddToMessagesGPT(event_msg);
+                 event_msg.Role = "assistant";
+                 event_msg.Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_title+"\n"+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_intro;
+                 AddToMessagesGPT(event_msg);
+                 battle_event.AppendMsg(event_msg.Content);
+
                 if(dice_num==0){
                     dice_event.SetDiceEvent(dice_num);
                     dice_num = 200;
@@ -109,12 +121,19 @@ Narrator (내레이터):
                 else{
                     dice_event.SetDiceEvent(dice_num);
                 }
-            } else {
-                SendReply();
+                event_occur = true;
             }
         } else {
             SendReply();
         }
+        if(event_occur){
+            event_occur = false;
+            player_input.text = "";
+        }
+        else{
+            SendReply();
+        }
+        
         
         //dice_event.SetDiceEvent(50);
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);
