@@ -142,11 +142,12 @@ public class MapManager : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "진행중인 게임에 필요한 " + about_item + " 생성"
+            Content = "진행중인 게임에 필요한 " + about_item + " 이름을 한 단어로 생성"
         };
         gpt_messages.Add(query_msg);
 
         map[place_idx].item_name = await GptManager.gpt.CallGpt(gpt_messages);
+        Debug.Log("아이템 이름: "+map[place_idx].item_name);
     }
 
     private async void CreateEventTrigger(int place_idx)
