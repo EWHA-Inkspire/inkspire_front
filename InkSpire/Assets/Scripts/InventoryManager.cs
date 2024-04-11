@@ -30,8 +30,8 @@ public class InventoryManager : MonoBehaviour
             inventory=this;
         }
 
-        AddItem(1,3,"테스트테스트",50,"Recover",3);
-        AddItem(2,4,"테스트2",5,"Weapon",1);
+        //AddItem(1,3,"테스트테스트",50,"Recover",3);
+        //AddItem(2,4,"테스트2",5,"Weapon",1);
     }
 
     public void AddItem(int itemid, int mapid, string itemname, int itemdetail, string itemtype, int iquant){
