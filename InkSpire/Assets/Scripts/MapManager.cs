@@ -142,7 +142,7 @@ public class MapManager : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "진행중인 게임에 필요한 " + about_item + " 생성"
+            Content = "진행중인 게임에 필요한 " + about_item + " 이름을 한 단어로 생성"
         };
         gpt_messages.Add(query_msg);
 
