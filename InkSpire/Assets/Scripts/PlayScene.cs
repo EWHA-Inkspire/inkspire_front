@@ -10,6 +10,7 @@ public class PlayScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI header_HP;
     [SerializeField] TextMeshProUGUI title_chapnum;
     [SerializeField] TextMeshProUGUI battle_stat;
+    [SerializeField] TextMeshProUGUI statmodal_title;
     [SerializeField] GameObject place_list;
     [SerializeField] GameObject item_list;
     [SerializeField] Slider slider_HP;
@@ -21,6 +22,7 @@ public class PlayScene : MonoBehaviour
 
         Changechap(ScriptManager.scriptinfo.curr_chapter);
         header_name.text = PlayerStatManager.playerstat.charname+" HP";
+        statmodal_title.text = PlayerStatManager.playerstat.charname+"'s Stats";
         header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP).ToString();
         battle_stat.text = "공격: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Attack).ToString()+" | 방어: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Defence).ToString()+" | 민첩: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Dexterity).ToString()+" | 행운: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Luck).ToString();
         
