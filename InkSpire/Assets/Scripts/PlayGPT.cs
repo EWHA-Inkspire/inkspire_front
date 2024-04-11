@@ -93,19 +93,21 @@ Narrator (내레이터):
         checkerMessage.Add(input_msg);
 
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
-        if(cnt == 3 && item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report") {
+        if(cnt == 3 && (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report")) {
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
             if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
                 // 이벤트 트리거 도입 스크립트 출력
-                var newMessage = new ChatMessage()
-                {
-                    Role = "assistant",
-                    Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_title
-                };
-                Debug.Log(newMessage.Content);
-                AppendMsg(newMessage);
-
                 battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
+                ChatMessage event_msg = new ChatMessage{
+                    Role = "user",
+                    Content = "판정 이벤트 발생"
+                };
+                AddToMessagesGPT(event_msg);
+                event_msg.Role = "assistant";
+                event_msg.Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_title+"\n"+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_intro;
+                AddToMessagesGPT(event_msg);
+                battle_event.AppendMsg(event_msg.Content);
+
                 if(dice_num==0){
                     dice_event.SetDiceEvent(dice_num);
                     dice_num = 200;

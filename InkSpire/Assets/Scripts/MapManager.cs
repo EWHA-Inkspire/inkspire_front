@@ -192,8 +192,8 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
         
         string response = await GptManager.gpt.CallGpt(gpt_messages); 
-        Debug.Log(">>이벤트 제목, 스크립트 결과 출력: "+response);
-        StringToPlace(response,map[place_idx],false);
+        Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n"+response);
+        map[place_idx] = StringToPlace(response,map[place_idx],false);
     }
 
     public void ChooseItemType()
@@ -302,7 +302,7 @@ public class MapManager : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "와 장소 이름이 겹치지 않는 진행중인 게임의 " + genre + "장르와 세계관에 어울리는 장소 생성"
+            Content = "와 장소 이름이 겹치지 (must not same) 않는 진행중인 게임의 " + genre + " 장르와 세계관에 어울리는 장소 생성"
         };
         for(int i = 0; i<place_idx; i++){
             if(i!=0){
@@ -332,11 +332,14 @@ public class MapManager : MonoBehaviour
         plc.clear = false;
 
         string[] plc_arr;
+        plc_string = plc_string.Replace("\n\n", ":");
         plc_string = plc_string.Replace("\n", ":");
+        
         plc_arr = plc_string.Split(':');
 
         if(is_plc){
-            plc.place_name = Regex.Replace(plc_arr[1], @"[!@#$%^&*()-=+]", "");
+            plc.place_name = plc_arr[1];
+            // plc.place_name = Regex.Replace(plc_arr[1], @"[!@#$%^&*()-=+]", "");
             plc.place_info = plc_arr[3];
         }
         else{
