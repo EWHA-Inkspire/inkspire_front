@@ -49,6 +49,9 @@ public class MapManager : MonoBehaviour
     private OpenAIApi openai = new OpenAIApi();
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
 
+    // 특수문자, 괄호, 점 제거를 위한 정규 표현식
+    Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
+
     void Awake()
     {
         // 씬이 바뀔 때 파괴되지 않음
@@ -146,8 +149,9 @@ public class MapManager : MonoBehaviour
         };
         gpt_messages.Add(query_msg);
 
-        map[place_idx].item_name = await GptManager.gpt.CallGpt(gpt_messages);
-        Debug.Log("아이템 생성"+map[place_idx].item_name+"\n"+map[place_idx].item_info);
+        string response = await GptManager.gpt.CallGpt(gpt_messages);
+
+        map[place_idx].item_name = regex.Replace(response, "");
     }
 
     private async void CreateEventTrigger(int place_idx)
@@ -343,8 +347,6 @@ public class MapManager : MonoBehaviour
 
         if(is_plc){
             // plc.place_name = plc_arr[1];
-            // 특수문자, 괄호, 점 제거를 위한 정규 표현식
-            Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
             plc.place_name = regex.Replace(plc_arr[1], "");
             plc.place_info = plc_arr[3];
         }
