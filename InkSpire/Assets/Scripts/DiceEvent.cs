@@ -76,14 +76,14 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
             InventoryManager.inventory.AddItem(100+curr_place,curr_place,MapManager.mapinfo.map[curr_place].item_name,MapManager.mapinfo.map[curr_place].item_stat,MapManager.mapinfo.map[curr_place].item_type.ToString(),1);
             InventoryManager.inventory.slotlist[InventoryManager.inventory.next_idx-1].SetSprites();
             playgpt.AddToMessagesGPT(result_msg);
-            result_msg.Content = MapManager.mapinfo.map[curr_place].event_succ;
+            result_msg.Content = MapManager.mapinfo.map[curr_place].event_succ.Replace(".", ".\n");
         }
         else
         {
             result_txt.text = "<color=#B40000>Fail</color>";
             result_msg.Content += "실패";
             playgpt.AddToMessagesGPT(result_msg);
-            result_msg.Content = MapManager.mapinfo.map[curr_place].event_fail;
+            result_msg.Content = MapManager.mapinfo.map[curr_place].event_fail.Replace(".", ".\n");
         }
         result_msg.Role = "assistant";
         playgpt.AddToMessagesGPT(result_msg);
