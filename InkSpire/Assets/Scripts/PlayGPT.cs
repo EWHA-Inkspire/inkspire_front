@@ -119,6 +119,8 @@ Narrator (내레이터):
                 else{
                     dice_event.SetDiceEvent(dice_num);
                 }
+
+                player_input.text = "";
             } else {
                 SendReply();
             }
