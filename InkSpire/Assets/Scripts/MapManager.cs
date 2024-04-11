@@ -159,21 +159,20 @@ public class MapManager : MonoBehaviour
         var prompt_msg = new ChatMessage()
         {
             Role = "system",
-            Content = @"당신은 챕터 목표에 맞는 게임 아이템의 위치와 플레이어가 아이템을 획득하기 위한 행동 지문 하나를 생성한다. "+(event_type==1 ? "챕터 목표는 "+ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail+"이며 " : "") + "게임의 세계관 배경은 다음과 같다. " + worldDetail
+            Content = @"당신은 챕터 목표에 맞는 게임 아이템의 위치를 생성한다. "+(event_type==1 ? "챕터 목표는 "+ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail+"이며 " : "") + "게임의 세계관 배경은 다음과 같다. " + worldDetail
             + "플레이어가 현재 위치한 장소 이름은 " + map[place_idx].place_name + "이며 이 장소에서 게임 아이템인 " + map[place_idx].item_name + @"가 존재하는 위치를 생성한다. 
-            위치의 이름은 장소 이름 및 게임 아이템과 자연스럽게 어울려야 하며 고유 명사가 아닌 명사로 출력한다." // 장소 이름, 아이템 이름, 월드디테일 전달, 챕터목표 -> 이 물건이 있을만한 위치를 생성  
+            위치의 이름은 장소 이름 및 게임 아이템과 자연스럽게 어울려야 하며 반드시 한 단어로 출력한다." // 장소 이름, 아이템 이름, 월드디테일 전달, 챕터목표 -> 이 물건이 있을만한 위치를 생성  
         };
         gpt_messages.Add(prompt_msg);
 
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "아이템이 존재하는 위치와 플레이어의 행동 지문 하나 생성"
+            Content = "아이템이 존재하는 위치를 한 단어로 생성"
         };
         gpt_messages.Add(query_msg);
 
         map[place_idx].event_trigger = await GptManager.gpt.CallGpt(gpt_messages); //이거 파싱 어케할지 고민
-        Debug.Log(place_idx + "의 event_trigger: " + map[place_idx].event_trigger);
 
         gpt_messages.Clear();
         prompt_msg.Content = @"당신은 trpg 게임의 기획자 역할을 하며 챕터 목표와 관련있으며 현재 플레이어가 있는 장소 내에 이벤트 트리거가 위치한 곳과 자연스럽게 어울리는 판정 이벤트를 생성한다. 챕터 목표는 " + ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail + "이며 게임의 세계관 배경은 다음과 같다. " + worldDetail
