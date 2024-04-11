@@ -146,6 +146,7 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
 
         map[place_idx].item_name = await GptManager.gpt.CallGpt(gpt_messages);
+        Debug.Log("아이템 생성"+map[place_idx].item_name+"\n"+map[place_idx].item_info);
     }
 
     private async void CreateEventTrigger(int place_idx)
@@ -193,6 +194,7 @@ public class MapManager : MonoBehaviour
         string response = await GptManager.gpt.CallGpt(gpt_messages); 
         Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n"+response);
         map[place_idx] = StringToPlace(response,map[place_idx],false);
+        Debug.Log("이벤트 생성:\n"+map[place_idx].item_name+"\n"+map[place_idx].item_info);
     }
 
     public void ChooseItemType()
@@ -320,9 +322,11 @@ public class MapManager : MonoBehaviour
         }
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (map[place_idx].item_type != "Mob" && map[place_idx].item_type != "Monster" && map[place_idx].item_type != null) {
+            CreateItem(place_idx);
             CreateEventTrigger(place_idx);
         }
         
+
     }
 
     //장소 이름 및 장소 설명 파싱 함수

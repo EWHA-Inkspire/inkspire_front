@@ -92,17 +92,17 @@ Narrator (내레이터):
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
         if(item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report") {
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
+            // if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
+            //     // 이벤트 트리거 도입 스크립트 출력
+            //     var newMessage = new ChatMessage()
+            //     {
+            //         Role = "assistant",
+            //         Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_title
+            //     };
+            //     Debug.Log(newMessage.Content);
+            //     AppendMsg(newMessage);
+            // }
             if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
-                // 이벤트 트리거 도입 스크립트 출력
-                var newMessage = new ChatMessage()
-                {
-                    Role = "assistant",
-                    Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_title
-                };
-                Debug.Log(newMessage.Content);
-                AppendMsg(newMessage);
-
-            if(EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
                  battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
                  ChatMessage event_msg = new ChatMessage{
                     Role = "user",
@@ -138,6 +138,7 @@ Narrator (내레이터):
         //dice_event.SetDiceEvent(50);
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
+    
     }
 
     public void AppendMsg(ChatMessage msg)
@@ -182,6 +183,7 @@ Narrator (내레이터):
 
     public void PlaceButton(int place_idx){
         MapManager.mapinfo.curr_place = place_idx;
+        
         var query_msg = new ChatMessage(){
             Role = "user",
             Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_name+"으로 이동"
@@ -201,6 +203,7 @@ Narrator (내레이터):
             // 전투 이벤트
             battle_event.SetBattle(BattleEvent.BType.MOB,3);
         }
+        Debug.Log("placeButton item name: "+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_name);
     }
 
     public void AddToMessagesGPT(ChatMessage msg){

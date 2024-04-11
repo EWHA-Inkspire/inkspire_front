@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Cci;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,11 +35,14 @@ public class InventoryManager : MonoBehaviour
     }
 
     public void AddItem(int itemid, int mapid, string itemname, int itemdetail, string itemtype, int iquant){
+        Debug.Log("New Item Name: "+itemname);
         inventorylist[next_idx] = new Items(itemid,mapid,itemname, itemdetail, itemtype,iquant);
-        
+        Debug.Log("Inventory Name: "+inventorylist[next_idx].GetItemName());
         if(play_scene_created){
+            OpenButton();
             slotlist[next_idx].setItem(inventorylist[next_idx].GetItemName(),inventorylist[next_idx].GetItemQuant(),inventorylist[next_idx].GetItemID());
             slotlist[next_idx].SetSprites();
+            CloseButton();
         }
         next_idx++;
     }
@@ -46,7 +50,7 @@ public class InventoryManager : MonoBehaviour
     public void SetTarget(int item_id){
         for(int i = 0; i<next_idx;i++){
             if(item_id == inventorylist[i].GetItemID() && inventorylist[i].GetItemQuant()>0){
-                Debug.Log("itemQ: "+inventorylist[i].GetItemQuant());
+                Debug.Log("name: "+inventorylist[i].GetItemName()+"itemQ: "+inventorylist[i].GetItemQuant());
                 item_bg[target_idx].color = new Color32(237,237,233,255);
                 target_idx = i;
                 item_bg[target_idx].color = new Color32(212,204,195,255);

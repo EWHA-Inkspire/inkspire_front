@@ -19,10 +19,11 @@ public class InventorySlot : MonoBehaviour
     private int id;
     public void SetSprites(){
         if(!exist){
-            Debug.Log("false item call");
+            //Debug.Log("false item call");
             item_object.gameObject.SetActive(false);
             return;
         }
+        item_object.gameObject.SetActive(true);
         text_name.text = itemname;
         text_quant.text = quant.ToString();
     }
