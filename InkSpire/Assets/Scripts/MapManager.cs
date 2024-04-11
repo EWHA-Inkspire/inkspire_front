@@ -301,18 +301,16 @@ public class MapManager : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = ""
+            Content = "와 겹치지 않는 진행중인 게임의 " + genre + "장르와 세계관에 어울리는 장소 생성"
         };
         for(int i = 0; i<place_idx; i++){
             if(i!=0){
-                query_msg.Content += map[i].place_name+", "+query_msg.Content;
+                query_msg.Content = map[i].place_name+", "+query_msg.Content;
             }
             else{
-                query_msg.Content += map[i].place_name+query_msg.Content;
+                query_msg.Content = map[i].place_name+query_msg.Content;
             }
         }
-
-        query_msg.Content += "와 다른 진행중인 게임의 " + genre + "장르와 세계관에 어울리는 장소 생성";
         
         gpt_messages.Add(query_msg);
 
