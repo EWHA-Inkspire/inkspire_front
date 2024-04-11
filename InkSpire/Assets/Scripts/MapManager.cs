@@ -132,7 +132,7 @@ public class MapManager : MonoBehaviour
         var prompt_msg = new ChatMessage()
         {
             Role = "system",
-            Content = @"당신은 게임 진행에 필요한 아이템의 이름을 한 단어로 제시한다.
+            Content = @"당신은 게임 진행에 필요한 아이템의 이름을 한 단어로 제시한다. 또한, 출력의 영어표기를 생략하고 한글표기만 나타낸다.
             다음은 게임의 배경인 
             " + timeBackground + " 시대 " + spaceBackground + "를 배경으로 하는 세계관에 대한 설명이다. " + worldDetail +
             @" 당신이 생성해야할 아이템은 " + about_item + "이다."
@@ -278,7 +278,7 @@ public class MapManager : MonoBehaviour
             " + timeBackground + "시대 " + spaceBackground + "를 배경으로 하는 세계관에 대한 설명이다. " + worldDetail +
                 @" 장소는 해당 게임의 조력자 NPC의 집 혹은 직장으로 생성되며 조력자 NPC의 정보는 다음과 같다. " + 
                 "이름은 " + ScriptManager.scriptinfo.pNPC.name + "이며, " + ScriptManager.scriptinfo.pNPC.detail +
-                @" 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
+                @" 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. 또한, 출력의 영어표기를 생략하고 한글표기만 나타낸다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
 
 
             장소명: *장소 이름을 한 단어로 출력*
