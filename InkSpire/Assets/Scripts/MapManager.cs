@@ -341,7 +341,9 @@ public class MapManager : MonoBehaviour
 
         string[] plc_arr;
         plc_string = plc_string.Replace("\n\n", ":");
+        plc_string = plc_string.Replace(":\n", ":");
         plc_string = plc_string.Replace("\n", ":");
+        plc_string = plc_string.Replace(": ", ":");
         
         plc_arr = plc_string.Split(':');
 
