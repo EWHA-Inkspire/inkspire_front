@@ -203,7 +203,7 @@ public class MapManager : MonoBehaviour
             if (map[i].event_type == 0) //일반 이벤트일 경우
             {
                 // 일반 이벤트일 때의 항목 정의
-                ItemType?[] normalEventItems = { ItemType.Recover, ItemType.Mob, ItemType.Weapon, null, null, null, null };
+                ItemType?[] normalEventItems = { ItemType.Recover, ItemType.Weapon };
 
                 //돌려돌려돌림판
                 int randomIdx = UnityEngine.Random.Range(0, normalEventItems.Length);
