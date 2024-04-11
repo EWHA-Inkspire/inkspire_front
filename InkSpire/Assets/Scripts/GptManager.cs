@@ -34,7 +34,7 @@ public class GptManager : MonoBehaviour
         }
         else
         {
-            return "No text was generated from this prompt.";
+            return await CallGpt(messages);
         }
     }
 }
