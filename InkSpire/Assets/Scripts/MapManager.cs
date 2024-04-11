@@ -317,10 +317,14 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
 
         map[place_idx] = StringToPlace(await GptManager.gpt.CallGpt(gpt_messages), map[place_idx],true);
+        if(place_idx == 0){
+            map[place_idx].place_info+="이곳에서는 NPC "+ScriptManager.scriptinfo.pNPC.name+"을 만날 수 있습니다.";
+        }
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (map[place_idx].item_type != "Mob" && map[place_idx].item_type != "Monster" && map[place_idx].item_type != null) {
             CreateEventTrigger(place_idx);
         }
+        
     }
 
     //장소 이름 및 장소 설명 파싱 함수
