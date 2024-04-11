@@ -321,6 +321,7 @@ public class MapManager : MonoBehaviour
         }
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (map[place_idx].item_type != "Mob" && map[place_idx].item_type != "Monster" && map[place_idx].item_type != null) {
+            CreateItem(place_idx);
             CreateEventTrigger(place_idx);
         }
         
@@ -338,8 +339,10 @@ public class MapManager : MonoBehaviour
         plc_arr = plc_string.Split(':');
 
         if(is_plc){
-            plc.place_name = plc_arr[1];
-            // plc.place_name = Regex.Replace(plc_arr[1], @"[!@#$%^&*()-=+]", "");
+            // plc.place_name = plc_arr[1];
+            // 특수문자, 괄호, 점 제거를 위한 정규 표현식
+            Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
+            plc.place_name = regex.Replace(plc_arr[1], "");
             plc.place_info = plc_arr[3];
         }
         else{
