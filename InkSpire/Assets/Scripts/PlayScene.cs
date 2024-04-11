@@ -54,6 +54,7 @@ public class PlayScene : MonoBehaviour
             
         }
         MapManager.mapinfo.curr_place = 0;
+        InventoryManager.inventory.play_scene_created = true;
     }
 
     void Update(){

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using OpenAI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,6 +14,8 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
     [SerializeField] TextMeshProUGUI result_txt;
     [SerializeField] TextMeshProUGUI tens_dice;
     [SerializeField] TextMeshProUGUI ones_dice;
+
+    [SerializeField] PlayGPT playgpt;
 
     int req_value = 0;
     bool result = false;
@@ -49,7 +52,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (resultwindow.activeSelf == false)
+        if (resultwindow.activeSelf == false )
         {
             return;
         }
@@ -58,16 +61,32 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
 
     void ResultActive()
     {
+        int curr_place = MapManager.mapinfo.curr_place;
         resultwindow.gameObject.SetActive(true);
         result_calc.text = pl_value.ToString() + " + " + luk_value.ToString() + "(Bonus)\n";
+        ChatMessage result_msg = new ChatMessage(){
+            Role = "user",
+            Content = "주사위 판정 "
+        };
         if (pl_value + luk_value >= req_value)
         {
             result_txt.text = "<color=#074AB0>Success</color>";
+            result_msg.Content += "성공";
+            InventoryManager.inventory.AddItem(100+curr_place,curr_place,MapManager.mapinfo.map[curr_place].item_name,MapManager.mapinfo.map[curr_place].item_stat,MapManager.mapinfo.map[curr_place].item_type.ToString(),1);
+            InventoryManager.inventory.slotlist[InventoryManager.inventory.next_idx=1].SetSprites();
+            playgpt.AddToMessagesGPT(result_msg);
+            result_msg.Content = MapManager.mapinfo.map[curr_place].event_succ;
         }
         else
         {
             result_txt.text = "<color=#B40000>Fail</color>";
+            result_msg.Content += "실패";
+            playgpt.AddToMessagesGPT(result_msg);
+            result_msg.Content = MapManager.mapinfo.map[curr_place].event_fail;
         }
+        result_msg.Role = "assistant";
+        playgpt.AddToMessagesGPT(result_msg);
+        playgpt.AppendMsg(result_msg);
     }
 
 

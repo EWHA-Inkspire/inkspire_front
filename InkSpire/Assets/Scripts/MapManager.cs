@@ -18,9 +18,14 @@ public class MapManager : MonoBehaviour
         public string item_type; //일반 이벤트일 경우 아이템, 목표 이벤트일 경우 목표
         public int item_stat; //아이템 기능치
         public string event_trigger; //이벤트 트리거
+        public string event_title;  // 이벤트 제목
+        public string event_intro;  // 이벤트 도입 스크립트 
+        public string event_succ;   // 이벤트 성공 스크립트
+        public string event_fail;   // 이벤트 실패 스크립트
         public int event_type; //일반 이벤트 == 0, 목표 이벤트 == 1;
         public int ANPC_exist; //ANPC 등장 여부
         public bool clear; //파싱용 클리어 속성
+        
     }
 
     public enum ItemType
@@ -102,7 +107,6 @@ public class MapManager : MonoBehaviour
         }
         if (i == 13) //최종 에필로그 보스방
         {
-            map[i].item_type = "NULL";
             map[i].event_type = 1;
             map[i].ANPC_exist = 0;
         }
@@ -142,28 +146,22 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
 
         map[place_idx].item_name = await GptManager.gpt.CallGpt(gpt_messages);
-        curr_place = place_idx;
-        if (curr_place != 1)
-        {
-            //StartCoroutine(PostChapterObjective(curr_chapter));
-        }
     }
 
     private async void CreateEventTrigger(int place_idx)
-    {
+    { 
         string worldDetail = ScriptManager.scriptinfo.world_detail;
         int curr_chapter = ScriptManager.scriptinfo.curr_chapter;
+        int event_type = map[place_idx].event_type;
 
-        Debug.Log(">>Call Create EventTrigger GPT");
-        Debug.Log(">>현재 장소 인덱스: " + place_idx);
         gpt_messages.Clear();
+
         if (map[place_idx].item_type == "Mob" || map[place_idx].item_type == "Monster" || map[place_idx].item_type == "NULL")
             return;
-        Debug.Log(">>현재 챕터 목표: " + ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail);
         var prompt_msg = new ChatMessage()
         {
             Role = "system",
-            Content = @"당신은 챕터 목표에 맞는 게임 아이템의 위치를 생성한다. 챕터 목표는 " + ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail + "이며 게임의 세계관 배경은 다음과 같다. " + worldDetail
+            Content = @"당신은 챕터 목표에 맞는 게임 아이템의 위치를 생성한다. "+(event_type==1 ? "챕터 목표는 "+ScriptManager.scriptinfo.chapter_obj[curr_chapter].detail+"이며 " : "") + "게임의 세계관 배경은 다음과 같다. " + worldDetail
             + "플레이어가 현재 위치한 장소 이름은 " + map[place_idx].place_name + "이며 이 장소에서 게임 아이템인 " + map[place_idx].item_name + @"가 존재하는 위치를 생성한다. 
             위치의 이름은 장소 이름 및 게임 아이템과 자연스럽게 어울려야 하며 반드시 한 단어로 출력한다." // 장소 이름, 아이템 이름, 월드디테일 전달, 챕터목표 -> 이 물건이 있을만한 위치를 생성  
         };
@@ -177,12 +175,26 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
 
         map[place_idx].event_trigger = await GptManager.gpt.CallGpt(gpt_messages); //이거 파싱 어케할지 고민
-        Debug.Log(">>이벤트 트리거: "+map[place_idx].event_trigger);
-        curr_place = place_idx;
-        if (curr_place != 1)
-        {
-            //StartCoroutine(PostChapterObjective(curr_chapter));
-        }
+
+        gpt_messages.Clear();
+        prompt_msg.Content = @"당신은 trpg 게임의 기획자 역할을 하며 챕터 목표와 관련있으며 현재 플레이어가 있는 장소 내에 이벤트 트리거가 위치한 곳과 자연스럽게 어울리는 판정 이벤트를 생성한다. 챕터 목표는 " + ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail + "이며 게임의 세계관 배경은 다음과 같다. " + worldDetail
+            + "플레이어가 현재 위치한 장소 이름은 " + map[place_idx].place_name + "이며 이 장소의 이벤트 트리거인 "+map[place_idx].event_trigger+"를 통해 생성되는 이벤트 성공시 유저는 게임 아이템인 " + map[place_idx].item_name + @"을 획득한다. 
+            발생한 이벤트의 내용은 장소 이름, 챕터 목표, 게임 아이템과 자연스럽게 어울려야 한다.
+            이어지는 출력 양식의 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
+            
+            이벤트제목: *이벤트의 제목을 출력*
+            도입 스크립트: *이벤트 트리거를 건드렸을 때 판정이벤트가 발생하며 출력될 게임 시나리오 스크립트 출력* 
+            성공 스크립트: *이벤트 판정에 성공했을 때 출력될 아이템 획득 게임 시나리오 스크립트*
+            실패 스크립트: *이벤트 판정에 실패했을 때 출력될 게임 시나리오 스크립트*
+            ";
+        gpt_messages.Add(prompt_msg);
+
+        query_msg.Content = "판정 이벤트 생성";
+        gpt_messages.Add(query_msg);
+        
+        string response = await GptManager.gpt.CallGpt(gpt_messages); 
+        Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n"+response);
+        map[place_idx] = StringToPlace(response,map[place_idx],false);
     }
 
     public void ChooseItemType()
@@ -205,7 +217,7 @@ public class MapManager : MonoBehaviour
                 // 목표 이벤트일 때의 항목 정의
                 GoalType[] goalEventItems = { GoalType.Item, GoalType.Report, GoalType.Monster };
 
-                //돌려돌려돌림판
+                //돌려돌려돌림판 -> TODO: 챕터 목표의 유형을 받아와야 함
                 int randomIdx = UnityEngine.Random.Range(0, goalEventItems.Length);
 
                 map[i].item_type = goalEventItems[randomIdx].ToString(); // 열거형을 문자열로 변환하여 할당
@@ -304,28 +316,39 @@ public class MapManager : MonoBehaviour
         
         gpt_messages.Add(query_msg);
 
-        map[place_idx] = StringToPlace(await GptManager.gpt.CallGpt(gpt_messages), map[place_idx]);
-        curr_place = place_idx; //curr_chapter가 어디에서 i++되는 변수인지 확인하기
-        if (curr_place != 1)
-        {
-            //StartCoroutine(PostChapterObjective(curr_chapter));
+        map[place_idx] = StringToPlace(await GptManager.gpt.CallGpt(gpt_messages), map[place_idx],true);
+        if(place_idx == 0){
+            map[place_idx].place_info+="이곳에서는 NPC "+ScriptManager.scriptinfo.pNPC.name+"을 만날 수 있습니다.";
         }
-
-        // 이벤트 트리거 생성
-        CreateEventTrigger(place_idx);
+        // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
+        if (map[place_idx].item_type != "Mob" && map[place_idx].item_type != "Monster" && map[place_idx].item_type != null) {
+            CreateEventTrigger(place_idx);
+        }
+        
     }
 
     //장소 이름 및 장소 설명 파싱 함수
-    place StringToPlace(string plc_string, place plc)
+    place StringToPlace(string plc_string, place plc, bool is_plc)
     {
         plc.clear = false;
 
         string[] plc_arr;
+        plc_string = plc_string.Replace("\n\n", ":");
         plc_string = plc_string.Replace("\n", ":");
+        
         plc_arr = plc_string.Split(':');
 
-        plc.place_name = plc_arr[1];
-        plc.place_info = plc_arr[3];
+        if(is_plc){
+            plc.place_name = plc_arr[1];
+            plc.place_info = plc_arr[3];
+        }
+        else{
+            plc.event_title = plc_arr[1];
+            plc.event_intro = plc_arr[3];
+            plc.event_succ = plc_arr[5];
+            plc.event_fail = plc_arr[7];
+        }
+
 
         return plc;
     }

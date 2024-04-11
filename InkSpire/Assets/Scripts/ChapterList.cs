@@ -8,17 +8,10 @@ using UnityEngine.EventSystems;
 
 public class ChapterList : MonoBehaviour
 {
-    [SerializeField] GameObject Chapter1;
-    [SerializeField] GameObject Chapter2;
-    [SerializeField] GameObject Chapter3;
-    [SerializeField] GameObject Chapter4;
-    [SerializeField] GameObject Chapter5;
-    [SerializeField] TextMeshProUGUI ModalTitle;
-    string characterName;
+    //string characterName = GetComponentInChildren<Text>().text;
     void SetTitle()
     {
-        characterName = GetComponentInChildren<Text>().text;
-        ModalTitle.text = characterName + " 's Story";
+        //ModalTitle.text = characterName + " 's Story";
     }
 
     void activateChapter()

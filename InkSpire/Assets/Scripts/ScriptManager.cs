@@ -96,7 +96,7 @@ public class ScriptManager : MonoBehaviour
             int i = 0;
             while(i/3 == 0){
                 MapManager.mapinfo.CreatePlace(i+1);
-                Debug.Log("장소명:"+MapManager.mapinfo.map[i+1].place_name+"\n"+MapManager.mapinfo.map[i+1].place_info);
+                // Debug.Log("장소명:"+MapManager.mapinfo.map[i+1].place_name+"\n"+MapManager.mapinfo.map[i+1].place_info);
                 i++;
             }
 

@@ -17,7 +17,7 @@ public class GptManager : MonoBehaviour
         }
     }
 
-    private OpenAIApi openai = new OpenAIApi(apiKey:"api키 입력");
+    private OpenAIApi openai = new OpenAIApi();
 
     public async Task<string> CallGpt(List<ChatMessage> messages) {
         // gpt 호출
@@ -34,7 +34,7 @@ public class GptManager : MonoBehaviour
         }
         else
         {
-            return "No text was generated from this prompt.";
+            return await CallGpt(messages);
         }
     }
 }

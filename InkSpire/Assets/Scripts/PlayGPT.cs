@@ -18,6 +18,8 @@ public class PlayGPT : MonoBehaviour
     [SerializeField] private ScrollRect scroll;
     [SerializeField] private GameObject map_modal;
 
+    private int dice_num = 0;
+
     private List<ChatMessage> messages = new List<ChatMessage>();
     private ChatMessage input_msg = new ChatMessage();
     private string system_prompt = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
@@ -84,6 +86,7 @@ Narrator (내레이터):
         // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
         checkerMessage.Add(input_msg);
 
+        bool event_occur = false;
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
         if(item_type == "Recover" || item_type == "Weapon" ||
         item_type == "Item" || item_type == "Report") {
@@ -92,18 +95,41 @@ Narrator (내레이터):
             Debug.Log(event_trigger);
 
             if(EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
-                // TODO: 주사위 이벤트 진행
-                // mapManager에서 event_trigger 만들 때 인트로 문구도 같이 만들도록 -> 출력 후 주사위 이벤트 진행
-                dice_event.SetDiceEvent(50);
+                 battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
+                 ChatMessage event_msg = new ChatMessage{
+                    Role = "user",
+                    Content = "판정 이벤트 발생"
+                 };
+                 AddToMessagesGPT(event_msg);
+                 event_msg.Role = "assistant";
+                 event_msg.Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_title+"\n"+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_intro;
+                 AddToMessagesGPT(event_msg);
+                 battle_event.AppendMsg(event_msg.Content);
+
+                if(dice_num==0){
+                    dice_event.SetDiceEvent(dice_num);
+                    dice_num = 200;
+                }
+                else{
+                    dice_event.SetDiceEvent(dice_num);
+                }
+                event_occur = true;
             }
         }
-        SendReply();
+        if(event_occur){
+            event_occur = false;
+            player_input.text = "";
+        }
+        else{
+            SendReply();
+        }
+        
         
         //dice_event.SetDiceEvent(50);
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     }
-    void AppendMsg(ChatMessage msg)
+    public void AppendMsg(ChatMessage msg)
     {
         string add_text = "";
         if (msg.Role == "user")
@@ -126,7 +152,6 @@ Narrator (내레이터):
             Role = "user",
             Content = player_input.text
         };
-
         messages.Add(newMessage);
 
         button.enabled = false;
@@ -136,6 +161,8 @@ Narrator (내레이터):
         var message = await GptManager.gpt.CallGpt(messages);
         newMessage.Role = "assistant";
         newMessage.Content = message;
+        messages.Add(newMessage);
+
         AppendMsg(newMessage);
 
         button.enabled = true;
@@ -156,5 +183,9 @@ Narrator (내레이터):
         messages.Add(newMessage);
         AppendMsg(newMessage);
         map_modal.gameObject.SetActive(false);
+    }
+
+    public void AddToMessagesGPT(ChatMessage msg){
+        messages.Add(msg);
     }
 }
