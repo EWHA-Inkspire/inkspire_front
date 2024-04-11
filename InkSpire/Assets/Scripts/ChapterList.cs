@@ -16,14 +16,14 @@ public class ChapterList : MonoBehaviour
 
     void activateChapter()
     {
-        Chapter1.gameObject.SetActive(true);
-        if (ScriptManager.scriptinfo.curr_chapter >= 2)
-            Chapter2.gameObject.SetActive(true);
-        else if (ScriptManager.scriptinfo.curr_chapter >= 3)
-            Chapter3.gameObject.SetActive(true);
-        else if (ScriptManager.scriptinfo.curr_chapter >= 4)
-            Chapter4.gameObject.SetActive(true);
-        else
-            Chapter5.gameObject.SetActive(true);
+        // Chapter1.gameObject.SetActive(true);
+        // if (ScriptManager.scriptinfo.curr_chapter >= 2)
+        //     Chapter2.gameObject.SetActive(true);
+        // else if (ScriptManager.scriptinfo.curr_chapter >= 3)
+        //     Chapter3.gameObject.SetActive(true);
+        // else if (ScriptManager.scriptinfo.curr_chapter >= 4)
+        //     Chapter4.gameObject.SetActive(true);
+        // else
+        //     Chapter5.gameObject.SetActive(true);
     }
 }
