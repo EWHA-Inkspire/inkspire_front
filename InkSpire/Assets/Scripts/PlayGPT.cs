@@ -72,11 +72,13 @@ Narrator (내레이터):
         }
     }
 
-    public void SendButton()
+    public async void SendButton()
     {
         // 이벤트 체커 메시지 설정 (가장 마지막 gpt 대화 추가)
         var checkerMessage = new List<ChatMessage>();
-        checkerMessage.Add(messages.Last());
+        var assistant_msg = messages.Last();
+        assistant_msg.Role = "user";
+        checkerMessage.Add(assistant_msg);
 
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
@@ -87,14 +89,19 @@ Narrator (내레이터):
         checkerMessage.Add(input_msg);
 
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
-        if(item_type == "Recover" || item_type == "Weapon" ||
-        item_type == "Item" || item_type == "Report") {
-            Debug.Log(">>이벤트 트리거");
+        if(item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report") {
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
-            Debug.Log(event_trigger);
+            if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
+                // 이벤트 트리거 도입 스크립트 출력
+                var newMessage = new ChatMessage()
+                {
+                    Role = "assistant",
+                    Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_title
+                };
+                Debug.Log(newMessage.Content);
+                AppendMsg(newMessage);
 
-            if(EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
-                 battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
+                battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
                 if(dice_num==0){
                     dice_event.SetDiceEvent(dice_num);
                     dice_num = 200;
@@ -102,14 +109,18 @@ Narrator (내레이터):
                 else{
                     dice_event.SetDiceEvent(dice_num);
                 }
+            } else {
+                SendReply();
             }
+        } else {
+            SendReply();
         }
-        SendReply();
         
         //dice_event.SetDiceEvent(50);
         //battle_event.SetBattle(BattleEvent.BType.MOB,3);
         
     }
+
     public void AppendMsg(ChatMessage msg)
     {
         string add_text = "";
@@ -164,6 +175,13 @@ Narrator (내레이터):
         messages.Add(newMessage);
         AppendMsg(newMessage);
         map_modal.gameObject.SetActive(false);
+
+        // 장소의 아이템 유형이 Mob이거나 Monster일 경우 전투 이벤트 발동
+        var item_type = MapManager.mapinfo.map[place_idx].item_type;
+        if(item_type == "Mob" || item_type == "Monster") {
+            // 전투 이벤트
+            battle_event.SetBattle(BattleEvent.BType.MOB,3);
+        }
     }
 
     public void AddToMessagesGPT(ChatMessage msg){
