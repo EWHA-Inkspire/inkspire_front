@@ -75,6 +75,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
             Debug.Log("맵 아이템 이름:"+MapManager.mapinfo.map[curr_place].item_name);
             InventoryManager.inventory.AddItem(100+curr_place,curr_place,MapManager.mapinfo.map[curr_place].item_name,MapManager.mapinfo.map[curr_place].item_stat,MapManager.mapinfo.map[curr_place].item_type.ToString(),1);
             InventoryManager.inventory.slotlist[InventoryManager.inventory.next_idx-1].SetSprites();
+            MapManager.mapinfo.map[curr_place].clear = true;
             playgpt.AddToMessagesGPT(result_msg);
             result_msg.Content = MapManager.mapinfo.map[curr_place].event_succ.Replace(".", ".\n");
         }

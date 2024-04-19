@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class Stats
 {
+    // 스탯 데이터 구조 클라스
     public event EventHandler OnStatsChanged;
-    public static int STAT_MIN = 0;
-    public static int STAT_MAX = 100;
-    public static int HP_MAX = 1000;
+    public static int STAT_MIN = 0;     // 스탯 최소값
+    public static int STAT_MAX = 100;   // 스탯 최댓값
+    public static int HP_MAX = 1000;    // HP 최댓값
 
     public enum Type {
+        // 스탯 종류 자료형
         Attack,
         Defence, 
         Luck, 
@@ -19,6 +21,7 @@ public class Stats
         MaxHP,
         CurrHP
     }
+
 
     private SingleStat stat_luk;
     private SingleStat stat_def;

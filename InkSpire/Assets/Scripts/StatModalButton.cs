@@ -6,7 +6,10 @@ public class StatModalButton : MonoBehaviour
 {
     [SerializeField] GameObject mesh_obj;
     [SerializeField] GameObject modal_obj;
-    [SerializeField] StatGraphTest stattest;
+    [SerializeField] private StatusGraph status_graph;
+
+    private Stats zero_stats = new Stats(0,0,0,0,0);
+
     private CanvasRenderer radarMeshCanvasRenderer;
 
     private void Awake(){
@@ -16,17 +19,22 @@ public class StatModalButton : MonoBehaviour
     public void OnModalOpen(){
         
         modal_obj.gameObject.SetActive(true);
-        stattest.ModalActivate();
+        ModalActivate();
     }
 
     public void OnModalClose(){
-        stattest.ModalDeactivate();
+        status_graph.SetStats(zero_stats);
         Invoke("Deactivate",0.03f);
     }
 
     private void Deactivate(){
         modal_obj.gameObject.SetActive(false);
-        stattest.ModalActivate();
+        ModalActivate();
+    }
+
+    public void ModalActivate(){
+        status_graph.SetStats(PlayerStatManager.playerstat.p_stats);
+
     }
 
 }

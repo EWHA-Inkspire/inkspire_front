@@ -10,7 +10,7 @@ public class CreateStatScene : MonoBehaviour
 {
     [SerializeField] GameObject LoadingPannel;
     [SerializeField] TextMeshProUGUI LoadingText;
-    [SerializeField] StatGraphTest testObj;
+    [SerializeField] StatModalButton testObj;
     [SerializeField] TMP_InputField atk;
     [SerializeField] TMP_InputField def;
     [SerializeField] TMP_InputField luk;
@@ -20,6 +20,7 @@ public class CreateStatScene : MonoBehaviour
     public void SetAttack()
     {
         PlayerStatManager.playerstat.p_stats.SetStatAmount(Stats.Type.Attack, int.Parse(atk.text));
+        testObj.ModalActivate();
     }
 
     public void SetDefence()
