@@ -64,7 +64,7 @@ public class Script
         };
         gpt_messages.Add(newMessage);
 
-        var response = await GptManager.gpt.CallGpt(gpt_messages);
+        string response = await GptManager.gpt.CallGpt(gpt_messages);
         Debug.Log("세계관 출력:" + response);
 
         if(response == GPT_ERROR) {
@@ -113,10 +113,10 @@ public class Script
 
         gpt_messages.Add(newMessage);
 
-        var response = await GptManager.gpt.CallGpt(messages);
+        var response = await GptManager.gpt.CallGpt(gpt_messages);
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
-        this.intro_string = response.Replace("###", "");
+        this.intro = response.Replace("###", "");
         Debug.Log(response);
     }
 
