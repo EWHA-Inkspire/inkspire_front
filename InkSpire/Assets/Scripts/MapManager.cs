@@ -209,8 +209,8 @@ public class MapManager : MonoBehaviour
         {
             if (map[i].event_type == 0) //일반 이벤트일 경우
             {
-                // 일반 이벤트일 때의 항목 정의 -> TODO: 실제 최종에서는 Mob, null 4개 추가해야 함!!
-                ItemType?[] normalEventItems = { ItemType.Recover, ItemType.Weapon };
+                // 일반 이벤트일 때의 항목 정의
+                ItemType?[] normalEventItems = { ItemType.Recover, ItemType.Weapon, ItemType.Mob, null, null, null, null };
 
                 //돌려돌려돌림판
                 int randomIdx = UnityEngine.Random.Range(0, normalEventItems.Length);
@@ -219,8 +219,8 @@ public class MapManager : MonoBehaviour
             }
             else //목표 이벤트일 경우
             {
-                // 목표 이벤트일 때의 항목 정의 -> TODO: 실제 최종에서는 Monster 추가해야 함!!
-                GoalType[] goalEventItems = { GoalType.Item, GoalType.Report };
+                // 목표 이벤트일 때의 항목 정의
+                GoalType[] goalEventItems = { GoalType.Item, GoalType.Report, GoalType.Monster };
 
                 //돌려돌려돌림판 -> TODO: 챕터 목표의 유형을 받아와야 함
                 int randomIdx = UnityEngine.Random.Range(0, goalEventItems.Length);
@@ -330,8 +330,6 @@ public class MapManager : MonoBehaviour
             CreateItem(place_idx);
             CreateEventTrigger(place_idx);
         }
-        
-
     }
 
     //장소 이름 및 장소 설명 파싱 함수
