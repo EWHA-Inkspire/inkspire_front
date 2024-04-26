@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using OpenAI;
 
-public class Npc {
+public class Npc
+{
     private enum NPCType
     {
         A,
@@ -92,5 +93,15 @@ public class Npc {
             type_s = "조연";
         }
         return type_s;
+    }
+
+    public string GetName()
+    {
+        return this.name;
+    }
+
+    public string GetDetail()
+    {
+        return this.detail;
     }
 }
