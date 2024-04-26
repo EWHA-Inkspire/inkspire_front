@@ -16,6 +16,7 @@ public class ScriptManager : MonoBehaviour
     private Script script;
     private Goals[] chapter_obj = new Goals[5];
     private Place[] map = new Place[14];
+    private string[] place_names = new string[14];
     private Npc pro_npc;
     private Npc anta_npc;
 
@@ -45,7 +46,8 @@ public class ScriptManager : MonoBehaviour
         // 맵 정보 생성
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
         for (int i = 0; i < 4; i++) {
-            map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter].GetDetail());
+            map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter].GetDetail(), place_names);
+            place_names[i] = map[i].place_name;
         }
 
         script.IntroGpt(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
