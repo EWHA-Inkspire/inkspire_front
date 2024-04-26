@@ -110,9 +110,6 @@ Narrator (내레이터):
 
     public async void SendButton()
     {
-        // 핑퐁 횟수 체크
-        cnt++;
-
         // 이벤트 체커 메시지 설정 (가장 마지막 gpt 대화 추가)
         var checkerMessage = new List<ChatMessage>();
         var assistant_msg = messages.Last();
@@ -130,7 +127,7 @@ Narrator (내레이터):
         Debug.Log("이벤트 트리거: " + MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger);
 
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
-        if (cnt == 2 && (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report"))
+        if (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report")
         {
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
             if (!MapManager.mapinfo.map[MapManager.mapinfo.curr_place].clear || await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger))
@@ -155,7 +152,7 @@ Narrator (내레이터):
                 if (dice_num == 0)
                 {
                     dice_event.SetDiceEvent(dice_num);
-                    dice_num = 200;
+                    dice_num = 50;
                 }
                 else
                 {
