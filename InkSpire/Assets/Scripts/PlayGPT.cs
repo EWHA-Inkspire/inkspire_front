@@ -93,6 +93,8 @@ NPC는 항상 등장할 필요는 없으며 등장할 경우에만 아래의 양
         // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
         checkerMessage.Add(input_msg);
 
+        Debug.Log("이벤트 트리거: "+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger);
+
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
         if(item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report") {
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class StatusGraph : MonoBehaviour
 {
+    // 스탯 그래프 UI를 그리는 코드 파일 - Youtube 참고해서 짠 코드라 웬만해선 건드리지 말것
+
     [SerializeField] private Material radarMaterial;
     [SerializeField] private GameObject mesh_object;
-    //[SerializeField] private Texture2D radarTexture2D;
+
 
     private Stats stats;
     private CanvasRenderer radarMeshCanvasRenderer;
