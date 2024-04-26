@@ -74,7 +74,7 @@ public class Script
         this.world_detail = response;
     }
 
-    public async void IntroGPT(Npc pro_npc, Npc anta_npc, Place[] map, string char_name)
+    public async void IntroGPT(Npc pro_npc, Npc anta_npc, string place_name, string place_info, string char_name)
     {
         Debug.Log(">>Call Intro GPT");
         gpt_messages.Clear();
@@ -85,7 +85,7 @@ public class Script
             Content = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
             게임의 배경과 세계관 설정을 참고하여 게임의 시작 멘트인 인트로를 아래의 양식대로 출력하되, 직접적으로 게임이라는 언급은 하지 않는다.
             또한, 조력자 npc인 " + pro_npc.GetDetail() + "(" + pro_npc.GetDetail() + ")와 적대자 NPC인 " + anta_npc.GetName() + "(" + anta_npc.GetDetail() + @")의 요약된 소개를 줄글 형태로 진행한다. 
-            게임 시작 장소는" + map[0].place_name + "으로, " + map[0].place_info + @"이다.
+            게임 시작 장소는" + place_name + "으로, " + place_info + @"이다.
             ** 이 표시 안의 내용은 문맥에 맞게 채운다.
             ###
             여기는 *시간적 배경* *공간적 배경*. *플레이어 이름*님, 당신은 이 도시로 들어오면서 새로운 모험을 시작하게 됩니다.

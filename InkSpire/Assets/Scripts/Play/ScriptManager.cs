@@ -48,7 +48,7 @@ public class ScriptManager : MonoBehaviour
             map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter].GetDetail());
         }
 
-        script.IntroGpt(pro_npc, anta_npc, map, this.char_name);
+        script.IntroGpt(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
     }
 
     // 각 장소별 목표 or 일반 이벤트 여부 정하기
