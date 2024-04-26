@@ -47,6 +47,7 @@ public class IntroGpt
 
         var response = await GptManager.gpt.CallGpt(messages);
         response = response.Replace("###\n", "");
+        response = response.Replace("*", "");
         ScriptManager.scriptinfo.intro_string = response.Replace("###", "");
         Debug.Log(response);
     }
