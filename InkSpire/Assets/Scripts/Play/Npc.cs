@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using OpenAI;
+using System;
 
-public class Npc {
+public class Npc
+{
     private enum NPCType
     {
         A,
@@ -22,7 +24,7 @@ public class Npc {
     public Npc(string type, string world_detail, string genre)
     {
         this.type = (NPCType)Enum.Parse(typeof(NPCType),type);
-        NameGPT(type, world_detail, genre);
+        NameGPT(this.type, world_detail, genre);
         NpcDetailGPT(this.type, world_detail, genre);
         this.stat = new Stats(50, 50, 50, 50, 50);
     }
@@ -46,7 +48,7 @@ public class Npc {
         };
         gpt_messages.Add(newMessage);
 
-        response = await GptManager.gpt.CallGpt(messages);
+        string response = await GptManager.gpt.CallGpt(gpt_messages);
         if(response == GPT_ERROR) {
             // 출력 안 될 경우 처리
         }
@@ -72,7 +74,7 @@ public class Npc {
         };
         gpt_messages.Add(newMessage);
 
-        response = await GptManager.gpt.CallGpt(messages);
+        string response = await GptManager.gpt.CallGpt(gpt_messages);
         if(response == GPT_ERROR) {
             // 출력 안 될 경우 처리
         }
@@ -92,5 +94,15 @@ public class Npc {
             type_s = "조연";
         }
         return type_s;
+    }
+
+    public string GetName()
+    {
+        return this.name;
+    }
+
+    public string GetDetail()
+    {
+        return this.detail;
     }
 }
