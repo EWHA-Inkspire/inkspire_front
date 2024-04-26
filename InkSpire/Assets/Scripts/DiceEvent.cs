@@ -78,6 +78,8 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
             MapManager.mapinfo.map[curr_place].clear = true;
             playgpt.AddToMessagesGPT(result_msg);
             result_msg.Content = MapManager.mapinfo.map[curr_place].event_succ.Replace(".", ".\n");
+            MapManager.mapinfo.map[curr_place].clear = true;
+            result_msg.Content = MapManager.mapinfo.map[curr_place].event_succ;
         }
         else
         {
