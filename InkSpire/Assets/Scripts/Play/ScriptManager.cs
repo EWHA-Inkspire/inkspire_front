@@ -39,13 +39,13 @@ public class ScriptManager : MonoBehaviour
         // 목표 생성
 
         // npc 정보 생성
-        pro_npc = new Npc("P", script.getWorldDetail(), genre);
-        anta_npc = new Npc("A", script.getWorldDetail(), genre);
+        pro_npc = new Npc("P", script.GetWorldDetail(), genre);
+        anta_npc = new Npc("A", script.GetWorldDetail(), genre);
 
         // 맵 정보 생성
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
         for (int i = 0; i < 4; i++) {
-            map[i] = new Place(i);
+            map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter].GetDetail());
         }
 
         script.IntroGpt(pro_npc, anta_npc, map, this.char_name);
@@ -59,34 +59,34 @@ public class ScriptManager : MonoBehaviour
         while (i < 13) {
             flag = UnityEngine.Random.Range(0, 3);
             if (flag == 0) {
-                map[i].event_type = 1;
+                map[i].game_event.event_type = 1;
             }
             else {
-                map[i].event_type = 0;
+                map[i].game_event.event_type = 0;
             }
 
             if (map[i].event_type == 1) {
                 //100
-                map[i + 1].event_type = 0;
-                map[i + 2].event_type = 0;
+                map[i + 1].game_event.event_type = 0;
+                map[i + 2].game_event.event_type = 0;
                 i += 3;
                 continue;
             }
             else {
                 i++;
-                map[i].event_type = UnityEngine.Random.Range(0, 2);
-                if (map[i].event_type == 1){
-                    map[i + 1].event_type = 0; //010
+                map[i].game_event.event_type = UnityEngine.Random.Range(0, 2);
+                if (map[i].game_event.event_type == 1){
+                    map[i + 1].game_event.event_type = 0; //010
                 }
                 else {
-                    map[i + 1].event_type = 1; //001
+                    map[i + 1].game_event.event_type = 1; //001
                 }
                 i += 2;
             }
         }
         //최종 에필로그
         if (i == 13) {
-            map[i].event_type = 1;
+            map[i].game_event.event_type = 1;
             map[i].ANPC_exist = 0;
         }
     }
