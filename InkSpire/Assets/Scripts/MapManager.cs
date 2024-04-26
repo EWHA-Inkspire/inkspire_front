@@ -184,7 +184,7 @@ public class MapManager : MonoBehaviour
         prompt_msg.Content = @"당신은 trpg 게임의 기획자 역할을 하며 챕터 목표와 관련있으며 현재 플레이어가 있는 장소 내에 이벤트 트리거가 위치한 곳과 자연스럽게 어울리는 판정 이벤트를 생성한다. 챕터 목표는 " + ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail + "이며 게임의 세계관 배경은 다음과 같다. " + worldDetail
             + "플레이어가 현재 위치한 장소 이름은 " + map[place_idx].place_name + "이며 이 장소의 이벤트 트리거인 " + map[place_idx].event_trigger + "를 통해 생성되는 이벤트 성공시 유저는 게임 아이템인 " + map[place_idx].item_name + @"을 획득한다. 
             발생한 이벤트의 내용은 장소 이름, 챕터 목표, 게임 아이템과 자연스럽게 어울려야 한다.
-            이어지는 출력 양식의 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
+            이어지는 출력 양식의 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. 아래는 출력 예시이다.
             
             ex 1)
             이벤트제목: 은혜당의 구미호를 만나다.
