@@ -72,10 +72,10 @@ public class MapManager : MonoBehaviour
         CreatePlace(place_idx);
 
         // 모든 챕터의 장소 설정
-        ChooseEventType();
-        IsANPCexists();
-        ChooseItemType();
-        ItemStat();
+        ChooseEventType(); // 스크립트 매니저로 이동시킬 애
+        IsANPCexists(); // Place
+        ChooseItemType(); // Item
+        ItemStat(); // Item
         is_drawmap = true;
     }
 
