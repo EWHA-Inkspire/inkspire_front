@@ -10,10 +10,11 @@ public class ScriptManager : MonoBehaviour
 {
     public static ScriptManager script_manager;
     private int character_id = 0; // 추후 API 호출 결과 값으로 변경
+    private string char_name;
     private int curr_chapter = 0;
     
     // 플레이어의 입력값
-    [SerializeField] TMP_InputField char_name;
+    [SerializeField] TMP_InputField input_name;
     [SerializeField] TMP_InputField time_background;
     [SerializeField] TMP_InputField space_background;
     [SerializeField] ToggleGroup genregroup;
@@ -37,8 +38,9 @@ public class ScriptManager : MonoBehaviour
     // 기본 틀 생성
     public void SetScriptInfo()
     {
+        char_name = input_name.text;
         // 스크립트 기본 틀 생성 (세계관, 인트로)
-        script = new Script(char_name.text, GetGenre(), time_background.text, space_background.text);
+        script = new Script(char_name, GetGenre(), time_background.text, space_background.text);
         // 목표 생성
 
         // npc 정보 생성
@@ -47,7 +49,7 @@ public class ScriptManager : MonoBehaviour
 
         // 맵 정보 생성 -> 아이템 & 이벤트 트리거
 
-        script.IntroGpt(pro_npc, anta_npc, map);
+        script.IntroGpt(pro_npc, anta_npc, map, char_name);
     }
 
 
