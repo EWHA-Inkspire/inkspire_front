@@ -97,7 +97,7 @@ Narrator (내레이터):
         var item_type = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].item_type;
         if(cnt == 2 && (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report")) {
             var event_trigger = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].event_trigger;
-            if(await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
+            if(!MapManager.mapinfo.map[MapManager.mapinfo.curr_place].clear||await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger)) {
                 // 이벤트 트리거 도입 스크립트 출력
                 battle_event.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
                 ChatMessage event_msg = new ChatMessage{
