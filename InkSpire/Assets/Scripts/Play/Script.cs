@@ -140,8 +140,17 @@ public class Script
         return this.world_detail;
     }
 
-    public string GetIntro()
+    public string getTimeBackground()
     {
+        return this.time_background;
+    }
+
+    public string getSpaceBackground()
+    {
+        return this.space_background;
+    }
+
+    public string GetIntro(){
         return this.intro;
     }
 }
