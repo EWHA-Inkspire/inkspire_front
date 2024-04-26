@@ -120,13 +120,28 @@ public class Script
         Debug.Log(response);
     }
 
-    public string getGenre()
+    public string GetGenre()
     {
         return this.genre;
     }
 
-    public string getWorldDetail()
+    public string GetTimeBackground()
+    {
+        return this.time_background;
+    }
+
+    public string GetSpaceBackground()
+    {
+        return this.space_background;
+    }
+
+    public string GetWorldDetail()
     {
         return this.world_detail;
+    }
+
+    public string GetIntro()
+    {
+        return this.intro;
     }
 }
