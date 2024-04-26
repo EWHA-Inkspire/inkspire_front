@@ -20,22 +20,10 @@ public class Item : MonoBehaviour
     {
         Recover,
         Mob,
-        Weapon
-    }
-
-    public enum GoalType
-    {
+        Weapon,
         Item,
         Report,
         Monster
-    }
-    // 인벤 아이템 관리용
-    public enum Type
-    {
-        Recover,
-        Mob,
-        Weapon,
-        Report
     }
 
     public Item(string time_background, string space_background, string world_detail, int event_type)
@@ -62,7 +50,7 @@ public class Item : MonoBehaviour
         else //목표 이벤트일 경우
         {
             // 목표 이벤트일 때의 항목 정의
-            GoalType[] goalEventItems = { GoalType.Item, GoalType.Report, GoalType.Monster };
+            ItemType[] goalEventItems = { ItemType.Item, ItemType.Report, ItemType.Monster };
 
             //돌려돌려돌림판 -> TODO: 챕터 목표의 유형을 받아와야 함
             int randomIdx = UnityEngine.Random.Range(0, goalEventItems.Length);
