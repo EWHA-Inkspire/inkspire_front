@@ -67,7 +67,7 @@ public class ScriptManager : MonoBehaviour
                 map[i].game_event.event_type = 0;
             }
 
-            if (map[i].event_type == 1) {
+            if (map[i].game_event.event_type == 1) {
                 //100
                 map[i + 1].game_event.event_type = 0;
                 map[i + 2].game_event.event_type = 0;
