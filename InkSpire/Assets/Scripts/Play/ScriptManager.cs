@@ -12,12 +12,6 @@ public class ScriptManager : MonoBehaviour
     private int character_id = 0; // 추후 API 호출 결과 값으로 변경
     private string char_name;
     private int curr_chapter = 0;
-    
-    // 플레이어의 입력값
-    [SerializeField] TMP_InputField input_name;
-    [SerializeField] TMP_InputField time_background;
-    [SerializeField] TMP_InputField space_background;
-    [SerializeField] ToggleGroup genregroup;
 
     private Script script;
     private Goals[] chapter_obj = new Goals[5];
@@ -35,31 +29,66 @@ public class ScriptManager : MonoBehaviour
         }
     }
 
-    // 기본 틀 생성
-    public async void SetScriptInfo()
+    // 초기 스크립트 틀 생성 (장소 4개)
+    public void SetScriptInfo(string char_name, string genre, string time_background, string space_background)
     {
-        char_name = input_name.text;
-        // 스크립트 기본 틀 생성 (세계관, 인트로)
-        script = new Script(GetGenre(), time_background.text, space_background.text);
+        this.char_name = char_name;
+        // 세계관, 인트로 생성
+        script = new Script(genre, time_background, space_background);
+
         // 목표 생성
 
         // npc 정보 생성
-        pro_npc = new Npc("P", script.getWorldDetail(), script.getGenre());
-        anta_npc = new Npc("A", script.getWorldDetail(), script.getGenre());
+        pro_npc = new Npc("P", script.getWorldDetail(), genre);
+        anta_npc = new Npc("A", script.getWorldDetail(), genre);
 
-        // 맵 정보 생성 -> 아이템 & 이벤트 트리거
+        // 맵 정보 생성
+        ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
+        for (int i = 0; i < 4; i++) {
+            map[i] = new Place(i);
+        }
 
-        await script.IntroGpt(pro_npc, anta_npc, map, char_name);
+        script.IntroGpt(pro_npc, anta_npc, map, this.char_name);
     }
 
-
-    // 장르 그룹에서 장르 텍스트 뽑아오기
-    private string GetGenre()
+    // 각 장소별 목표 or 일반 이벤트 여부 정하기
+    private void ChooseEventType()
     {
-        string[] strlist = genregroup.ActiveToggles().FirstOrDefault().GetComponentInChildren<Text>().text.Split("#");
-        return (strlist[1]);
-    }
+        int i = 1;
+        int flag = 0;
+        while (i < 13) {
+            flag = UnityEngine.Random.Range(0, 3);
+            if (flag == 0) {
+                map[i].event_type = 1;
+            }
+            else {
+                map[i].event_type = 0;
+            }
 
-    // map의 이벤트 타입 설정 (3개 장소마다 목표 이벤트 출현 장소 정하는 로직)
+            if (map[i].event_type == 1) {
+                //100
+                map[i + 1].event_type = 0;
+                map[i + 2].event_type = 0;
+                i += 3;
+                continue;
+            }
+            else {
+                i++;
+                map[i].event_type = UnityEngine.Random.Range(0, 2);
+                if (map[i].event_type == 1){
+                    map[i + 1].event_type = 0; //010
+                }
+                else {
+                    map[i + 1].event_type = 1; //001
+                }
+                i += 2;
+            }
+        }
+        //최종 에필로그
+        if (i == 13) {
+            map[i].event_type = 1;
+            map[i].ANPC_exist = 0;
+        }
+    }
 
 }
