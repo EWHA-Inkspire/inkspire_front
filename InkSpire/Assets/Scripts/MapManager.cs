@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using OpenAI;
 using UnityEngine;
@@ -216,9 +217,9 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
 
         string response = await GptManager.gpt.CallGpt(gpt_messages);
-        Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n" + response);
+        UnityEngine.Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n" + response);
         map[place_idx] = StringToPlace(response, map[place_idx], false);
-        Debug.Log("이벤트 생성:\n" + map[place_idx].item_name + "\n" + map[place_idx].item_info);
+        UnityEngine.Debug.Log("이벤트 생성:\n" + map[place_idx].item_name + "\n" + map[place_idx].item_info);
     }
 
     public void ChooseItemType()
@@ -286,8 +287,8 @@ public class MapManager : MonoBehaviour
         string worldDetail = ScriptManager.scriptinfo.world_detail;
         string genre = ScriptManager.scriptinfo.genre;
 
-        Debug.Log(">>Call Create Place GPT");
-        Debug.Log(">>현재 장소 인덱스: " + place_idx);
+        UnityEngine.Debug.Log(">>Call Create Place GPT");
+        UnityEngine.Debug.Log(">>현재 장소 인덱스: " + place_idx);
         gpt_messages.Clear();
 
         ChatMessage prompt_msg;
@@ -375,6 +376,8 @@ public class MapManager : MonoBehaviour
         {
             // plc.place_name = plc_arr[1];
             plc.place_name = regex.Replace(plc_arr[1], "");
+            plc.place_name.Trim();
+            UnityEngine.Debug.Log(plc.place_name);
             plc.place_info = plc_arr[3];
         }
         else
