@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using OpenAI;
 using UnityEngine;
@@ -216,9 +217,9 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
 
         string response = await GptManager.gpt.CallGpt(gpt_messages);
-        Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n" + response);
+        UnityEngine.Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n" + response);
         map[place_idx] = StringToPlace(response, map[place_idx], false);
-        Debug.Log("이벤트 생성:\n" + map[place_idx].item_name + "\n" + map[place_idx].item_info);
+        UnityEngine.Debug.Log("이벤트 생성:\n" + map[place_idx].item_name + "\n" + map[place_idx].item_info);
     }
 
     public void ChooseItemType()
@@ -286,8 +287,8 @@ public class MapManager : MonoBehaviour
         string worldDetail = ScriptManager.scriptinfo.world_detail;
         string genre = ScriptManager.scriptinfo.genre;
 
-        Debug.Log(">>Call Create Place GPT");
-        Debug.Log(">>현재 장소 인덱스: " + place_idx);
+        UnityEngine.Debug.Log(">>Call Create Place GPT");
+        UnityEngine.Debug.Log(">>현재 장소 인덱스: " + place_idx);
         gpt_messages.Clear();
 
         ChatMessage prompt_msg;
@@ -327,7 +328,7 @@ public class MapManager : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "와 장소 이름이 겹치지 (must not same) 않는 진행중인 게임의 " + genre + " 장르와 세계관에 어울리는 장소 생성"
+            Content = "와 장소 이름이 중복되지 않도록 진행중인 게임의 " + genre + " 장르와 세계관에 어울리는 장소 생성. 장소 이름은 절대 중복되어서는 안된다."
         };
         for (int i = 0; i < place_idx; i++)
         {
@@ -344,10 +345,10 @@ public class MapManager : MonoBehaviour
         gpt_messages.Add(query_msg);
 
         map[place_idx] = StringToPlace(await GptManager.gpt.CallGpt(gpt_messages), map[place_idx], true);
-        if (place_idx == 0)
-        {
-            map[place_idx].place_info += "이곳에서는 NPC " + ScriptManager.scriptinfo.pNPC.name + "을 만날 수 있습니다.";
-        }
+        // if (place_idx == 0)
+        // {
+        //     map[place_idx].place_info += "이곳에서는 NPC " + ScriptManager.scriptinfo.pNPC.name + "을 만날 수 있습니다.";
+        // }
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (map[place_idx].item_type != "Mob" && map[place_idx].item_type != "Monster" && map[place_idx].item_type != null)
         {
@@ -375,6 +376,8 @@ public class MapManager : MonoBehaviour
         {
             // plc.place_name = plc_arr[1];
             plc.place_name = regex.Replace(plc_arr[1], "");
+            plc.place_name = plc.place_name.Trim();
+            UnityEngine.Debug.Log(plc.place_name);
             plc.place_info = plc_arr[3];
         }
         else

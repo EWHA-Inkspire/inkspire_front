@@ -32,12 +32,12 @@ TRPG 진행을 하듯 진행하되, TRPG라는 단어는 언급하면 안된다.
 게임 배경에 대한 정보는 출력을 위한 참고사항이며, 해당 정보들을 바탕으로 다음 시나리오 진행한다.
 npc 정보들을 토대로 적절한 시점에 npc를 등장시킨다.
 
-현재 플레이중인 게임은"+ScriptManager.scriptinfo.time_background+"시대 "+ScriptManager.scriptinfo.space_background+" 배경으로 하는 "+ScriptManager.scriptinfo.genre+"장르의 게임이며 세계관은 다음과 같다.\n"
-+ScriptManager.scriptinfo.world_detail+"\n\n"
-+"게임의 최종 목표는 "+ScriptManager.scriptinfo.final_obj.title+"\n"+ScriptManager.scriptinfo.final_obj.detail+"이며"
-+"현재 챕터의 목표는 다음과 같다."+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].title+"\n"+ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail
-+"\n현재 플레이어가 있는 장소는 \""+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_name+"\"로, "+MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_info
-+@"이 아래로 게임 진행 양식이 이어진다. ** 이 표시 안의 내용은 문맥에 맞게 채운 후 *기호는 모두 삭제한다. 
+현재 플레이중인 게임은" + ScriptManager.scriptinfo.time_background + "시대 " + ScriptManager.scriptinfo.space_background + " 배경으로 하는 " + ScriptManager.scriptinfo.genre + "장르의 게임이며 세계관은 다음과 같다.\n"
++ ScriptManager.scriptinfo.world_detail + "\n\n"
++ "게임의 최종 목표는 " + ScriptManager.scriptinfo.final_obj.title + "\n" + ScriptManager.scriptinfo.final_obj.detail + "이며"
++ "현재 챕터의 목표는 다음과 같다." + ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].title + "\n" + ScriptManager.scriptinfo.chapter_obj[ScriptManager.scriptinfo.curr_chapter].detail
++ "\n현재 플레이어가 있는 장소는 \"" + MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_name + "\"로, " + MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_info
++ @"이 아래로 게임 진행 양식이 이어진다. ** 이 표시 안의 내용은 문맥에 맞게 채운 후 *기호는 모두 삭제한다. 
  ------------------------------------------------
 Narrator (내레이터):
 *게임 스토리 진행 멘트와 플레이어의 선택지 생성, 선택지는 반드시 4가지 생성되며 각 선택지끼리의 내용은 절대 중복되지 않는다. *
@@ -228,6 +228,10 @@ Narrator (내레이터):
             Content = MapManager.mapinfo.map[MapManager.mapinfo.curr_place].place_name + "으로 이동"
         };
         messages.Add(query_msg);
+        if (MapManager.mapinfo.curr_place == 0)
+        {
+            MapManager.mapinfo.map[place_idx].place_info += "이곳에서는 NPC " + ScriptManager.scriptinfo.pNPC.name + EulorReul(ScriptManager.scriptinfo.pNPC.name) + " 만날 수 있습니다.";
+        }
         var newMessage = new ChatMessage()
         {
             Role = "assistant",
