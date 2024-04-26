@@ -132,7 +132,7 @@ public class Place : MonoBehaviour
         place_string = place_string.Replace(": ", ":");
 
         place_arr = place_string.Split(':');
-        place_name = regex.Replace(plc_arr[1], "");
+        place_name = regex.Replace(place_arr[1], "");
         place_name = place_name.Trim();
         UnityEngine.Debug.Log(place_name);
         place_info = place_arr[3];
