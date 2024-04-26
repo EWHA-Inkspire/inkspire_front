@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public class Goals
 {
-    private string type;
+    private int type;
     private string title;
     private string detail;
     private string etc;
@@ -14,31 +14,7 @@ public class Goals
 
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
 
-// 변수 호출 함수들
-    public string GetGoalType()
-    {
-        return type;
-    }
 
-    public string GetTitle()
-    {
-        return title;
-    }
-
-    public string GetDetail()
-    {
-        return detail;
-    }
-
-    public string GetEtc()
-    {
-        return etc;
-    }
-
-    public bool GetClear()
-    {
-        return clear;
-    }
 
 
 // 생성자들
@@ -245,7 +221,7 @@ public class Goals
         for(int i = 0; i<obj_arr.Length; i++ ){
             switch(i){
                 case 1:
-                    type = obj_arr[1];
+                    type = int.Parse(obj_arr[1]);
                     continue;
                 case 3:
                     title = obj_arr[3];
@@ -260,5 +236,31 @@ public class Goals
                     continue;
             }
         }
+    }
+
+    // 변수 호출 함수들
+    public int GetGoalType()
+    {
+        return type;
+    }
+
+    public string GetTitle()
+    {
+        return title;
+    }
+
+    public string GetDetail()
+    {
+        return detail;
+    }
+
+    public string GetEtc()
+    {
+        return etc;
+    }
+
+    public bool GetClear()
+    {
+        return clear;
     }
 }

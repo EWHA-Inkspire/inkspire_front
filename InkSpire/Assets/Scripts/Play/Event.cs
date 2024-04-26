@@ -18,7 +18,7 @@ public class Event : MonoBehaviour
     public string event_fail; // 이벤트 실패 스크립트
     public int event_type; //일반 이벤트 == 0, 목표 이벤트 == 1;
 
-    private async void CreateEventTrigger(int idx, string world_detail, string chapter_obj, string place_name, string item_name)
+    public async void CreateEventTrigger(int idx, string world_detail, string chapter_obj, string place_name, string item_name)
     {
         gpt_messages.Clear();
 

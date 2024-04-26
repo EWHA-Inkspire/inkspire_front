@@ -7,6 +7,9 @@ using UnityEngine.Networking;
 
 public class Place : MonoBehaviour
 {
+    // 특수문자, 괄호, 점 제거를 위한 정규 표현식
+    Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
+
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
     public string place_name; //장소 이름
     public string place_info; //장소 설명
@@ -26,7 +29,7 @@ public class Place : MonoBehaviour
 
         item = new Item(time_background, space_background, world_detail, game_event.event_type);
         IsANPCexists();
-        CreatePlace(idx, time_background, space_background, world_detail, genre, pnpc_name, pnpc_detail);
+        CreatePlace(idx, time_background, space_background, world_detail, genre, pnpc_name, pnpc_detail,place_names);
 
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (item.item_type != "Mob" && item.item_type != "Monster" && item.item_type != null)
@@ -47,7 +50,7 @@ public class Place : MonoBehaviour
             ANPC_exist = UnityEngine.Random.Range(0, 2);
         }
     }
-    public async void CreatePlace(int idx, string time_background, string space_background, string world_detail, string genre, string pnpc_name, string pnpc_detail)
+    public async void CreatePlace(int idx, string time_background, string space_background, string world_detail, string genre, string pnpc_name, string pnpc_detail,string[] place_names)
     {
         UnityEngine.Debug.Log(">>Call Create Place GPT");
         UnityEngine.Debug.Log(">>현재 장소 인덱스: " + idx);
