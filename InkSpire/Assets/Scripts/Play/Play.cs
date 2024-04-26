@@ -56,8 +56,8 @@ public class Play : MonoBehaviour
         게임 배경에 대한 정보는 출력을 위한 참고사항이며, 해당 정보들을 바탕으로 다음 시나리오 진행한다.
         npc 정보들을 토대로 적절한 시점에 npc를 등장시킨다.
 
-        현재 플레이중인 게임은" + s_manager.GetScript().getTimeBackground() + "시대 " + s_manager.GetScript().getSpaceBackground() + " 배경으로 하는 " + s_manager.GetScript().getGenre() + "장르의 게임이며 세계관은 다음과 같다.\n"
-        + s_manager.GetScript().getWorldDetail() + "\n\n"
+        현재 플레이중인 게임은" + s_manager.GetScript().GetTimeBackground() + "시대 " + s_manager.GetScript().GetSpaceBackground() + " 배경으로 하는 " + s_manager.GetScript().GetGenre() + "장르의 게임이며 세계관은 다음과 같다.\n"
+        + s_manager.GetScript().GetWorldDetail() + "\n\n"
         + "게임의 최종 목표는 " + s_manager.GetGoal(4).GetTitle() + "\n" + s_manager.GetGoal(4).GetDetail() + "이며"
         + "현재 챕터의 목표는 다음과 같다." + s_manager.GetGoal(curr_chap).GetTitle() + "\n" + s_manager.GetGoal(curr_chap).GetDetail()
         // !!!!!!!!!!!!!!!!!!!!Place 들어오면 수정!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
