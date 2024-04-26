@@ -24,7 +24,7 @@ public class Place : MonoBehaviour
         string pnpc_name = pro_npc.GetName();
         string pnpc_detail = pro_npc.GetDetail();
 
-        SetItem(time_background, space_background, world_detail, game_event.event_type);
+        item = new Item(time_background, space_background, world_detail, game_event.event_type);
         IsANPCexists();
         CreatePlace(idx, time_background, space_background, world_detail, genre, pnpc_name, pnpc_detail);
 
@@ -32,18 +32,6 @@ public class Place : MonoBehaviour
         if (item.item_type != "Mob" && item.item_type != "Monster" && item.item_type != null)
         {
             game_event.CreateEventTrigger(idx, world_detail, chapter_obj, place_name, item.item_name);
-        }
-    }
-
-    public void SetItem(string time_background, string space_background, string world_detail, int event_type)
-    {
-        item = new Item();
-        item.ChooseItemType(event_type);
-        item.ItemStat();
-        // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
-        if (item.item_type != "Mob" && item.item_type != "Monster" && item.item_type != null)
-        {
-            item.CreateItem(time_background, space_background, world_detail);
         }
     }
 
@@ -132,7 +120,7 @@ public class Place : MonoBehaviour
         place_string = place_string.Replace(": ", ":");
 
         place_arr = place_string.Split(':');
-        place_name = regex.Replace(plc_arr[1], "");
+        place_name = regex.Replace(place_arr[1], "");
         place_name = place_name.Trim();
         UnityEngine.Debug.Log(place_name);
         place_info = place_arr[3];

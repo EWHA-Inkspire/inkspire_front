@@ -37,6 +37,18 @@ public class Item : MonoBehaviour
         Weapon,
         Report
     }
+
+    public Item(string time_background, string space_background, string world_detail, int event_type)
+    {
+        ChooseItemType(event_type);
+        ItemStat();
+        // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
+        if (item_type != "Mob" && item_type != "Monster" && item_type != null)
+        {
+            CreateItem(time_background, space_background, world_detail);
+        }
+    }
+
     public void ChooseItemType(int event_type)
     {
         if (event_type == 0) //일반 이벤트일 경우
