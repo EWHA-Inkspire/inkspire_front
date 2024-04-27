@@ -13,6 +13,7 @@ public class ScriptManager : MonoBehaviour
     private string char_name;
     private int curr_chapter = 0;
     private int curr_place = 0;
+    private bool is_fin = false;
 
     private Script script;
     private Goals[] chapter_obj = new Goals[5];
@@ -55,9 +56,10 @@ public class ScriptManager : MonoBehaviour
         }
 
         script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
+        is_fin = true;
     }
 
-    // 각 장소별 목표 or 일반 이벤트 여부 정하기
+    // 장소 별 이벤트 타입 설정 (3개 장소마다 목표 이벤트 출현 장소 정하는 로직)
     private void ChooseEventType()
     {
         int i = 1;
@@ -95,41 +97,47 @@ public class ScriptManager : MonoBehaviour
             map[i].game_event.event_type = 1;
             map[i].ANPC_exist = 0;
         }
-    // map의 이벤트 타입 설정 (3개 장소마다 목표 이벤트 출현 장소 정하는 로직)
     }
-// Set 함수
+
+// Settter
     public void SetCurrPlace(int idx){
         curr_place = idx;
     }
 
 
-// 필드 호출 함수
-    public Goals GetGoal(int chap_num){
-        return chapter_obj[chap_num];
-    }
-
-    public Script GetScript(){
-        return script;
+// Getter
+    public string GetCharName(){
+        return char_name;
     }
 
     public int GetCurrChap(){
         return curr_chapter;
     }
 
+    public int GetCurrPlace(){
+        return curr_place;
+    }
+
+    public bool GetIsFin() {
+        return is_fin;
+    }
+
+    public Script GetScript(){
+        return script;
+    }
+
+    public Goals GetGoal(int chap_num){
+        return chapter_obj[chap_num];
+    }
+
     public Place GetPlace(int idx){
         return map[idx];
     }
 
-    public string GetCharName(){
-        return char_name;
-    }
 
     public Npc GetPnpc(){
         return pro_npc;
     }
 
-    public int GetCurrPlace(){
-        return curr_place;
-    }
 
 }
