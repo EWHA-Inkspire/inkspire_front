@@ -13,7 +13,6 @@ public class ScriptManager : MonoBehaviour
     private string char_name;
     private int curr_chapter = 0;
     private int curr_place = 0;
-    private bool is_fin = false;
 
     private Script script;
     private Goals[] chapter_obj = new Goals[5];
@@ -22,6 +21,7 @@ public class ScriptManager : MonoBehaviour
     private Npc pro_npc;
     private Npc anta_npc;
 
+    private bool init_script = false;
 
 
 // 일반함수
@@ -56,7 +56,7 @@ public class ScriptManager : MonoBehaviour
         }
 
         script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
-        is_fin = true;
+        init_script = true;
     }
 
     // 장소 별 이벤트 타입 설정 (3개 장소마다 목표 이벤트 출현 장소 정하는 로직)
@@ -118,9 +118,6 @@ public class ScriptManager : MonoBehaviour
         return curr_place;
     }
 
-    public bool GetIsFin() {
-        return is_fin;
-    }
 
     public Script GetScript(){
         return script;
@@ -134,10 +131,11 @@ public class ScriptManager : MonoBehaviour
         return map[idx];
     }
 
-
     public Npc GetPnpc(){
         return pro_npc;
     }
 
-
+    public bool GetInitScript(){
+        return init_script;
+    }
 }

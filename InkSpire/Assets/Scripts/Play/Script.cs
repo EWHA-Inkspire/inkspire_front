@@ -9,7 +9,7 @@ public class Script
     private string time_background;
     private string space_background;
     private string world_detail;
-    private string intro;
+    private string intro = "placeholder";
 
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
     private string GPT_ERROR = "No text was generated from this prompt.";
