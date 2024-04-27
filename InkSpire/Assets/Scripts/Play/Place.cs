@@ -13,7 +13,7 @@ public class Place : MonoBehaviour
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
     public string place_name; //장소 이름
     public string place_info; //장소 설명
-    private Item item; //아이템 
+    public Item item; //아이템 
     public Event game_event = new Event(); //이벤트
     public int ANPC_exist; //ANPC 등장 여부
     public bool clear; //파싱용 클리어 속성

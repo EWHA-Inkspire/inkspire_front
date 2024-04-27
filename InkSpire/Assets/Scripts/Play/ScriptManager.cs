@@ -128,4 +128,8 @@ public class ScriptManager : MonoBehaviour
         return pro_npc;
     }
 
+    public int GetCurrPlace(){
+        return curr_place;
+    }
+
 }
