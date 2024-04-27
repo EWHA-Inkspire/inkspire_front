@@ -17,12 +17,13 @@ public class PlayScene : MonoBehaviour
 
 
     public InventorySlot slotPrefab;
+    private ScriptManager s_manager = ScriptManager.script_manager;
 
     void Start(){
 
-        Changechap(ScriptManager.scriptinfo.curr_chapter);
-        header_name.text = PlayerStatManager.playerstat.charname+" HP";
-        statmodal_title.text = PlayerStatManager.playerstat.charname+"'s Stats";
+        Changechap(s_manager.GetCurrChap());
+        header_name.text = s_manager.GetCharName()+" HP";
+        statmodal_title.text = s_manager.GetCharName()+"'s Stats";
         header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP).ToString();
         battle_stat.text = "공격: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Attack).ToString()+" | 방어: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Defence).ToString()+" | 민첩: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Dexterity).ToString()+" | 행운: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Luck).ToString();
         
@@ -41,13 +42,13 @@ public class PlayScene : MonoBehaviour
             }
         }
 
-        place_list.transform.GetChild(12).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+MapManager.mapinfo.map[0].place_name;
+        place_list.transform.GetChild(12).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+s_manager.GetPlace(0).place_name;
         for (int i = 0; i<14; i++){
             if(i==12){
                 continue;
             }
             if(i/3 == 0){
-                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = MapManager.mapinfo.map[i+1].place_name;
+                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(i+1).place_name;
             }
             else{
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
@@ -55,7 +56,6 @@ public class PlayScene : MonoBehaviour
             }
             
         }
-        MapManager.mapinfo.curr_place = 0;
         InventoryManager.inventory.play_scene_created = true;
     }
 
