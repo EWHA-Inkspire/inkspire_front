@@ -21,6 +21,8 @@ public class ScriptManager : MonoBehaviour
     private Npc pro_npc;
     private Npc anta_npc;
 
+    private bool init_script = false;
+
 
 
 // 일반함수
@@ -55,6 +57,7 @@ public class ScriptManager : MonoBehaviour
         }
 
         script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
+        init_script = true;
     }
 
     // 각 장소별 목표 or 일반 이벤트 여부 정하기
@@ -130,6 +133,10 @@ public class ScriptManager : MonoBehaviour
 
     public int GetCurrPlace(){
         return curr_place;
+    }
+
+    public bool GetInitScript(){
+        return init_script;
     }
 
 }

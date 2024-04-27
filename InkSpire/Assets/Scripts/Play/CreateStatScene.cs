@@ -83,7 +83,7 @@ public class CreateStatScene : MonoBehaviour
         {
             LoadingText.text += " .";
         }
-        if (ScriptManager.scriptinfo.intro_string == "placeholder" || ScriptManager.scriptinfo.intro_string == "" || ScriptManager.scriptinfo.curr_chapter != 1 || !MapManager.mapinfo.is_drawmap)
+        if (ScriptManager.script_manager.GetScript().GetIntro() == "placeholder" || ScriptManager.script_manager.GetScript().GetIntro() == "" || ScriptManager.script_manager.GetCurrChap() != 0 || !ScriptManager.script_manager.GetInitScript())
         {
             Debug.Log(">>Wating for GPT Response");
             //Debug.Log(ScriptManager.scriptinfo.intro_string);
@@ -92,8 +92,8 @@ public class CreateStatScene : MonoBehaviour
         }
         else
         {
-            Debug.Log(ScriptManager.scriptinfo.intro_string);
-            Debug.Log(ScriptManager.scriptinfo.curr_chapter);
+            Debug.Log(ScriptManager.script_manager.GetScript().GetIntro());
+            Debug.Log(ScriptManager.script_manager.GetCurrChap());
             LoadingPannel.gameObject.SetActive(false);
             SceneManager.LoadScene("5_Play");
         }
@@ -102,7 +102,7 @@ public class CreateStatScene : MonoBehaviour
     IEnumerator PostCharacterScriptInfo()
     {
         WWWForm char_form = new WWWForm();
-        char_form.AddField("userId", ScriptManager.scriptinfo.character_id);
+        //char_form.AddField("userId", ScriptManager.scriptinfo.character_id);
         char_form.AddField("name", PlayerStatManager.playerstat.charname);
         char_form.AddField("luck", PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Luck));
         char_form.AddField("defense", PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Defence));
@@ -124,10 +124,10 @@ public class CreateStatScene : MonoBehaviour
         }
 
         WWWForm script_form = new WWWForm();
-        script_form.AddField("userId", ScriptManager.scriptinfo.character_id);
-        script_form.AddField("time", ScriptManager.scriptinfo.time_background);
-        script_form.AddField("place", ScriptManager.scriptinfo.space_background);
-        script_form.AddField("genre", ScriptManager.scriptinfo.genre);
+        // script_form.AddField("userId", ScriptManager.scriptinfo.character_id);
+        // script_form.AddField("time", ScriptManager.scriptinfo.time_background);
+        // script_form.AddField("place", ScriptManager.scriptinfo.space_background);
+        // script_form.AddField("genre", ScriptManager.scriptinfo.genre);
 
         www = UnityWebRequest.Post("http://3.38.126.43:8080/scripts", script_form);
         yield return www.SendWebRequest();
@@ -143,28 +143,28 @@ public class CreateStatScene : MonoBehaviour
 
     }
 
-    IEnumerator PostObjectiveInfo()
-    {
-        WWWForm obj_form = new WWWForm();
-        obj_form.AddField("scriptId", ScriptManager.scriptinfo.character_id);
-        obj_form.AddField("chapter", 5);
-        obj_form.AddField("content", ScriptManager.scriptinfo.chapter_obj[5].title);
-        obj_form.AddField("type", ScriptManager.scriptinfo.chapter_obj[5].type);
-        obj_form.AddField("require", ScriptManager.scriptinfo.chapter_obj[5].detail);
-        obj_form.AddField("etc", ScriptManager.scriptinfo.chapter_obj[5].etc);
+    // IEnumerator PostObjectiveInfo()
+    // {
+    //     // WWWForm obj_form = new WWWForm();
+    //     // obj_form.AddField("scriptId", ScriptManager.scriptinfo.character_id);
+    //     // obj_form.AddField("chapter", 5);
+    //     // obj_form.AddField("content", ScriptManager.scriptinfo.chapter_obj[5].title);
+    //     // obj_form.AddField("type", ScriptManager.scriptinfo.chapter_obj[5].type);
+    //     // obj_form.AddField("require", ScriptManager.scriptinfo.chapter_obj[5].detail);
+    //     // obj_form.AddField("etc", ScriptManager.scriptinfo.chapter_obj[5].etc);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://3.38.126.43:8080/scripts/goal", obj_form);
-        yield return www.SendWebRequest();
+    //     // UnityWebRequest www = UnityWebRequest.Post("http://3.38.126.43:8080/scripts/goal", obj_form);
+    //     // yield return www.SendWebRequest();
 
-        WWWForm chap_form = new WWWForm();
-        chap_form.AddField("scriptId", ScriptManager.scriptinfo.character_id);
-        chap_form.AddField("chapter", 5);
-        chap_form.AddField("content", ScriptManager.scriptinfo.chapter_obj[5].title);
-        chap_form.AddField("type", ScriptManager.scriptinfo.chapter_obj[5].type);
-        chap_form.AddField("require", ScriptManager.scriptinfo.chapter_obj[5].detail);
-        chap_form.AddField("etc", ScriptManager.scriptinfo.chapter_obj[5].etc);
+    //     // WWWForm chap_form = new WWWForm();
+    //     // chap_form.AddField("scriptId", ScriptManager.scriptinfo.character_id);
+    //     // chap_form.AddField("chapter", 5);
+    //     // chap_form.AddField("content", ScriptManager.scriptinfo.chapter_obj[5].title);
+    //     // chap_form.AddField("type", ScriptManager.scriptinfo.chapter_obj[5].type);
+    //     // chap_form.AddField("require", ScriptManager.scriptinfo.chapter_obj[5].detail);
+    //     // chap_form.AddField("etc", ScriptManager.scriptinfo.chapter_obj[5].etc);
 
-        www = UnityWebRequest.Post("http://3.38.126.43:8080/scripts/goal", obj_form);
-        yield return www.SendWebRequest();
-    }
+    //     // www = UnityWebRequest.Post("http://3.38.126.43:8080/scripts/goal", obj_form);
+    //     // yield return www.SendWebRequest();
+    // }
 }
