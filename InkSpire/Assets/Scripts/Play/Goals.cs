@@ -221,7 +221,7 @@ public class Goals
         for(int i = 0; i<obj_arr.Length; i++ ){
             switch(i){
                 case 1:
-                    type = int.Parse(obj_arr[1]);
+                    int.TryParse(obj_arr[1],out type);
                     continue;
                 case 3:
                     title = obj_arr[3];
