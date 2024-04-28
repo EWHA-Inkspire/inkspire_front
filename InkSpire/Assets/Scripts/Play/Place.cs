@@ -25,7 +25,7 @@ public class Place
         item = new Item();
     }
 
-    public async void InitPlace(int idx, Script script, Npc pro_npc, string chapter_obj, string[] place_names)
+    public async Task InitPlace(int idx, Script script, Npc pro_npc, string chapter_obj, string[] place_names)
     {
         string time_background = script.GetTimeBackground();
         string space_background = script.GetSpaceBackground();

@@ -22,7 +22,7 @@ public class Npc
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
     private string GPT_ERROR = "No text was generated from this prompt.";
 
-    public async void InitNpc(string type, string world_detail, string genre)
+    public async Task InitNpc(string type, string world_detail, string genre)
     {
         this.type = (NPCType)Enum.Parse(typeof(NPCType),type);
         await NameGPT(this.type, world_detail, genre);

@@ -15,7 +15,7 @@ public class Script
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
     private string GPT_ERROR = "No text was generated from this prompt.";
 
-    public async void InitScript(string genre, string time_background, string space_background)
+    public async Task InitScript(string genre, string time_background, string space_background)
     {
         this.genre = genre;
         this.time_background = time_background;

@@ -14,17 +14,17 @@ public class Goal
 
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
 
-    public void InitGoal(string time_background, string space_background, string world_detail, string genre)
+    public async Task InitGoal(string time_background, string space_background, string world_detail, string genre)
     {
         // 최종 목표 생성자(챕터4)
-        FinalObjectiveGPT(time_background,space_background,world_detail,genre);
+        await FinalObjectiveGPT(time_background,space_background,world_detail,genre);
     }
 
-    public void InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj)
+    public async Task InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj)
     {
         // 챕터 목표 생성자(챕터0)
         Goal tmp = new Goal();
-        ChapterObjectiveGPT(time_background,space_background,world_detail,genre,0,final_obj,tmp);
+        await ChapterObjectiveGPT(time_background,space_background,world_detail,genre,0,final_obj,tmp);
     }
 
     public void InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj, Goal prev_obj){
@@ -34,7 +34,7 @@ public class Goal
 
 
 // 최종목표 생성 함수
-    private async void FinalObjectiveGPT(string time_background, string space_background, string world_detail, string genre)
+    private async Task FinalObjectiveGPT(string time_background, string space_background, string world_detail, string genre)
     {
         gpt_messages.Clear();
 
@@ -116,7 +116,7 @@ public class Goal
     }
 
 // 챕터 목표 생성 함수
-    private async void ChapterObjectiveGPT(string time_background, string space_background, string world_detail, string genre, int chapter_num, Goal final_obj, Goal prev_obj)
+    private async Task ChapterObjectiveGPT(string time_background, string space_background, string world_detail, string genre, int chapter_num, Goal final_obj, Goal prev_obj)
     {
         gpt_messages.Clear();
 

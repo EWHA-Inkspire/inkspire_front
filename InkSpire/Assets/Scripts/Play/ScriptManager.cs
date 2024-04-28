@@ -60,49 +60,26 @@ public class ScriptManager : MonoBehaviour
         this.char_name = char_name;
 
         // 세계관 생성
-        script.InitScript(genre, time_background, space_background);
-        while(script.GetWorldDetail() == "") {
-            Debug.Log("세계관 생성중...");
-            await Task.Delay(1000);
-        }
+        await script.InitScript(genre, time_background, space_background);
 
         // 목표 생성
-        chapter_obj[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
-        while(chapter_obj[4].GetTitle() == "") {
-            Debug.Log("최종 목표 생성중...");
-            await Task.Delay(1000);
-        }
+        await chapter_obj[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
 
-        chapter_obj[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, chapter_obj[4]);
-        while(chapter_obj[0].GetTitle() == "") {
-            Debug.Log("1챕터 목표 생성중...");
-            await Task.Delay(1000);
-        }
+        await chapter_obj[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, chapter_obj[4]);
 
         // npc 정보 생성
-        pro_npc.InitNpc("P", script.GetWorldDetail(), genre);
-        anta_npc.InitNpc("A", script.GetWorldDetail(), genre);
-        while(pro_npc.GetDetail() == "" || anta_npc.GetDetail() == "") {
-            Debug.Log("npc 정보 생성중...");
-            await Task.Delay(1000);
-        }
+        await pro_npc.InitNpc("P", script.GetWorldDetail(), genre);
+        await anta_npc.InitNpc("A", script.GetWorldDetail(), genre);
 
         // 맵 정보 생성
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
         for (int i = 0; i < 4; i++) {
-            map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter].GetDetail(), place_names);
-            while(map[i].place_name == "" || map[i].place_info == "") {
-                Debug.Log(i+"번째 장소 정보 생성중...");
-                await Task.Delay(1000);
-            }
+            await map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter].GetDetail(), place_names);
             place_names[i] = map[i].place_name;
         }
 
-        script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
-        while(script.GetIntro() == "placeholder") {
-            Debug.Log("인트로 생성중...");
-            await Task.Delay(1000);
-        }
+        await script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
+        Debug.Log(script.GetIntro());
         init_script = true;
         // API 호출 (스크립트 내용 저장)
     }
