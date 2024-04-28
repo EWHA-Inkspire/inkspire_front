@@ -69,7 +69,7 @@ public class ScriptManager : MonoBehaviour
         }
 
         script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
-        init_script = true;
+        
         // API 호출 (스크립트 내용 저장)
     }
 
@@ -122,6 +122,9 @@ public class ScriptManager : MonoBehaviour
         map[curr_place_idx].SetClear(clr);
     }
 
+    public void SetInitScript(bool setscript){
+        init_script = setscript;
+    }
 
 // Getter
     public string GetCharName(){

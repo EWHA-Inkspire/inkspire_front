@@ -118,6 +118,7 @@ public class Script
         response = response.Replace("*", "");
         this.intro = response.Replace("###", "");
         Debug.Log(response);
+        ScriptManager.script_manager.SetInitScript(true);
     }
 
     public string GetGenre()
