@@ -119,7 +119,7 @@ public class ScriptManager : MonoBehaviour
     }
 
     public void SetPlaceClear(bool clr){
-        map[curr_place].SetClear(clr);
+        map[curr_place_idx].SetClear(clr);
     }
 
 

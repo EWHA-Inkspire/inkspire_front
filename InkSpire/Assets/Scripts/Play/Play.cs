@@ -181,7 +181,7 @@ public class Play : MonoBehaviour
             Role = "assistant",
             Content = "Narrator: \n이곳은 " +s_manager.GetCurrPlace().place_name + "입니다.\n" + s_manager.GetCurrPlace().place_info
         };
-        if (s_manager.GetCurrPlace() == 0)
+        if (s_manager.GetCurrPlaceIdx() == 0)
         {
             newMessage.Content += "이곳에서는 NPC " + s_manager.GetPnpc().GetName() + EulorReul(s_manager.GetPnpc().GetName()) + " 만날 수 있습니다.";
         }
