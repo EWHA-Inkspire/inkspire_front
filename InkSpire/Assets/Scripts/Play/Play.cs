@@ -18,6 +18,7 @@ public class Play : MonoBehaviour
     private List<ChatMessage> messages = new List<ChatMessage>();
     private ChatMessage input_msg = new ChatMessage();
     private static ScriptManager s_manager = ScriptManager.script_manager;
+    private static EventChecker eventChecker = EvenetChecker.eventChecker;
     private string system_prompt = "";
 
     void Start(){
@@ -95,7 +96,7 @@ public class Play : MonoBehaviour
         var item_type = s_manager.GetCurrPlace().item.item_type;
         if (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report")
         {
-            if (!s_manager.GetCurrPlace().clear || await EventChecker.eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, s_manager.GetCurrPlace().game_event))
+            if (!s_manager.GetCurrPlace().clear && await eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, s_manager.GetCurrPlace().game_event))
             {
                 // 이벤트 트리거 도입 스크립트 출력
                 text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
