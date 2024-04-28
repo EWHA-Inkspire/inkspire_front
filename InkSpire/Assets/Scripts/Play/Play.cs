@@ -106,7 +106,7 @@ public class Play : MonoBehaviour
         if (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report")
         {
             var event_trigger = s_manager.GetCurrPlace().game_event.event_trigger;
-            if (!s_manager.GetCurrPlace().clear || await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger))
+            if (!s_manager.GetCurrPlace().clear) // || await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger))
             {
                 // 이벤트 트리거 도입 스크립트 출력
                 text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
