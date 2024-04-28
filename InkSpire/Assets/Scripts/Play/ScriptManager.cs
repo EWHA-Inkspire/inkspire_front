@@ -104,6 +104,10 @@ public class ScriptManager : MonoBehaviour
         curr_place = idx;
     }
 
+    public void SetPlaceClear(bool clr){
+        map[curr_place].SetClear(clr);
+    }
+
 
 // Getter
     public string GetCharName(){

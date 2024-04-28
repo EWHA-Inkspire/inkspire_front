@@ -11,7 +11,7 @@ public class Play : MonoBehaviour
     [SerializeField] private DiceEvent dice_event;
     [SerializeField] private BattleEvent battle_event;
     [SerializeField] private TMP_InputField player_input;
-    [SerializeField] private TextScrollUI text_scroll;
+    [SerializeField] public TextScrollUI text_scroll;
     [SerializeField] private Button send_button;
     [SerializeField] private GameObject map_modal;
 
@@ -227,6 +227,12 @@ public class Play : MonoBehaviour
         // 받침 여부에 따라 조사 선택
         return hasJongsung ? "을" : "를";
     }
-        
+
+
+    // Setter
+    public void AddToMessagesGPT(ChatMessage msg)
+    {
+        messages.Add(msg);
+    }
 
 }
