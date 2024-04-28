@@ -27,7 +27,7 @@ public class Item
         Monster
     }
 
-    public async Task<Item> InitItem(string time_background, string space_background, string world_detail, int event_type)
+    public async Task InitItem(string time_background, string space_background, string world_detail, int event_type)
     {
         ChooseItemType(event_type);
         ItemStat();
@@ -36,8 +36,6 @@ public class Item
         {
             await CreateItem(time_background, space_background, world_detail);
         }
-
-        return this;
     }
 
     public void ChooseItemType(int event_type)
@@ -75,7 +73,7 @@ public class Item
             i++;
         }
     }
-    private async Task<string> CreateItem(string time_background, string space_background, string world_detail)
+    private async Task CreateItem(string time_background, string space_background, string world_detail)
     {
         gpt_messages.Clear();
         string about_item = "";
@@ -107,6 +105,5 @@ public class Item
         string response = await GptManager.gpt.CallGpt(gpt_messages);
 
         item_name = regex.Replace(response, "");
-        return item_name;
     }
 }

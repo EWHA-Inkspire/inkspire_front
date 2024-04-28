@@ -19,7 +19,7 @@ public class Event
     public string event_fail; // 이벤트 실패 스크립트
     public int event_type; //일반 이벤트 == 0, 목표 이벤트 == 1;
 
-    public async Task<Event> CreateEventTrigger(int idx, string world_detail, string chapter_obj, string place_name, string item_name)
+    public async Task CreateEventTrigger(int idx, string world_detail, string chapter_obj, string place_name, string item_name)
     {
         gpt_messages.Clear();
 
@@ -80,7 +80,6 @@ public class Event
         string response = await GptManager.gpt.CallGpt(gpt_messages);
         Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n" + response);
         StringToEvent(response);
-        return this;
     }
 
     //장소 이름 및 장소 설명 파싱 함수

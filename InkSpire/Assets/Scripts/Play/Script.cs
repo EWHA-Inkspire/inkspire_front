@@ -23,7 +23,7 @@ public class Script
         await WorldDetailGPT();
     }
 
-    private async Task<string> WorldDetailGPT()
+    private async Task WorldDetailGPT()
     {
         gpt_messages.Clear();
 
@@ -72,10 +72,9 @@ public class Script
         }
 
         this.world_detail = response;
-        return response;
     }
 
-    public async Task<string> IntroGPT(Npc pro_npc, Npc anta_npc, string place_name, string place_info, string char_name)
+    public async Task IntroGPT(Npc pro_npc, Npc anta_npc, string place_name, string place_info, string char_name)
     {
         gpt_messages.Clear();
 
@@ -118,8 +117,6 @@ public class Script
         response = response.Replace("*", "");
         this.intro = response.Replace("###", "");
         Debug.Log("인트로"+response);
-
-        return response;
     }
 
     public string GetGenre()

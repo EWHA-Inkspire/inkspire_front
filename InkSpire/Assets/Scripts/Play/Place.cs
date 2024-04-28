@@ -57,7 +57,7 @@ public class Place
             ANPC_exist = UnityEngine.Random.Range(0, 2);
         }
     }
-    public async Task<string> CreatePlace(int idx, string time_background, string space_background, string world_detail, string genre, string pnpc_name, string pnpc_detail,string[] place_names)
+    public async Task CreatePlace(int idx, string time_background, string space_background, string world_detail, string genre, string pnpc_name, string pnpc_detail,string[] place_names)
     {
         gpt_messages.Clear();
 
@@ -114,7 +114,6 @@ public class Place
 
         gpt_messages.Add(query_msg);
         StringToPlace(await GptManager.gpt.CallGpt(gpt_messages));
-        return this.place_name;
     }
 
     //장소 이름 및 장소 설명 파싱 함수
