@@ -80,7 +80,7 @@ public class EventChecker : MonoBehaviour {
         Debug.Log(">>이벤트 체커 결과: " + response);
 
         if(response == "T") {
-            return false;
+            return true;
         }
 
         return false;
