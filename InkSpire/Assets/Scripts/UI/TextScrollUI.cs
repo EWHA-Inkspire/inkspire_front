@@ -19,7 +19,7 @@ public class TextScrollUI : MonoBehaviour
         string add_text = "";
         if (msg.Role == "user")
         {
-            add_text += PlayerStatManager.playerstat.charname + "> ";
+            add_text += ScriptManager.script_manager.GetCharName() + "> ";
         }
 
         add_text += msg.Content;

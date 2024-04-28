@@ -102,7 +102,6 @@ public class ScriptManager : MonoBehaviour
         while(script.GetIntro() == "placeholder") {
             Debug.Log("인트로 생성중...");
             await Task.Delay(1000);
-
         }
         init_script = true;
         // API 호출 (스크립트 내용 저장)
@@ -157,6 +156,9 @@ public class ScriptManager : MonoBehaviour
         map[curr_place_idx].SetClear(clr);
     }
 
+    public void SetInitScript(bool setscript){
+        init_script = setscript;
+    }
 
 // Getter
     public string GetCharName(){

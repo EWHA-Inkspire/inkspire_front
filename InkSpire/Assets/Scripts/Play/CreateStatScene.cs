@@ -71,6 +71,7 @@ public class CreateStatScene : MonoBehaviour
 
     void WaitForGPT()
     {
+        Debug.Log("Wait for GPT: "+ScriptManager.script_manager.GetScript().GetIntro());
         if (!LoadingPannel.gameObject.activeSelf)
         {
             LoadingPannel.gameObject.SetActive(true);

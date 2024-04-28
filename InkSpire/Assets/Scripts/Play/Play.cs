@@ -39,6 +39,7 @@ public class Play : MonoBehaviour
                 + s_manager.GetPnpc().GetName()+ EorGa(s_manager.GetPnpc().GetName()) + " 당신을 반겨줄 것입니다."
             };
             messages.Add(introMessage);
+            Debug.Log("PlayStart: \n"+introMessage.Content);
             text_scroll.AppendMsg(introMessage);
         }
     }
@@ -84,7 +85,7 @@ public class Play : MonoBehaviour
         }
     }
 
-    public async void SendButton()
+    public void SendButton()
     {
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
