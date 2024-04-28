@@ -61,7 +61,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
 
     void ResultActive()
     {
-        int curr_place = ScriptManager.script_manager.GetCurrPlace();
+        int curr_place = ScriptManager.script_manager.GetCurrPlaceIdx();
         resultwindow.gameObject.SetActive(true);
         result_calc.text = pl_value.ToString() + " + " + luk_value.ToString() + "(Bonus)\n";
         ChatMessage result_msg = new ChatMessage(){
