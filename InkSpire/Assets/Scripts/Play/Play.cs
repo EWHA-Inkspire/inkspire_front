@@ -85,7 +85,7 @@ public class Play : MonoBehaviour
         }
     }
 
-    public async void SendButton()
+    public void SendButton()
     {
         // 이벤트 체커 메시지 설정 (가장 마지막 gpt 대화 추가)
         var checkerMessage = new List<ChatMessage>();
