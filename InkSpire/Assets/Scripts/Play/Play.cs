@@ -11,7 +11,7 @@ public class Play : MonoBehaviour
     [SerializeField] private DiceEvent dice_event;
     [SerializeField] private BattleEvent battle_event;
     [SerializeField] private TMP_InputField player_input;
-    [SerializeField] private TextScrollUI text_scroll;
+    [SerializeField] public TextScrollUI text_scroll;
     [SerializeField] private Button send_button;
     [SerializeField] private GameObject map_modal;
 
@@ -59,7 +59,7 @@ public class Play : MonoBehaviour
         + s_manager.GetScript().GetWorldDetail() + "\n\n"
         + "게임의 최종 목표는 " + s_manager.GetGoal(4).GetTitle() + "\n" + s_manager.GetGoal(4).GetDetail() + "이며"
         + "현재 챕터의 목표는 다음과 같다." + s_manager.GetGoal(curr_chap).GetTitle() + "\n" + s_manager.GetGoal(curr_chap).GetDetail()
-        + "\n현재 플레이어가 있는 장소는 \"" + s_manager.GetCurrPlace().place_name + "\"로, " + s_manager.GetCurrPlace().place_info
+        + "\n현재 플레이어가 있는 장소는 \"" + s_manager.GetPlace(s_manager.GetCurrPlace()).place_name + "\"로, " + s_manager.GetPlace(s_manager.GetCurrPlace()).place_info
         + @"이 아래로 게임 진행 양식이 이어진다. ** 이 표시 안의 내용은 문맥에 맞게 채운 후 *기호는 모두 삭제한다. 
         ------------------------------------------------
         Narrator (내레이터):
@@ -100,13 +100,13 @@ public class Play : MonoBehaviour
         // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
         checkerMessage.Add(input_msg);
 
-        Debug.Log("이벤트 트리거: " + s_manager.GetCurrPlace().game_event.event_trigger);
+        Debug.Log("이벤트 트리거: " + s_manager.GetPlace(s_manager.GetCurrPlace()).game_event.event_trigger);
 
-        var item_type = s_manager.GetCurrPlace().item.item_type;
+        var item_type = s_manager.GetPlace(s_manager.GetCurrPlace()).item.item_type;
         if (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report")
         {
-            var event_trigger = s_manager.GetCurrPlace().game_event.event_trigger;
-            if (!s_manager.GetCurrPlace().clear || await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger))
+            var event_trigger = s_manager.GetPlace(s_manager.GetCurrPlace()).game_event.event_trigger;
+            if (!s_manager.GetPlace(s_manager.GetCurrPlace()).clear || await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger))
             {
                 // 이벤트 트리거 도입 스크립트 출력
                 text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
@@ -118,8 +118,8 @@ public class Play : MonoBehaviour
                 messages.Add(event_msg);
                 event_msg.Role = "assistant";
 
-                string event_title = s_manager.GetCurrPlace().game_event.event_title.Replace(".", ".\n");
-                string event_intro = s_manager.GetCurrPlace().game_event.event_intro.Replace(".", ".\n");
+                string event_title = s_manager.GetPlace(s_manager.GetCurrPlace()).game_event.event_title.Replace(".", ".\n");
+                string event_intro = s_manager.GetPlace(s_manager.GetCurrPlace()).game_event.event_intro.Replace(".", ".\n");
 
                 event_msg.Content = event_title + "\n" + event_intro + "\n\n";
                 messages.Add(event_msg);
@@ -172,16 +172,16 @@ public class Play : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = s_manager.GetCurrPlace().place_name + "으로 이동"
+            Content = s_manager.GetPlace(s_manager.GetCurrPlace()).place_name + "으로 이동"
         };
         messages.Add(query_msg);
 
         var newMessage = new ChatMessage()
         {
             Role = "assistant",
-            Content = "Narrator: \n이곳은 " +s_manager.GetCurrPlace().place_name + "입니다.\n" + s_manager.GetCurrPlace().place_info
+            Content = "Narrator: \n이곳은 " +s_manager.GetPlace(s_manager.GetCurrPlace()).place_name + "입니다.\n" + s_manager.GetPlace(s_manager.GetCurrPlace()).place_info
         };
-        if (s_manager.GetCurrPlaceIdx() == 0)
+        if (s_manager.GetCurrPlace() == 0)
         {
             newMessage.Content += "이곳에서는 NPC " + s_manager.GetPnpc().GetName() + EulorReul(s_manager.GetPnpc().GetName()) + " 만날 수 있습니다.";
         }
@@ -196,13 +196,9 @@ public class Play : MonoBehaviour
             // 전투 이벤트
             battle_event.SetBattle(BattleEvent.BType.MOB, 3);
         }
-        Debug.Log("placeButton item name: " +s_manager.GetCurrPlace().item.item_name);
+        Debug.Log("placeButton item name: " +s_manager.GetPlace(s_manager.GetCurrPlace()).item.item_name);
     }
-
-    public void AddToMessagesGPT(ChatMessage msg)
-    {
-        messages.Add(msg);
-    }
+    
 
     // 조사 선택 함수
     static string EorGa(string noun)
@@ -231,4 +227,12 @@ public class Play : MonoBehaviour
         // 받침 여부에 따라 조사 선택
         return hasJongsung ? "을" : "를";
     }
+
+
+    // Setter
+    public void AddToMessagesGPT(ChatMessage msg)
+    {
+        messages.Add(msg);
+    }
+
 }

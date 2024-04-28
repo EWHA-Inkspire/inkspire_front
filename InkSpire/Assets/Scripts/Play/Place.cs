@@ -133,4 +133,8 @@ public class Place
         UnityEngine.Debug.Log(place_name);
         place_info = place_arr[3];
     }
+
+    public void SetClear(bool clr){
+        clear = clr;
+    }
 }
