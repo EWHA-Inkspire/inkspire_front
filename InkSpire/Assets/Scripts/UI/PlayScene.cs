@@ -67,19 +67,19 @@ public class PlayScene : MonoBehaviour
     public void Changechap(int int_chapnum){
         string rome_chapnum;
         switch(int_chapnum){
-            case 1:
+            case 0:
                 rome_chapnum = "I";
                 break;
-            case 2:
+            case 1:
                 rome_chapnum = "II";
                 break;
-            case 3:
+            case 2:
                 rome_chapnum = "III";
                 break;
-            case 4:
+            case 3:
                 rome_chapnum = "IV";
                 break;
-            case 5:
+            case 4:
                 rome_chapnum = "V";
                 break;
             default:
