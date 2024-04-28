@@ -83,11 +83,8 @@ public class CreateStatScene : MonoBehaviour
         {
             LoadingText.text += " .";
         }
-        if (ScriptManager.script_manager.GetScript().GetIntro() == "placeholder" || ScriptManager.script_manager.GetScript().GetIntro() == "" || ScriptManager.script_manager.GetCurrChap() != 0 || !ScriptManager.script_manager.GetInitScript())
+        if (!ScriptManager.script_manager.GetInitScript())
         {
-            Debug.Log(">>Wating for GPT Response");
-            //Debug.Log(ScriptManager.scriptinfo.intro_string);
-            //Debug.Log(ScriptManager.scriptinfo.curr_chapter);
             Invoke("WaitForGPT", 1f);
         }
         else

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using OpenAI;
 using System;
+using System.Threading.Tasks;
 
 public class Npc
 {
@@ -16,20 +17,20 @@ public class Npc
     private string name;
     private NPCType type;
     private Stats stat;
-    private string detail;
+    private string detail = "";
 
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
     private string GPT_ERROR = "No text was generated from this prompt.";
 
-    public Npc(string type, string world_detail, string genre)
+    public async void InitNpc(string type, string world_detail, string genre)
     {
         this.type = (NPCType)Enum.Parse(typeof(NPCType),type);
-        NameGPT(this.type, world_detail, genre);
-        NpcDetailGPT(this.type, world_detail, genre);
+        await NameGPT(this.type, world_detail, genre);
+        await NpcDetailGPT(this.type, world_detail, genre);
         this.stat = new Stats(50, 50, 50, 50, 50);
     }
 
-    private async void NameGPT(NPCType type, string world_detail, string genre){
+    private async Task<string> NameGPT(NPCType type, string world_detail, string genre){
         string type_s = NPCtypeToString(type);
         gpt_messages.Clear();
 
@@ -54,9 +55,10 @@ public class Npc
         }
 
         this.name = response;
+        return response;
     }
 
-    private async void NpcDetailGPT(NPCType type, string world_detail, string genre){
+    private async Task<string> NpcDetailGPT(NPCType type, string world_detail, string genre){
         string type_s = NPCtypeToString(type);
         gpt_messages.Clear();
 
@@ -80,6 +82,7 @@ public class Npc
         }
 
         this.detail = response;
+        return response;
     }
 
     private string NPCtypeToString(NPCType type){

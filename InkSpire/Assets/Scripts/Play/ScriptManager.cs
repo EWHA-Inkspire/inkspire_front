@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using System.Linq;
 
@@ -15,7 +16,7 @@ public class ScriptManager : MonoBehaviour
     private int curr_place_idx = 0;
 
     private Script script;
-    private Goals[] chapter_obj = new Goals[5];
+    private Goal[] chapter_obj = new Goal[5];
     private Place[] map = new Place[14];
     private string[] place_names = new string[14];
     private Npc pro_npc;
@@ -34,10 +35,12 @@ public class ScriptManager : MonoBehaviour
             script_manager = this;
         }
 
-        // Goal 배열 초기화
+        // 필드 초기화
+        script = new Script();
+
         for (int i = 0; i < chapter_obj.Length; i++)
         {
-            chapter_obj[i] = new Goals();
+            chapter_obj[i] = new Goal();
         }
 
         // map 배열과 place_names 배열 초기화
@@ -46,29 +49,61 @@ public class ScriptManager : MonoBehaviour
             map[i] = new Place();
             place_names[i] = ""; // 또는 적절한 초기값 설정
         }
+
+        pro_npc = new Npc();
+        anta_npc = new Npc();
     }
 
     // 초기 스크립트 틀 생성 (장소 4개)
-    public void SetScriptInfo(string char_name, string genre, string time_background, string space_background)
+    public async void SetScriptInfo(string char_name, string genre, string time_background, string space_background)
     {
         this.char_name = char_name;
-        // 세계관, 인트로 생성
-        script = new Script(genre, time_background, space_background);
+
+        // 세계관 생성
+        script.InitScript(genre, time_background, space_background);
+        while(script.GetWorldDetail() == "") {
+            Debug.Log("세계관 생성중...");
+            await Task.Delay(1000);
+        }
 
         // 목표 생성
+        chapter_obj[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
+        while(chapter_obj[4].GetTitle() == "") {
+            Debug.Log("최종 목표 생성중...");
+            await Task.Delay(1000);
+        }
+
+        chapter_obj[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, chapter_obj[4]);
+        while(chapter_obj[0].GetTitle() == "") {
+            Debug.Log("1챕터 목표 생성중...");
+            await Task.Delay(1000);
+        }
 
         // npc 정보 생성
-        pro_npc = new Npc("P", script.GetWorldDetail(), genre);
-        anta_npc = new Npc("A", script.GetWorldDetail(), genre);
+        pro_npc.InitNpc("P", script.GetWorldDetail(), genre);
+        anta_npc.InitNpc("A", script.GetWorldDetail(), genre);
+        while(pro_npc.GetDetail() == "" || anta_npc.GetDetail() == "") {
+            Debug.Log("npc 정보 생성중...");
+            await Task.Delay(1000);
+        }
 
         // 맵 정보 생성
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
         for (int i = 0; i < 4; i++) {
             map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter].GetDetail(), place_names);
+            while(map[i].place_name == "" || map[i].place_info == "") {
+                Debug.Log(i+"번째 장소 정보 생성중...");
+                await Task.Delay(1000);
+            }
             place_names[i] = map[i].place_name;
         }
 
         script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
+        while(script.GetIntro() == "placeholder") {
+            Debug.Log("인트로 생성중...");
+            await Task.Delay(1000);
+
+        }
         init_script = true;
         // API 호출 (스크립트 내용 저장)
     }
@@ -140,7 +175,7 @@ public class ScriptManager : MonoBehaviour
         return script;
     }
 
-    public Goals GetGoal(int chap_num){
+    public Goal GetGoal(int chap_num){
         return chapter_obj[chap_num];
     }
 

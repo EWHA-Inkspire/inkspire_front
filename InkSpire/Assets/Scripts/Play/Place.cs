@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using OpenAI;
 using UnityEngine;
+using System.Threading.Tasks;
 using UnityEngine.Networking;
 
 public class Place
@@ -11,19 +12,20 @@ public class Place
     Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
 
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
-    public string place_name; //장소 이름
-    public string place_info; //장소 설명
+    public string place_name = ""; //장소 이름
+    public string place_info = ""; //장소 설명
     public Item item; //아이템 
-    public Event game_event = new Event(); //이벤트
+    public Event game_event; //이벤트
     public int ANPC_exist; //ANPC 등장 여부
     public bool clear; //파싱용 클리어 속성
 
     public Place()
     {
         game_event = new Event();
+        item = new Item();
     }
 
-    public void InitPlace(int idx, Script script, Npc pro_npc, string chapter_obj, string[] place_names)
+    public async void InitPlace(int idx, Script script, Npc pro_npc, string chapter_obj, string[] place_names)
     {
         string time_background = script.GetTimeBackground();
         string space_background = script.GetSpaceBackground();
@@ -32,14 +34,14 @@ public class Place
         string pnpc_name = pro_npc.GetName();
         string pnpc_detail = pro_npc.GetDetail();
 
-        item = new Item(time_background, space_background, world_detail, game_event.event_type);
+        await item.InitItem(time_background, space_background, world_detail, game_event.event_type);
         IsANPCexists();
-        CreatePlace(idx, time_background, space_background, world_detail, genre, pnpc_name, pnpc_detail,place_names);
+        await CreatePlace(idx, time_background, space_background, world_detail, genre, pnpc_name, pnpc_detail,place_names);
 
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (item.item_type != "Mob" && item.item_type != "Monster" && item.item_type != null)
         {
-            game_event.CreateEventTrigger(idx, world_detail, chapter_obj, place_name, item.item_name);
+            await game_event.CreateEventTrigger(idx, world_detail, chapter_obj, place_name, item.item_name);
         }
     }
 
@@ -55,10 +57,8 @@ public class Place
             ANPC_exist = UnityEngine.Random.Range(0, 2);
         }
     }
-    public async void CreatePlace(int idx, string time_background, string space_background, string world_detail, string genre, string pnpc_name, string pnpc_detail,string[] place_names)
+    public async Task<string> CreatePlace(int idx, string time_background, string space_background, string world_detail, string genre, string pnpc_name, string pnpc_detail,string[] place_names)
     {
-        UnityEngine.Debug.Log(">>Call Create Place GPT");
-        UnityEngine.Debug.Log(">>현재 장소 인덱스: " + idx);
         gpt_messages.Clear();
 
         ChatMessage prompt_msg;
@@ -114,6 +114,7 @@ public class Place
 
         gpt_messages.Add(query_msg);
         StringToPlace(await GptManager.gpt.CallGpt(gpt_messages));
+        return this.place_name;
     }
 
     //장소 이름 및 장소 설명 파싱 함수
@@ -130,7 +131,6 @@ public class Place
         place_arr = place_string.Split(':');
         place_name = regex.Replace(place_arr[1], "");
         place_name = place_name.Trim();
-        UnityEngine.Debug.Log(place_name);
         place_info = place_arr[3];
     }
 

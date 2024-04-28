@@ -4,37 +4,30 @@ using UnityEngine;
 using OpenAI;
 using System.Threading.Tasks;
 
-public class Goals
+public class Goal
 {
     private int type;
-    private string title;
+    private string title = "";
     private string detail;
     private string etc;
     private bool clear;
 
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
 
-
-
-
-// 생성자들
-    public Goals(){
-        return;
-    }
-    public Goals(string time_background, string space_background, string world_detail, string genre)
+    public void InitGoal(string time_background, string space_background, string world_detail, string genre)
     {
         // 최종 목표 생성자(챕터4)
         FinalObjectiveGPT(time_background,space_background,world_detail,genre);
     }
 
-    public Goals(string time_background, string space_background, string world_detail, string genre, Goals final_obj)
+    public void InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj)
     {
         // 챕터 목표 생성자(챕터0)
-        Goals tmp = new Goals();
+        Goal tmp = new Goal();
         ChapterObjectiveGPT(time_background,space_background,world_detail,genre,0,final_obj,tmp);
     }
 
-    public Goals(string time_background, string space_background, string world_detail, string genre, Goals final_obj, Goals prev_obj){
+    public void InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj, Goal prev_obj){
         // 챕터 목표 생성자(챕터1~3)
         ChapterObjectiveGPT(time_background,space_background,world_detail,genre,1,final_obj,prev_obj);
     }
@@ -43,7 +36,6 @@ public class Goals
 // 최종목표 생성 함수
     private async void FinalObjectiveGPT(string time_background, string space_background, string world_detail, string genre)
     {
-        Debug.Log(">>Call Final Objective GPT");
         gpt_messages.Clear();
 
         var prompt_msg = new ChatMessage()
@@ -124,9 +116,8 @@ public class Goals
     }
 
 // 챕터 목표 생성 함수
-    private async void ChapterObjectiveGPT(string time_background, string space_background, string world_detail, string genre, int chapter_num, Goals final_obj, Goals prev_obj)
+    private async void ChapterObjectiveGPT(string time_background, string space_background, string world_detail, string genre, int chapter_num, Goal final_obj, Goal prev_obj)
     {
-        Debug.Log(">>Call Chapter Objective GPT");
         gpt_messages.Clear();
 
         var prompt_msg = new ChatMessage()
@@ -208,7 +199,7 @@ public class Goals
         };
         gpt_messages.Add(query_msg);
 
-        StringToObjective(await GptManager.gpt.CallGpt(gpt_messages));
+        StringToObjective("챕터목표유형:"+await GptManager.gpt.CallGpt(gpt_messages));
     }
     private void StringToObjective(string obj_string)
     {

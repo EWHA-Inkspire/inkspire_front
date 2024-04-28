@@ -2,29 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using OpenAI;
+using System.Threading.Tasks;
 
 public class Script
 {
     private string genre;
     private string time_background;
     private string space_background;
-    private string world_detail;
+    private string world_detail = "";
     private string intro = "placeholder";
 
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
     private string GPT_ERROR = "No text was generated from this prompt.";
 
-    public Script(string genre, string time_background, string space_background)
+    public async void InitScript(string genre, string time_background, string space_background)
     {
         this.genre = genre;
         this.time_background = time_background;
         this.space_background = space_background;
-        WorldDetailGPT();
+        await WorldDetailGPT();
     }
 
-    private async void WorldDetailGPT()
+    private async Task<string> WorldDetailGPT()
     {
-        Debug.Log(">>Call World Detail GPT");
         gpt_messages.Clear();
 
         var newMessage = new ChatMessage()
@@ -72,11 +72,11 @@ public class Script
         }
 
         this.world_detail = response;
+        return response;
     }
 
-    public async void IntroGPT(Npc pro_npc, Npc anta_npc, string place_name, string place_info, string char_name)
+    public async Task<string> IntroGPT(Npc pro_npc, Npc anta_npc, string place_name, string place_info, string char_name)
     {
-        Debug.Log(">>Call Intro GPT");
         gpt_messages.Clear();
 
         var newMessage = new ChatMessage()
@@ -117,7 +117,9 @@ public class Script
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
         this.intro = response.Replace("###", "");
-        Debug.Log(response);
+        Debug.Log("인트로"+response);
+
+        return response;
     }
 
     public string GetGenre()

@@ -20,7 +20,7 @@ public class Play : MonoBehaviour
     private static ScriptManager s_manager = ScriptManager.script_manager;
     private string system_prompt = "";
 
-    void Awake(){
+    void Start(){
         SetSystemPrompt();
         if (messages.Count == 1)
         {
@@ -86,27 +86,15 @@ public class Play : MonoBehaviour
 
     public async void SendButton()
     {
-        // 이벤트 체커 메시지 설정 (가장 마지막 gpt 대화 추가)
-        var checkerMessage = new List<ChatMessage>();
-        var assistant_msg = messages.Last();
-        assistant_msg.Role = "user";
-        checkerMessage.Add(assistant_msg);
-
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
 
         text_scroll.AppendMsg(input_msg);
 
-        // 이벤트 체커 메시지 설정 (플레이어 입력값 추가)
-        checkerMessage.Add(input_msg);
-
-        Debug.Log("이벤트 트리거: " + s_manager.GetCurrPlace().game_event.event_trigger);
-
         var item_type = s_manager.GetCurrPlace().item.item_type;
         if (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report")
         {
-            var event_trigger = s_manager.GetCurrPlace().game_event.event_trigger;
-            if (!s_manager.GetCurrPlace().clear) // || await EventChecker.eventChecker.EventCheckerGPT(checkerMessage, event_trigger))
+            if (!s_manager.GetCurrPlace().clear || await EventChecker.eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, s_manager.GetCurrPlace().game_event))
             {
                 // 이벤트 트리거 도입 스크립트 출력
                 text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");

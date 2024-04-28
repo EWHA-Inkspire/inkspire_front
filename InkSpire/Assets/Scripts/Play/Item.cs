@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using OpenAI;
 using UnityEngine;
+using System.Threading.Tasks;
 using UnityEngine.Networking;
 
 public class Item
@@ -26,15 +27,17 @@ public class Item
         Monster
     }
 
-    public Item(string time_background, string space_background, string world_detail, int event_type)
+    public async Task<Item> InitItem(string time_background, string space_background, string world_detail, int event_type)
     {
         ChooseItemType(event_type);
         ItemStat();
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (item_type != "Mob" && item_type != "Monster" && item_type != null)
         {
-            CreateItem(time_background, space_background, world_detail);
+            await CreateItem(time_background, space_background, world_detail);
         }
+
+        return this;
     }
 
     public void ChooseItemType(int event_type)
@@ -72,7 +75,7 @@ public class Item
             i++;
         }
     }
-    private async void CreateItem(string time_background, string space_background, string world_detail)
+    private async Task<string> CreateItem(string time_background, string space_background, string world_detail)
     {
         gpt_messages.Clear();
         string about_item = "";
@@ -104,5 +107,6 @@ public class Item
         string response = await GptManager.gpt.CallGpt(gpt_messages);
 
         item_name = regex.Replace(response, "");
+        return item_name;
     }
 }
