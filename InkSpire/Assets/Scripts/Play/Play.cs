@@ -85,7 +85,7 @@ public class Play : MonoBehaviour
         }
     }
 
-    public void SendButton()
+    public async void SendButton()
     {
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
