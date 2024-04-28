@@ -5,7 +5,7 @@ using OpenAI;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Event : MonoBehaviour
+public class Event
 {
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
 

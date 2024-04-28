@@ -5,7 +5,7 @@ using OpenAI;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Place : MonoBehaviour
+public class Place
 {
     // 특수문자, 괄호, 점 제거를 위한 정규 표현식
     Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
@@ -17,6 +17,11 @@ public class Place : MonoBehaviour
     public Event game_event = new Event(); //이벤트
     public int ANPC_exist; //ANPC 등장 여부
     public bool clear; //파싱용 클리어 속성
+
+    public Place()
+    {
+        game_event = new Event();
+    }
 
     public void InitPlace(int idx, Script script, Npc pro_npc, string chapter_obj, string[] place_names)
     {

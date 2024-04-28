@@ -14,8 +14,9 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
     [SerializeField] TextMeshProUGUI result_txt;
     [SerializeField] TextMeshProUGUI tens_dice;
     [SerializeField] TextMeshProUGUI ones_dice;
+    [SerializeField] private TextScrollUI text_scroll;
 
-    [SerializeField] PlayGPT playgpt;
+    [SerializeField] Play play;
 
     int req_value = 0;
     bool result = false;
@@ -61,37 +62,42 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
 
     void ResultActive()
     {
-        int curr_place = MapManager.mapinfo.curr_place;
+        ScriptManager s_manager = ScriptManager.script_manager;
+        int curr_place = s_manager.GetCurrPlaceIdx();
+        Place place = s_manager.GetCurrPlace();
+        Event game_event = place.game_event;
+
         resultwindow.gameObject.SetActive(true);
         result_calc.text = pl_value.ToString() + " + " + luk_value.ToString() + "(Bonus)\n";
         ChatMessage result_msg = new ChatMessage(){
             Role = "user",
             Content = "주사위 판정 "
         };
+
         if (pl_value + luk_value >= req_value)
         {
+            Item item = place.item;
             result_txt.text = "<color=#074AB0>Success</color>";
             result_msg.Content += "성공";
-            Debug.Log("맵 아이템 이름:"+MapManager.mapinfo.map[curr_place].item_name);
-            InventoryManager.inventory.AddItem(100+curr_place,curr_place,MapManager.mapinfo.map[curr_place].item_name,MapManager.mapinfo.map[curr_place].item_stat,MapManager.mapinfo.map[curr_place].item_type.ToString(),1);
+            Debug.Log("맵 아이템 이름:"+item.item_name);
+            InventoryManager.inventory.AddItem(100+curr_place, curr_place, item.item_name, item.item_stat, item.item_type, 1);
             InventoryManager.inventory.slotlist[InventoryManager.inventory.next_idx-1].SetSprites();
-            MapManager.mapinfo.map[curr_place].clear = true;
-            playgpt.AddToMessagesGPT(result_msg);
-            result_msg.Content = MapManager.mapinfo.map[curr_place].event_succ.Replace(".", ".\n");
-            MapManager.mapinfo.map[curr_place].clear = true;
-            result_msg.Content = MapManager.mapinfo.map[curr_place].event_succ;
+            place.clear = true;
+            play.AddToMessagesGPT(result_msg);
+            result_msg.Content = game_event.event_succ.Replace(".", ".\n");
+            place.clear = true;
+            result_msg.Content = game_event.event_succ;
         }
         else
         {
             result_txt.text = "<color=#B40000>Fail</color>";
             result_msg.Content += "실패";
-            playgpt.AddToMessagesGPT(result_msg);
-            result_msg.Content = MapManager.mapinfo.map[curr_place].event_fail.Replace(".", ".\n");
+            play.AddToMessagesGPT(result_msg);
+            result_msg.Content = game_event.event_fail.Replace(".", ".\n");
         }
         result_msg.Role = "assistant";
-        playgpt.AddToMessagesGPT(result_msg);
-        playgpt.AppendMsg(result_msg);
+        play.AddToMessagesGPT(result_msg);
+        text_scroll.AppendMsg(result_msg);
     }
-
 
 }

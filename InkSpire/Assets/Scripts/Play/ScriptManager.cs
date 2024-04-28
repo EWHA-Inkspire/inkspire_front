@@ -12,7 +12,7 @@ public class ScriptManager : MonoBehaviour
     private int char_id = 0; // 추후 API 호출 결과 값으로 변경
     private string char_name;
     private int curr_chapter = 0;
-    private int curr_place = 0;
+    private int curr_place_idx = 0;
 
     private Script script;
     private Goals[] chapter_obj = new Goals[5];
@@ -32,6 +32,19 @@ public class ScriptManager : MonoBehaviour
 
         if (script_manager == null) {
             script_manager = this;
+        }
+
+        // Goal 배열 초기화
+        for (int i = 0; i < chapter_obj.Length; i++)
+        {
+            chapter_obj[i] = new Goals();
+        }
+
+        // map 배열과 place_names 배열 초기화
+        for (int i = 0; i < map.Length; i++)
+        {
+            map[i] = new Place();
+            place_names[i] = ""; // 또는 적절한 초기값 설정
         }
     }
 
@@ -57,6 +70,7 @@ public class ScriptManager : MonoBehaviour
 
         script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
         init_script = true;
+        // API 호출 (스크립트 내용 저장)
     }
 
     // 장소 별 이벤트 타입 설정 (3개 장소마다 목표 이벤트 출현 장소 정하는 로직)
@@ -101,7 +115,7 @@ public class ScriptManager : MonoBehaviour
 
 // Settter
     public void SetCurrPlace(int idx){
-        curr_place = idx;
+        curr_place_idx = idx;
     }
 
 
@@ -114,10 +128,9 @@ public class ScriptManager : MonoBehaviour
         return curr_chapter;
     }
 
-    public int GetCurrPlace(){
-        return curr_place;
+    public int GetCurrPlaceIdx(){
+        return curr_place_idx;
     }
-
 
     public Script GetScript(){
         return script;
@@ -129,6 +142,10 @@ public class ScriptManager : MonoBehaviour
 
     public Place GetPlace(int idx){
         return map[idx];
+    }
+
+    public Place GetCurrPlace(){
+        return map[curr_place_idx];
     }
 
     public Npc GetPnpc(){
