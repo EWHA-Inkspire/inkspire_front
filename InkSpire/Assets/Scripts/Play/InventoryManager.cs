@@ -22,7 +22,7 @@ public class InventoryManager : MonoBehaviour
 
     private Stats p_stats = PlayerStatManager.playerstat.p_stats;
     public bool is_battle = false;
-    private int target_idx = -1;
+    private int target_idx = 0;
     private int cnt = 0; // inven 창 열고 닫을 때 사용
 
     void Awake() {
@@ -68,14 +68,13 @@ public class InventoryManager : MonoBehaviour
         if (inventory.Count <= 0) return;
         if (!inventory.Exists(x => x.item_id == item.item_id)) return;
 
-        int s_idx = slots.FindIndex(x => x.getItem().item_id == item.item_id);
         int i_idx = inventory.FindIndex(x => x.item_id == item.item_id);
 
         switch (item.item_type) {
             case ItemType.Recover:
                 battle.AppendMsg(">> 아이템 사용: 체력 회복(+"+item.item_stat.ToString()+")\n");
                 p_stats.SetStatAmount(StatType.Hp, p_stats.GetStatAmount(StatType.Hp)+item.item_stat);
-                slots[s_idx].DelSprites();  inventory.RemoveAt(i_idx);
+                slots[i_idx].DelSprites();  inventory.RemoveAt(i_idx);
                 break;
             case ItemType.Mob:
                 break;
@@ -84,7 +83,7 @@ public class InventoryManager : MonoBehaviour
                 break;
             case ItemType.Weapon:
                 PlayerStatManager.playerstat.wheapone = item.item_stat;
-                slots[s_idx].DelSprites();  inventory.RemoveAt(i_idx);
+                slots[i_idx].DelSprites();  inventory.RemoveAt(i_idx);
                 battle.AppendMsg(">> 아이템 사용: 진행중인 전투 동안 공격력 증가(+"+item.item_stat.ToString()+")\n");
                 break;
         }
@@ -92,6 +91,7 @@ public class InventoryManager : MonoBehaviour
 
     public void UseTargetItem()
     {
+        Debug.Log("Traget idx: "+target_idx);
         if(target_idx < 0 || target_idx >= inventory.Count) {
             return;
         }
