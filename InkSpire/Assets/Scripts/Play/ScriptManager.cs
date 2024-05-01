@@ -68,8 +68,8 @@ public class ScriptManager : MonoBehaviour
         await chapter_obj[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, chapter_obj[4]);
 
         // npc 정보 생성
-        await pro_npc.InitNpc("P", script.GetWorldDetail(), genre);
-        await anta_npc.InitNpc("A", script.GetWorldDetail(), genre);
+        await pro_npc.InitNpc("P", script.GetWorldDetail(), genre, char_name);
+        await anta_npc.InitNpc("A", script.GetWorldDetail(), genre, char_name);
 
         // 맵 정보 생성
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성

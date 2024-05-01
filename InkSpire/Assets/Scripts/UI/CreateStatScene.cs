@@ -17,46 +17,41 @@ public class CreateStatScene : MonoBehaviour
     [SerializeField] TMP_InputField intl;
     [SerializeField] TMP_InputField dex;
 
+    private PlayerStatManager stat_manager = PlayerStatManager.playerstat;
+
     public void SetAttack()
     {
-        PlayerStatManager.playerstat.p_stats.SetStatAmount(Stats.Type.Attack, int.Parse(atk.text));
+        stat_manager.p_stats.SetStatAmount(StatType.Attack, int.Parse(atk.text));
         testObj.ModalActivate();
     }
 
     public void SetDefence()
     {
-        PlayerStatManager.playerstat.p_stats.SetStatAmount(Stats.Type.Defence, int.Parse(def.text));
+        stat_manager.p_stats.SetStatAmount(StatType.Defence, int.Parse(def.text));
         testObj.ModalActivate();
     }
 
     public void SetLuck()
     {
-        PlayerStatManager.playerstat.p_stats.SetStatAmount(Stats.Type.Luck, int.Parse(luk.text));
+        stat_manager.p_stats.SetStatAmount(StatType.Luck, int.Parse(luk.text));
         testObj.ModalActivate();
     }
 
     public void SetMental()
     {
-        PlayerStatManager.playerstat.p_stats.SetStatAmount(Stats.Type.Mental, int.Parse(intl.text));
+        stat_manager.p_stats.SetStatAmount(StatType.Mental, int.Parse(intl.text));
         testObj.ModalActivate();
 
     }
 
     public void SetDexterity()
     {
-        PlayerStatManager.playerstat.p_stats.SetStatAmount(Stats.Type.Dexterity, int.Parse(dex.text));
+        stat_manager.p_stats.SetStatAmount(StatType.Dexterity, int.Parse(dex.text));
         testObj.ModalActivate();
     }
     public void SetCharacterStat()
     {
-
-        PlayerStatManager.playerstat.atk = int.Parse(atk.text);
-        PlayerStatManager.playerstat.def = int.Parse(def.text);
-        PlayerStatManager.playerstat.luk = int.Parse(luk.text);
-        PlayerStatManager.playerstat.mental = int.Parse(intl.text);
-        PlayerStatManager.playerstat.dex = int.Parse(dex.text);
-        PlayerStatManager.playerstat.p_stats = new Stats(PlayerStatManager.playerstat.luk, PlayerStatManager.playerstat.def, PlayerStatManager.playerstat.mental, PlayerStatManager.playerstat.dex, PlayerStatManager.playerstat.atk);
-
+        stat_manager.p_stats = new Stats(int.Parse(luk.text), int.Parse(def.text), int.Parse(intl.text), int.Parse(dex.text), int.Parse(atk.text));
     }
 
     public void GameStartButton()
@@ -100,13 +95,13 @@ public class CreateStatScene : MonoBehaviour
     {
         WWWForm char_form = new WWWForm();
         //char_form.AddField("userId", ScriptManager.scriptinfo.character_id);
-        char_form.AddField("name", PlayerStatManager.playerstat.charname);
-        char_form.AddField("luck", PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Luck));
-        char_form.AddField("defense", PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Defence));
-        char_form.AddField("mental", PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Mental));
-        char_form.AddField("agility", PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Dexterity));
-        char_form.AddField("attack", PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Attack));
-        char_form.AddField("agility", PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP));
+        char_form.AddField("name", ScriptManager.script_manager.GetCharName());
+        char_form.AddField("luck", stat_manager.p_stats.GetStatAmount(StatType.Luck));
+        char_form.AddField("defense", stat_manager.p_stats.GetStatAmount(StatType.Defence));
+        char_form.AddField("mental", stat_manager.p_stats.GetStatAmount(StatType.Mental));
+        char_form.AddField("agility", stat_manager.p_stats.GetStatAmount(StatType.Dexterity));
+        char_form.AddField("attack", stat_manager.p_stats.GetStatAmount(StatType.Attack));
+        char_form.AddField("agility", stat_manager.p_stats.GetStatAmount(StatType.Hp));
 
         UnityWebRequest www = UnityWebRequest.Post("http://3.38.126.43:8080/characters", char_form);
         yield return www.SendWebRequest();

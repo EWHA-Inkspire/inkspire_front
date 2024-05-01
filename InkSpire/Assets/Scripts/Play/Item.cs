@@ -6,6 +6,17 @@ using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.Networking;
 
+public enum ItemType
+{
+    Recover,
+    Mob,
+    Weapon,
+    Item,
+    Report,
+    Monster,
+    Null
+}
+
 public class Item
 {
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
@@ -15,24 +26,15 @@ public class Item
 
     public string item_name; // 아이템 이름
     public string item_info; // 아이템 설명
-    public string item_type; // 아이템 타입
+    public ItemType item_type; // 아이템 타입
     public int item_stat; // 아이템 기능치
-    public enum ItemType
-    {
-        Recover,
-        Mob,
-        Weapon,
-        Item,
-        Report,
-        Monster
-    }
 
     public async Task InitItem(string time_background, string space_background, string world_detail, int event_type)
     {
         ChooseItemType(event_type);
         ItemStat();
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
-        if (item_type != "Mob" && item_type != "Monster" && item_type != null)
+        if (item_type != ItemType.Mob && item_type != ItemType.Monster && item_type != ItemType.Null)
         {
             await CreateItem(time_background, space_background, world_detail);
         }
@@ -43,10 +45,10 @@ public class Item
         if (event_type == 0) //일반 이벤트일 경우
         {
             // 일반 이벤트일 때의 항목 정의
-            ItemType?[] normalEventItems = { ItemType.Recover, ItemType.Weapon, ItemType.Mob, null, null, null, null };
+            ItemType[] normalEventItems = { ItemType.Recover, ItemType.Weapon, ItemType.Mob, ItemType.Null, ItemType.Null, ItemType.Null, ItemType.Null };
             int randomIdx = UnityEngine.Random.Range(0, normalEventItems.Length);
 
-            item_type = normalEventItems[randomIdx]?.ToString(); // 열거형을 문자열로 변환하여 할당
+            item_type = normalEventItems[randomIdx]; // 열거형을 문자열로 변환하여 할당
         }
         else //목표 이벤트일 경우
         {
@@ -56,7 +58,7 @@ public class Item
             //돌려돌려돌림판 -> TODO: 챕터 목표의 유형을 받아와야 함
             int randomIdx = UnityEngine.Random.Range(0, goalEventItems.Length);
 
-            item_type = goalEventItems[randomIdx].ToString(); // 열거형을 문자열로 변환하여 할당
+            item_type = goalEventItems[randomIdx]; // 열거형을 문자열로 변환하여 할당
         }
     }
 
@@ -66,7 +68,7 @@ public class Item
         int i = 1;
         while (i < 13)
         {
-            if (item_type != "NULL")
+            if (item_type != ItemType.Null)
             {
                 item_stat = UnityEngine.Random.Range(1, 6);
             }
@@ -77,11 +79,11 @@ public class Item
     {
         gpt_messages.Clear();
         string about_item = "";
-        if (item_type == "Recover")
+        if (item_type == ItemType.Recover)
             about_item = "플레이어의 HP를 회복시켜주는 아이템";
-        else if (item_type == "Mob")
+        else if (item_type == ItemType.Mob)
             about_item = "잡몹을 처치했을 때 얻는 보상 아이템";
-        else if (item_type == "Weapon")
+        else if (item_type == ItemType.Weapon)
             about_item = "플레이어의 공격력을 높여주는 무기 아이템";
         item_info = about_item;
 

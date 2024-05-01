@@ -93,7 +93,7 @@ public class Play : MonoBehaviour
         text_scroll.AppendMsg(input_msg);
 
         var item_type = s_manager.GetCurrPlace().item.item_type;
-        if (item_type == "Recover" || item_type == "Weapon" || item_type == "Item" || item_type == "Report")
+        if (item_type == ItemType.Recover || item_type == ItemType.Weapon || item_type == ItemType.Item || item_type == ItemType.Report)
         {
             if (!s_manager.GetCurrPlace().clear && await EventChecker.eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, s_manager.GetCurrPlace().game_event))
             {
@@ -180,7 +180,7 @@ public class Play : MonoBehaviour
 
         // 장소의 아이템 유형이 Mob이거나 Monster일 경우 전투 이벤트 발동
         var item_type = s_manager.GetPlace(place_idx).item.item_type;
-        if (item_type == "Mob" || item_type == "Monster")
+        if (item_type == ItemType.Mob || item_type == ItemType.Monster)
         {
             // 전투 이벤트
             battle_event.SetBattle(BattleEvent.BType.MOB, 3);

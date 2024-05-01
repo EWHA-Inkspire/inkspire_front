@@ -27,9 +27,9 @@ public class Goal
         await ChapterObjectiveGPT(time_background,space_background,world_detail,genre,0,final_obj,tmp);
     }
 
-    public void InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj, Goal prev_obj){
+    public async void InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj, Goal prev_obj){
         // 챕터 목표 생성자(챕터1~3)
-        ChapterObjectiveGPT(time_background,space_background,world_detail,genre,1,final_obj,prev_obj);
+        await ChapterObjectiveGPT(time_background,space_background,world_detail,genre,1,final_obj,prev_obj);
     }
 
 

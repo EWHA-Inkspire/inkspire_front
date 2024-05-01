@@ -22,21 +22,21 @@ public class Npc
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
     private string GPT_ERROR = "No text was generated from this prompt.";
 
-    public async Task InitNpc(string type, string world_detail, string genre)
+    public async Task InitNpc(string type, string world_detail, string genre, string char_name)
     {
         this.type = (NPCType)Enum.Parse(typeof(NPCType),type);
-        await NameGPT(this.type, world_detail, genre);
+        await NameGPT(this.type, world_detail, genre, char_name);
         await NpcDetailGPT(this.type, world_detail, genre);
         this.stat = new Stats(50, 50, 50, 50, 50);
     }
 
-    private async Task<string> NameGPT(NPCType type, string world_detail, string genre){
+    private async Task<string> NameGPT(NPCType type, string world_detail, string genre, string char_name){
         string type_s = NPCtypeToString(type);
         gpt_messages.Clear();
 
         var newMessage = new ChatMessage(){
             Role = "system",
-            Content = "당신은 "+type_s+"NPC의 이름을 한 단어로 출력해주는 생성기이다. NPC의 이름은 주인공인 "+PlayerStatManager.playerstat.charname+"의 이름과 같아서는 안된다. 게임의 배경과 장르 분위기에 알맞은 NPC이름을 출력해야하며 게임의 배경과 장르는 다음과 같다."
+            Content = "당신은 "+type_s+"NPC의 이름을 한 단어로 출력해주는 생성기이다. NPC의 이름은 주인공인 "+char_name+"의 이름과 같아서는 안된다. 게임의 배경과 장르 분위기에 알맞은 NPC이름을 출력해야하며 게임의 배경과 장르는 다음과 같다."
                         +"또한, 출력의 영어표기를 생략하고 한글표기만 나타낸다. 출력은 반드시 한글로만 이루어진다."
                         +"\n게임 배경: "+world_detail
                         +"\n게임 장르: "+genre

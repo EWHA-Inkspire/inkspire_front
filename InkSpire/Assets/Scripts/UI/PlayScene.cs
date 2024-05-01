@@ -24,8 +24,8 @@ public class PlayScene : MonoBehaviour
         Changechap(s_manager.GetCurrChap());
         header_name.text = s_manager.GetCharName()+" HP";
         statmodal_title.text = s_manager.GetCharName()+"'s Stats";
-        header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP).ToString();
-        battle_stat.text = "공격: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Attack).ToString()+" | 방어: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Defence).ToString()+" | 민첩: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Dexterity).ToString()+" | 행운: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.Luck).ToString();
+        header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Hp).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.MaxHP).ToString();
+        battle_stat.text = "공격: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Attack).ToString()+" | 방어: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Defence).ToString()+" | 민첩: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Dexterity).ToString()+" | 행운: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Luck).ToString();
         
         if(slotPrefab!=null){
             for(int i = 0; i<8; i++){
@@ -60,8 +60,8 @@ public class PlayScene : MonoBehaviour
     }
 
     void Update(){
-        slider_HP.value=(float)PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP)/PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP);
-        header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.CurrHP).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(Stats.Type.MaxHP).ToString();
+        slider_HP.value=(float)PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Hp)/PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.MaxHP);
+        header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Hp).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.MaxHP).ToString();
     }
 
     public void Changechap(int int_chapnum){

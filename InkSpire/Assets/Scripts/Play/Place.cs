@@ -39,7 +39,7 @@ public class Place
         await CreatePlace(idx, time_background, space_background, world_detail, genre, pnpc_name, pnpc_detail,place_names);
 
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
-        if (item.item_type != "Mob" && item.item_type != "Monster" && item.item_type != null)
+        if (item.item_type != ItemType.Mob && item.item_type != ItemType.Monster && item.item_type != ItemType.Null)
         {
             await game_event.CreateEventTrigger(idx, world_detail, chapter_obj, place_name, item.item_name);
         }
