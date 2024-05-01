@@ -97,7 +97,7 @@ public class BattleEvent : MonoBehaviour
             
         }
 
-        InventoryManager.inventory.is_battle = true;
+        InventoryManager.i_manager.is_battle = true;
         
         //민첩스탯이 높은 쪽이 선공
         if(pl_stat.GetStatAmount(StatType.Dexterity)>enm_dex){
@@ -426,7 +426,7 @@ public class BattleEvent : MonoBehaviour
     }
 
     void EndBattle(int result){
-        InventoryManager.inventory.is_battle = false;
+        InventoryManager.i_manager.is_battle = false;
         string result_str;
         if(result==0){
             result_str = "WIN";

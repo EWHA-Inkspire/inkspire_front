@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -23,6 +24,7 @@ public class Item
 
     // 특수문자, 괄호, 점 제거를 위한 정규 표현식
     Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
+    public int item_id = (int)DateTime.Now.Ticks; // 아이템 아이디
 
     public string item_name; // 아이템 이름
     public string item_info; // 아이템 설명

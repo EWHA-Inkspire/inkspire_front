@@ -12,11 +12,8 @@ public class PlayScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI battle_stat;
     [SerializeField] TextMeshProUGUI statmodal_title;
     [SerializeField] GameObject place_list;
-    [SerializeField] GameObject item_list;
     [SerializeField] Slider slider_HP;
 
-
-    public InventorySlot slotPrefab;
     private ScriptManager s_manager = ScriptManager.script_manager;
 
     void Start(){
@@ -26,21 +23,6 @@ public class PlayScene : MonoBehaviour
         statmodal_title.text = s_manager.GetCharName()+"'s Stats";
         header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Hp).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.MaxHP).ToString();
         battle_stat.text = "공격: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Attack).ToString()+" | 방어: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Defence).ToString()+" | 민첩: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Dexterity).ToString()+" | 행운: "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Luck).ToString();
-        
-        if(slotPrefab!=null){
-            for(int i = 0; i<8; i++){
-                InventorySlot newSlot = Instantiate(slotPrefab);
-                if(i<InventoryManager.inventory.next_idx){
-                    newSlot.setItem(InventoryManager.inventory.inventorylist[i].GetItemName(),InventoryManager.inventory.inventorylist[i].GetItemQuant(),InventoryManager.inventory.inventorylist[i].GetItemID());
-                }
-                else{
-                    newSlot.SetSprites();
-                }
-                newSlot.name = "ItemSlot_"+i;
-                newSlot.transform.SetParent(item_list.transform);
-                InventoryManager.inventory.slotlist[i] = newSlot;
-            }
-        }
 
         place_list.transform.GetChild(12).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+s_manager.GetPlace(0).place_name;
         for (int i = 0; i<14; i++){
@@ -56,11 +38,10 @@ public class PlayScene : MonoBehaviour
             }
             
         }
-        InventoryManager.inventory.play_scene_created = true;
     }
 
     void Update(){
-        slider_HP.value=(float)PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Hp)/PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.MaxHP);
+        slider_HP.value=(float)PlayerStatManager.playerstat.p_stats.GetStatAmountNormalized(StatType.Hp);
         header_HP.text = PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Hp).ToString()+" / "+PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.MaxHP).ToString();
     }
 

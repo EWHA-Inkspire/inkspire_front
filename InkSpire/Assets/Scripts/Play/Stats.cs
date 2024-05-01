@@ -75,6 +75,7 @@ public class Stats
             case StatType.Dexterity:    return dex;
             case StatType.Attack:       return atk;
             case StatType.Hp:           return hp;
+            case StatType.MaxHP:        return HP_MAX;
             default: return 0;
         }
     }

@@ -74,8 +74,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
             result_msg.Content += "성공";
             Item map_item = ScriptManager.script_manager.GetPlace(curr_place).item;
             Debug.Log("맵 아이템 이름:"+map_item.item_name);
-            InventoryManager.inventory.AddItem(100+curr_place,curr_place,map_item.item_name,map_item.item_stat,map_item.item_type.ToString(),1);
-            InventoryManager.inventory.slotlist[InventoryManager.inventory.next_idx-1].SetSprites();
+            InventoryManager.i_manager.AddItem(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
             play_manager.AddToMessagesGPT(result_msg);
             result_msg.Content = ScriptManager.script_manager.GetPlace(curr_place).game_event.event_succ.Replace(".", ".\n");
