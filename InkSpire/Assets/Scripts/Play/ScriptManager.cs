@@ -76,10 +76,14 @@ public class ScriptManager : MonoBehaviour
 
         // 맵 정보 생성
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
-        for (int i = 0; i < 4; i++) {
+        // PNPC 장소 초기화
+        map[0].ANPC_exist = 0;
+        map[0].CreatePnpcPlace(script, pro_npc);
+        // 일반 장소 초기화
+        for (int i = 1; i < 4; i++) {
             // 목표 정보 전달
             await items[i].InitItem(script, goals[curr_chapter].GetGoalType(), goals[curr_chapter].GetEtc(), game_events[i].event_type);
-            await map[i].InitPlace(i, script, pro_npc, game_events[i].event_type, place_names);
+            await map[i].InitPlace(i, script, game_events[i].event_type, place_names);
             place_names[i] = map[i].place_name;
 
             // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
