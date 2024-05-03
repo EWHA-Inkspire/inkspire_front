@@ -25,7 +25,7 @@ public class Place
         item = new Item();
     }
 
-    public async Task InitPlace(int idx, Script script, Npc pro_npc, string chapter_obj, string[] place_names)
+    public async Task InitPlace(int idx, Script script, Npc pro_npc, Goal chapter_obj, string[] place_names)
     {
         string time_background = script.GetTimeBackground();
         string space_background = script.GetSpaceBackground();
@@ -36,7 +36,7 @@ public class Place
 
         await item.InitItem(time_background, space_background, world_detail, game_event.event_type);
         IsANPCexists();
-        await CreatePlace(idx, time_background, space_background, world_detail, genre, pnpc_name, pnpc_detail,place_names);
+        await CreatePlace(idx, time_background, space_background, world_detail, genre, pnpc_name, pnpc_detail, place_names);
 
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (item.item_type != ItemType.Mob && item.item_type != ItemType.Monster && item.item_type != ItemType.Null)
@@ -57,7 +57,7 @@ public class Place
             ANPC_exist = UnityEngine.Random.Range(0, 2);
         }
     }
-    public async Task CreatePlace(int idx, string time_background, string space_background, string world_detail, string genre, string pnpc_name, string pnpc_detail,string[] place_names)
+    public async Task CreatePlace(int idx, string time_background, string space_background, string world_detail, string genre, string pnpc_name, string pnpc_detail, string[] place_names)
     {
         gpt_messages.Clear();
 
@@ -133,7 +133,8 @@ public class Place
         place_info = place_arr[3];
     }
 
-    public void SetClear(bool clr){
+    public void SetClear(bool clr)
+    {
         clear = clr;
     }
 }

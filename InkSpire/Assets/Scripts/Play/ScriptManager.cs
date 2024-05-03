@@ -25,13 +25,14 @@ public class ScriptManager : MonoBehaviour
     private bool init_script = false;
 
 
-// 일반함수
+    // 일반함수
     void Awake()
     {
         // 씬이 바뀔 때 파괴되지 않음
         DontDestroyOnLoad(this.gameObject);
 
-        if (script_manager == null) {
+        if (script_manager == null)
+        {
             script_manager = this;
         }
 
@@ -73,8 +74,9 @@ public class ScriptManager : MonoBehaviour
 
         // 맵 정보 생성
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
-        for (int i = 0; i < 4; i++) {
-            await map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter].GetDetail(), place_names);
+        for (int i = 0; i < 4; i++)
+        {
+            await map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter], place_names);
             place_names[i] = map[i].place_name;
         }
 
@@ -89,88 +91,108 @@ public class ScriptManager : MonoBehaviour
     {
         int i = 1;
         int flag = 0;
-        while (i < 13) {
+        while (i < 13)
+        {
             flag = UnityEngine.Random.Range(0, 3);
-            if (flag == 0) {
+            if (flag == 0)
+            {
                 map[i].game_event.event_type = 1;
             }
-            else {
+            else
+            {
                 map[i].game_event.event_type = 0;
             }
 
-            if (map[i].game_event.event_type == 1) {
+            if (map[i].game_event.event_type == 1)
+            {
                 //100
                 map[i + 1].game_event.event_type = 0;
                 map[i + 2].game_event.event_type = 0;
                 i += 3;
                 continue;
             }
-            else {
+            else
+            {
                 i++;
                 map[i].game_event.event_type = UnityEngine.Random.Range(0, 2);
-                if (map[i].game_event.event_type == 1){
+                if (map[i].game_event.event_type == 1)
+                {
                     map[i + 1].game_event.event_type = 0; //010
                 }
-                else {
+                else
+                {
                     map[i + 1].game_event.event_type = 1; //001
                 }
                 i += 2;
             }
         }
         //최종 에필로그
-        if (i == 13) {
+        if (i == 13)
+        {
             map[i].game_event.event_type = 1;
             map[i].ANPC_exist = 0;
         }
     }
 
-// Settter
-    public void SetCurrPlace(int idx){
+    // Settter
+    public void SetCurrPlace(int idx)
+    {
         curr_place_idx = idx;
     }
 
-    public void SetPlaceClear(bool clr){
+    public void SetPlaceClear(bool clr)
+    {
         map[curr_place_idx].SetClear(clr);
     }
 
-    public void SetInitScript(bool setscript){
+    public void SetInitScript(bool setscript)
+    {
         init_script = setscript;
     }
 
-// Getter
-    public string GetCharName(){
+    // Getter
+    public string GetCharName()
+    {
         return char_name;
     }
 
-    public int GetCurrChap(){
+    public int GetCurrChap()
+    {
         return curr_chapter;
     }
 
-    public int GetCurrPlaceIdx(){
+    public int GetCurrPlaceIdx()
+    {
         return curr_place_idx;
     }
 
-    public Script GetScript(){
+    public Script GetScript()
+    {
         return script;
     }
 
-    public Goal GetGoal(int chap_num){
+    public Goal GetGoal(int chap_num)
+    {
         return chapter_obj[chap_num];
     }
 
-    public Place GetPlace(int idx){
+    public Place GetPlace(int idx)
+    {
         return map[idx];
     }
 
-    public Place GetCurrPlace(){
+    public Place GetCurrPlace()
+    {
         return map[curr_place_idx];
     }
 
-    public Npc GetPnpc(){
+    public Npc GetPnpc()
+    {
         return pro_npc;
     }
 
-    public bool GetInitScript(){
+    public bool GetInitScript()
+    {
         return init_script;
     }
 }
