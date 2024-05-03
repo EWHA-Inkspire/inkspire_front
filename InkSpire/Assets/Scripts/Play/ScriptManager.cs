@@ -78,14 +78,14 @@ public class ScriptManager : MonoBehaviour
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
         for (int i = 0; i < 4; i++) {
             // 목표 정보 전달
-            await items[i].InitItem(script, goals[curr_chapter].GetGoalType(), game_events[i].event_type);
+            await items[i].InitItem(script, goals[curr_chapter].GetGoalType(), goals[curr_chapter].GetEtc(), game_events[i].event_type);
             await map[i].InitPlace(i, script, pro_npc, game_events[i].event_type, place_names);
             place_names[i] = map[i].place_name;
 
             // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
             if (items[i].item_type != ItemType.Mob && items[i].item_type != ItemType.Monster && items[i].item_type != ItemType.Null)
             {
-                await game_events[i].CreateEventTrigger(i, script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[i], items[i].item_name);
+                await game_events[i].CreateEventTrigger(script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[i], items[i].item_name);
             }
         }
 

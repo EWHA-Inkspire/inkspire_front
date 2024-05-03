@@ -9,9 +9,11 @@ using UnityEngine.Networking;
 
 public enum ItemType
 {
+    // 일반 아이템 유형
     Recover,
     Mob,
     Weapon,
+    // 목표 아이템 유형
     Item,
     Report,
     Monster,
@@ -25,20 +27,31 @@ public class Item
     // 특수문자, 괄호, 점 제거를 위한 정규 표현식
     Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
     public int item_id = (int)DateTime.Now.Ticks; // 아이템 아이디
-
     public string item_name; // 아이템 이름
     public string item_info; // 아이템 설명
     public ItemType item_type; // 아이템 타입
     public int item_stat; // 아이템 기능치
 
-    public async Task InitItem(Script script, int goal_type, int event_type)
+    public async Task InitItem(Script script, int goal_type, string goal_etc, int event_type)
     {
+        // 아이템 타입 설정
         ChooseItemType(goal_type, event_type);
-        ItemStat();
-        // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
-        if (item_type != ItemType.Mob && item_type != ItemType.Monster && item_type != ItemType.Null)
+        // 아이템 스탯 설정
+        if (item_type != ItemType.Null) {
+            item_stat = UnityEngine.Random.Range(1, 6);
+        }
+        // 아이템 이름 설정
+        if (item_type == ItemType.Item) 
         {
-            await CreateItem(script);
+            item_name = goal_etc;
+        }
+        else if (item_type == ItemType.Report)
+        {
+            await CreateReportName(goal_etc);
+        }
+        else if (item_type == ItemType.Recover || item_type == ItemType.Mob && item_type == ItemType.Weapon)
+        {
+            await CreateItemName(script);
         }
     }
 
@@ -61,20 +74,31 @@ public class Item
         }
     }
 
-    //아이템 기능치: 1~5 사이의 정수 랜덤 생성
-    public void ItemStat()
+    private async Task CreateReportName(string goal_etc)
     {
-        int i = 1;
-        while (i < 13)
+        gpt_messages.Clear();
+
+        var prompt_msg = new ChatMessage()
         {
-            if (item_type != ItemType.Null)
-            {
-                item_stat = UnityEngine.Random.Range(1, 6);
-            }
-            i++;
-        }
+            Role = "system",
+            Content = @"당신은 사건의 진상 내용을 요약하여 아이템 이름에 걸맞는 한 단어로 제시한다. 또한, 출력의 영어표기를 생략하고 한글표기만 나타낸다.
+            사건의 진상: "+goal_etc
+        };
+        gpt_messages.Add(prompt_msg);
+
+        var query_msg = new ChatMessage()
+        {
+            Role = "user",
+            Content = "사건의 진상 내용을 요약하여 한 단어로 생성"
+        };
+        gpt_messages.Add(query_msg);
+
+        string response = await GptManager.gpt.CallGpt(gpt_messages);
+
+        item_name = regex.Replace(response, "");
     }
-    private async Task CreateItem(Script script)
+
+    private async Task CreateItemName(Script script)
     {
         string time_background = script.GetTimeBackground();
         string space_background = script.GetSpaceBackground();
@@ -83,12 +107,11 @@ public class Item
         gpt_messages.Clear();
         string about_item = "";
         if (item_type == ItemType.Recover)
-            about_item = "플레이어의 HP를 회복시켜주는 아이템";
+            item_info = "플레이어의 HP를 회복시켜주는 아이템";
         else if (item_type == ItemType.Mob)
-            about_item = "잡몹을 처치했을 때 얻는 보상 아이템";
+            item_info = "잡몹을 처치했을 때 얻는 보상 아이템";
         else if (item_type == ItemType.Weapon)
-            about_item = "플레이어의 공격력을 높여주는 무기 아이템";
-        item_info = about_item;
+            item_info = "플레이어의 공격력을 높여주는 무기 아이템";
 
         var prompt_msg = new ChatMessage()
         {
