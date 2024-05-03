@@ -200,18 +200,6 @@ public class ScriptManager : MonoBehaviour
         return game_events[curr_place_idx];
     }
 
-    public Item GetItem(int idx){
-        return items[idx];
-    }
-
-    public Item GetCurrItem(){
-        return items[curr_place_idx];
-    }
-
-    public Event GetCurrEvent(){
-        return game_events[curr_place_idx];
-    }
-
     public Npc GetPnpc()
     {
         return pro_npc;

@@ -19,14 +19,14 @@ public class Place
 
     public async Task InitPlace(int idx, Script script, Npc pro_npc, int event_type, string[] place_names)
     {
-        IsANPCexists(game_event);
+        IsANPCexists(event_type);
         await CreatePlace(idx, script, pro_npc, place_names);
     }
 
     //ANPC 미등장 == 0, 등장 == 1 (목표이벤트일 경우 무조건 0)
     public void IsANPCexists(int event_type)
     {
-        if (game_event.event_type == 1)
+        if (event_type == 1)
         {
             ANPC_exist = 0;
         }
