@@ -31,7 +31,7 @@ public class Item
     public ItemType item_type; // 아이템 타입
     public int item_stat; // 아이템 기능치
 
-    public async Task InitItem(Script script, int goal_type int event_type)
+    public async Task InitItem(Script script, int goal_type, int event_type)
     {
         ChooseItemType(goal_type, event_type);
         ItemStat();
