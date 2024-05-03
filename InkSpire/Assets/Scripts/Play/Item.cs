@@ -31,9 +31,9 @@ public class Item
     public ItemType item_type; // 아이템 타입
     public int item_stat; // 아이템 기능치
 
-    public async Task InitItem(Script script, int event_type)
+    public async Task InitItem(Script script, int goal_type int event_type)
     {
-        ChooseItemType(event_type);
+        ChooseItemType(goal_type, event_type);
         ItemStat();
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (item_type != ItemType.Mob && item_type != ItemType.Monster && item_type != ItemType.Null)
@@ -42,7 +42,7 @@ public class Item
         }
     }
 
-    public void ChooseItemType(int event_type)
+    public void ChooseItemType(int goal_type, int event_type)
     {
         if (event_type == 0) //일반 이벤트일 경우
         {
@@ -55,12 +55,9 @@ public class Item
         else //목표 이벤트일 경우
         {
             // 목표 이벤트일 때의 항목 정의
-            ItemType[] goalEventItems = { ItemType.Item, ItemType.Report, ItemType.Monster };
+            ItemType[] goalEventItems = { ItemType.Monster, ItemType.Item, ItemType.Report  };
 
-            //돌려돌려돌림판 -> TODO: 챕터 목표의 유형을 받아와야 함
-            int randomIdx = UnityEngine.Random.Range(0, goalEventItems.Length);
-
-            item_type = goalEventItems[randomIdx]; // 열거형을 문자열로 변환하여 할당
+            item_type = goalEventItems[goal_type-1]; // 열거형을 문자열로 변환하여 할당
         }
     }
 

@@ -16,7 +16,7 @@ public class ScriptManager : MonoBehaviour
     private int curr_place_idx = 0;
 
     private Script script;
-    private Goal[] chapter_obj = new Goal[5];
+    private Goal[] goals = new Goal[5];
     private Place[] map = new Place[14];
     private Item[] items = new Item[14];
     private Event[] game_events = new Event[14];
@@ -39,9 +39,9 @@ public class ScriptManager : MonoBehaviour
 
         // 필드 초기화
         script = new Script();
-        for (int i = 0; i < chapter_obj.Length; i++)
+        for (int i = 0; i < goals.Length; i++)
         {
-            chapter_obj[i] = new Goal();
+            goals[i] = new Goal();
         }
 
         // map 배열과 place_names 배열 초기화
@@ -66,8 +66,8 @@ public class ScriptManager : MonoBehaviour
         await script.InitScript(genre, time_background, space_background);
 
         // 목표 생성
-        await chapter_obj[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
-        await chapter_obj[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, chapter_obj[4]);
+        await goals[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
+        await goals[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[4]);
 
         // npc 정보 생성
         await pro_npc.InitNpc("P", script.GetWorldDetail(), genre, char_name);
@@ -77,14 +77,14 @@ public class ScriptManager : MonoBehaviour
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
         for (int i = 0; i < 4; i++) {
             // 목표 정보 전달
-            await items[i].InitItem(script, game_events[i].event_type);
+            await items[i].InitItem(script, goals[curr_chapter].GetGoalType(), game_events[i].event_type);
             await map[i].InitPlace(i, script, pro_npc, game_events[i], place_names);
             place_names[i] = map[i].place_name;
 
             // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
             if (items[i].item_type != ItemType.Mob && items[i].item_type != ItemType.Monster && items[i].item_type != ItemType.Null)
             {
-                await game_events[i].CreateEventTrigger(i, script.GetWorldDetail(), chapter_obj[curr_chapter].GetDetail(), place_names[i], items[i].item_name);
+                await game_events[i].CreateEventTrigger(i, script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[i], items[i].item_name);
             }
         }
 
@@ -165,7 +165,7 @@ public class ScriptManager : MonoBehaviour
     }
 
     public Goal GetGoal(int chap_num){
-        return chapter_obj[chap_num];
+        return goals[chap_num];
     }
 
     public Place GetPlace(int idx){
