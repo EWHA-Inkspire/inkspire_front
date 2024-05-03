@@ -42,22 +42,22 @@ public class Stats
     {
         switch(type) {
             case StatType.Luck:
-                luk = amount;
+                luk = Mathf.Clamp(amount, STAT_MIN, STAT_MAX);
                 break;
             case StatType.Defence:
-                def = amount;
+                def = Mathf.Clamp(amount, STAT_MIN, STAT_MAX);
                 break;
             case StatType.Mental:
-                mntl = amount;
+                mntl = Mathf.Clamp(amount, STAT_MIN, STAT_MAX);
                 break;
             case StatType.Dexterity:
-                dex = amount;
+                dex = Mathf.Clamp(amount, STAT_MIN, STAT_MAX);
                 break;
             case StatType.Attack:
-                atk = amount;
+                atk = Mathf.Clamp(amount, STAT_MIN, STAT_MAX);
                 break;
             case StatType.Hp:
-                hp = amount;
+                hp = Mathf.Clamp(amount, STAT_MIN, STAT_MAX);
                 break;
         }
 
