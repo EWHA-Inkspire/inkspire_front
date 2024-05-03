@@ -17,14 +17,14 @@ public class Place
     public int ANPC_exist; //ANPC 등장 여부
     public bool clear; //파싱용 클리어 속성
 
-    public async Task InitPlace(int idx, Script script, Npc pro_npc, Event game_event, string[] place_names)
+    public async Task InitPlace(int idx, Script script, Npc pro_npc, int event_type, string[] place_names)
     {
         IsANPCexists(game_event);
         await CreatePlace(idx, script, pro_npc, place_names);
     }
 
     //ANPC 미등장 == 0, 등장 == 1 (목표이벤트일 경우 무조건 0)
-    public void IsANPCexists(Event game_event)
+    public void IsANPCexists(int event_type)
     {
         if (game_event.event_type == 1)
         {
@@ -119,7 +119,8 @@ public class Place
         place_info = place_arr[3];
     }
 
-    public void SetClear(bool clr){
+    public void SetClear(bool clr)
+    {
         clear = clr;
     }
 }

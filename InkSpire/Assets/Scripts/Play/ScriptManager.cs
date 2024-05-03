@@ -27,13 +27,14 @@ public class ScriptManager : MonoBehaviour
     private bool init_script = false;
 
 
-// 일반함수
+    // 일반함수
     void Awake()
     {
         // 씬이 바뀔 때 파괴되지 않음
         DontDestroyOnLoad(this.gameObject);
 
-        if (script_manager == null) {
+        if (script_manager == null)
+        {
             script_manager = this;
         }
 
@@ -78,7 +79,7 @@ public class ScriptManager : MonoBehaviour
         for (int i = 0; i < 4; i++) {
             // 목표 정보 전달
             await items[i].InitItem(script, goals[curr_chapter].GetGoalType(), game_events[i].event_type);
-            await map[i].InitPlace(i, script, pro_npc, game_events[i], place_names);
+            await map[i].InitPlace(i, script, pro_npc, game_events[i].event_type, place_names);
             place_names[i] = map[i].place_name;
 
             // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
@@ -99,7 +100,8 @@ public class ScriptManager : MonoBehaviour
     {
         int i = 1;
         int flag = 0;
-        while (i < 13) {
+        while (i < 13)
+        {
             flag = UnityEngine.Random.Range(0, 3);
             if (flag == 0) {
                 game_events[i].event_type = 1;
@@ -115,7 +117,8 @@ public class ScriptManager : MonoBehaviour
                 i += 3;
                 continue;
             }
-            else {
+            else
+            {
                 i++;
                 game_events[i].event_type = UnityEngine.Random.Range(0, 2);
                 if (game_events[i].event_type == 1){
@@ -134,33 +137,40 @@ public class ScriptManager : MonoBehaviour
         }
     }
 
-// Settter
-    public void SetCurrPlace(int idx){
+    // Settter
+    public void SetCurrPlace(int idx)
+    {
         curr_place_idx = idx;
     }
 
-    public void SetPlaceClear(bool clr){
+    public void SetPlaceClear(bool clr)
+    {
         map[curr_place_idx].SetClear(clr);
     }
 
-    public void SetInitScript(bool setscript){
+    public void SetInitScript(bool setscript)
+    {
         init_script = setscript;
     }
 
-// Getter
-    public string GetCharName(){
+    // Getter
+    public string GetCharName()
+    {
         return char_name;
     }
 
-    public int GetCurrChap(){
+    public int GetCurrChap()
+    {
         return curr_chapter;
     }
 
-    public int GetCurrPlaceIdx(){
+    public int GetCurrPlaceIdx()
+    {
         return curr_place_idx;
     }
 
-    public Script GetScript(){
+    public Script GetScript()
+    {
         return script;
     }
 
@@ -168,11 +178,13 @@ public class ScriptManager : MonoBehaviour
         return goals[chap_num];
     }
 
-    public Place GetPlace(int idx){
+    public Place GetPlace(int idx)
+    {
         return map[idx];
     }
 
-    public Place GetCurrPlace(){
+    public Place GetCurrPlace()
+    {
         return map[curr_place_idx];
     }
 
@@ -188,11 +200,25 @@ public class ScriptManager : MonoBehaviour
         return game_events[curr_place_idx];
     }
 
-    public Npc GetPnpc(){
+    public Item GetItem(int idx){
+        return items[idx];
+    }
+
+    public Item GetCurrItem(){
+        return items[curr_place_idx];
+    }
+
+    public Event GetCurrEvent(){
+        return game_events[curr_place_idx];
+    }
+
+    public Npc GetPnpc()
+    {
         return pro_npc;
     }
 
-    public bool GetInitScript(){
+    public bool GetInitScript()
+    {
         return init_script;
     }
 }
