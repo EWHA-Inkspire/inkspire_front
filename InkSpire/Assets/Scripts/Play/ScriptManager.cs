@@ -82,8 +82,8 @@ public class ScriptManager : MonoBehaviour
         // 일반 장소 초기화
         for (int i = 1; i < 4; i++) {
             // 목표 정보 전달
-            await items[i].InitItem(script, goals[curr_chapter].GetGoalType(), goals[curr_chapter].GetEtc(), game_events[i].event_type);
-            await map[i].InitPlace(i, script, game_events[i].event_type, place_names);
+            await items[i].InitItem(script, goals[curr_chapter], game_events[i].event_type);
+            await map[i].InitPlace(i, script, items[i], game_events[i].event_type, place_names);
             place_names[i] = map[i].place_name;
 
             // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
@@ -178,8 +178,12 @@ public class ScriptManager : MonoBehaviour
         return script;
     }
 
-    public Goal GetGoal(int chap_num){
-        return goals[chap_num];
+    public Goal GetCurrGoal(){
+        return goals[curr_chapter];
+    }
+
+    public Goal GetFinalGoal(){
+        return goals[4];
     }
 
     public Place GetPlace(int idx)
@@ -190,6 +194,19 @@ public class ScriptManager : MonoBehaviour
     public Place GetCurrPlace()
     {
         return map[curr_place_idx];
+    }
+
+    public Item[] GetCurrItems(){
+        var start = 0; var end = 0;
+        // 최종 장소일 경우
+        if (curr_chapter == 4) {
+            start = 13; end = 13;
+            return items[start..(end + 1)];
+        }
+
+        // 나머지의 경우
+        start = 1 + curr_chapter*3; end = start + 2;
+        return items[start..(end + 1)];
     }
 
     public Item GetItem(int idx){

@@ -17,10 +17,10 @@ public class Place
     public int ANPC_exist; //ANPC 등장 여부
     public bool clear; //파싱용 클리어 속성
 
-    public async Task InitPlace(int idx, Script script, int event_type, string[] place_names)
+    public async Task InitPlace(int idx, Script script, Item item, int event_type, string[] place_names)
     {
         IsANPCexists(event_type);
-        await CreatePlace(idx, script, place_names);
+        await CreatePlace(idx, script, item, place_names);
     }
 
     //ANPC 미등장 == 0, 등장 == 1 (목표이벤트일 경우 무조건 0)
@@ -52,15 +52,14 @@ public class Place
         {
             Role = "system",
             Content = @"당신은 조력자 NPC가 머무는 장소를 제시한다.
-        다음은 게임의 배경인 
-        " + time_background + "시대 " + space_background + "를 배경으로 하는 세계관에 대한 설명이다. " + world_detail +
+            다음은 게임의 배경인 " + time_background + "시대 " + space_background + "를 배경으로 하는 세계관에 대한 설명이다. " + world_detail +
             @" 장소는 해당 게임의 조력자 NPC의 집 혹은 직장으로 생성되며 조력자 NPC의 정보는 다음과 같다. " +
             "이름은 " + pnpc_name + "이며, " + pnpc_detail +
             @" 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. 또한, 출력의 영어표기를 생략하고 한글표기만 나타낸다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
 
 
-        장소명: *장소 이름을 한 단어로 출력*
-        장소설명: *장소에 대한 설명을 50자 내외로 설명, 어미는 입니다 체로 통일합니다.* "
+            장소명: *장소 이름을 한 단어로 출력*
+            장소설명: *장소에 대한 설명을 50자 내외로 설명, 어미는 입니다 체로 통일합니다.* "
         };
         gpt_messages.Add(prompt_msg);
 
@@ -73,7 +72,8 @@ public class Place
         gpt_messages.Add(query_msg);
         StringToPlace(await GptManager.gpt.CallGpt(gpt_messages));
     }
-    public async Task CreatePlace(int idx, Script script, string[] place_names)
+
+    public async Task CreatePlace(int idx, Script script, Item item, string[] place_names)
     {
         string time_background = script.GetTimeBackground();
         string space_background = script.GetSpaceBackground();
@@ -88,13 +88,17 @@ public class Place
         {
             Role = "system",
             Content = @"당신은 게임 진행에 필요한 장소를 제시한다.
-            다음은 게임의 배경인 
-            " + time_background + "시대" + space_background + "를 배경으로 하는 세계관에 대한 설명이다." + world_detail +
-                @"장소는 게임의 배경에 맞추어 플레이어가 흥미롭게 탐색할 수 있는 곳으로 생성된다. 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
-            
-            장소명: *장소 이름을 한 단어로 출력*
-            장소설명: *장소에 대한 설명을 50자 내외로 설명, 어미는 입니다 체로 통일합니다.*"
+            다음은 게임의 배경인 " + time_background + "시대" + space_background + "를 배경으로 하는 세계관에 대한 설명이다." + world_detail
         };
+        if (item.item_type != ItemType.Null) {
+            prompt_msg.Content += @"다음은 이 장소에서 발견할 수 있는 아이템에 대한 설명이다. 
+            아이템 이름: " + item.item_name + @"
+            아이템 설명: " + item.item_info;
+        }
+        prompt_msg.Content += @"장소는 게임의 배경에 맞추어 플레이어가 흥미롭게 탐색할 수 있는 곳으로 생성된다. 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
+        
+        장소명: *장소 이름을 한 단어로 출력*
+        장소설명: *장소에 대한 설명을 50자 내외로 설명, 어미는 입니다 체로 통일합니다.*";
         gpt_messages.Add(prompt_msg);
 
         var query_msg = new ChatMessage()

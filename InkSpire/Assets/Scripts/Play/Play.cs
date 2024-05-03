@@ -59,8 +59,8 @@ public class Play : MonoBehaviour
 
         현재 플레이중인 게임은" + s_manager.GetScript().GetTimeBackground() + "시대 " + s_manager.GetScript().GetSpaceBackground() + " 배경으로 하는 " + s_manager.GetScript().GetGenre() + "장르의 게임이며 세계관은 다음과 같다.\n"
         + s_manager.GetScript().GetWorldDetail() + "\n\n"
-        + "게임의 최종 목표는 " + s_manager.GetGoal(4).GetTitle() + "\n" + s_manager.GetGoal(4).GetDetail() + "이며"
-        + "현재 챕터의 목표는 다음과 같다." + s_manager.GetGoal(curr_chap).GetTitle() + "\n" + s_manager.GetGoal(curr_chap).GetDetail()
+        + "게임의 최종 목표는 " + s_manager.GetFinalGoal().GetTitle() + "\n" + s_manager.GetFinalGoal().GetDetail() + "이며"
+        + "현재 챕터의 목표는 다음과 같다." + s_manager.GetCurrGoal().GetTitle() + "\n" + s_manager.GetCurrGoal().GetDetail()
         + "\n현재 플레이어가 있는 장소는 \"" + s_manager.GetCurrPlace().place_name + "\"로, " + s_manager.GetCurrPlace().place_info
         + @"이 아래로 게임 진행 양식이 이어진다. ** 이 표시 안의 내용은 문맥에 맞게 채운 후 *기호는 모두 삭제한다. 
         ------------------------------------------------
@@ -208,7 +208,7 @@ public class Play : MonoBehaviour
         return hasJongsung ? "은" : "는";
     }
 
-    static string EulorReul(string noun)
+    public static string EulorReul(string noun)
     {
         char lastChar = noun[noun.Length - 1]; // 마지막 글자 추출
         bool hasJongsung = (lastChar - '가') % 28 > 0; // 받침 여부 확인

@@ -29,13 +29,13 @@ public class Item
     public int item_id = (int)DateTime.Now.Ticks; // 아이템 아이디
     public string item_name; // 아이템 이름
     public string item_info; // 아이템 설명
-    public ItemType item_type; // 아이템 타입
+    public ItemType item_type = ItemType.Null; // 아이템 타입
     public int item_stat; // 아이템 기능치
 
-    public async Task InitItem(Script script, int goal_type, string goal_etc, int event_type)
+    public async Task InitItem(Script script, Goal goal, int event_type)
     {
         // 아이템 타입 설정
-        ChooseItemType(goal_type, event_type);
+        ChooseItemType(goal.GetGoalType(), event_type);
         // 아이템 스탯 설정
         if (item_type != ItemType.Null) {
             item_stat = UnityEngine.Random.Range(1, 6);
@@ -43,11 +43,12 @@ public class Item
         // 아이템 이름 설정
         if (item_type == ItemType.Item) 
         {
-            item_name = goal_etc;
+            item_name = goal.GetEtc();
+            item_info = goal.GetDetail();
         }
         else if (item_type == ItemType.Report)
         {
-            await CreateReportName(goal_etc);
+            await CreateReportName(goal.GetEtc());
         }
         else if (item_type == ItemType.Recover || item_type == ItemType.Mob && item_type == ItemType.Weapon)
         {
