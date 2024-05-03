@@ -92,10 +92,10 @@ public class Play : MonoBehaviour
 
         text_scroll.AppendMsg(input_msg);
 
-        var item_type = s_manager.GetCurrPlace().item.item_type;
+        var item_type = s_manager.GetCurrItem().item_type;
         if (item_type == ItemType.Recover || item_type == ItemType.Weapon || item_type == ItemType.Item || item_type == ItemType.Report)
         {
-            if (!s_manager.GetCurrPlace().clear && await EventChecker.eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, s_manager.GetCurrPlace().game_event))
+            if (!s_manager.GetCurrPlace().clear && await EventChecker.eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, s_manager.GetCurrEvent()))
             {
                 // 이벤트 트리거 도입 스크립트 출력
                 text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
@@ -107,8 +107,8 @@ public class Play : MonoBehaviour
                 messages.Add(event_msg);
                 event_msg.Role = "assistant";
 
-                string event_title = s_manager.GetCurrPlace().game_event.event_title.Replace(".", ".\n");
-                string event_intro = s_manager.GetCurrPlace().game_event.event_intro.Replace(".", ".\n");
+                string event_title = s_manager.GetCurrEvent().event_title.Replace(".", ".\n");
+                string event_intro = s_manager.GetCurrEvent().event_intro.Replace(".", ".\n");
 
                 event_msg.Content = event_title + "\n" + event_intro + "\n\n";
                 messages.Add(event_msg);
@@ -179,13 +179,13 @@ public class Play : MonoBehaviour
         map_modal.gameObject.SetActive(false);
 
         // 장소의 아이템 유형이 Mob이거나 Monster일 경우 전투 이벤트 발동
-        var item_type = s_manager.GetPlace(place_idx).item.item_type;
+        var item_type = s_manager.GetItem(place_idx).item_type;
         if (item_type == ItemType.Mob || item_type == ItemType.Monster)
         {
             // 전투 이벤트
             battle_event.SetBattle(BattleEvent.BType.MOB, 3);
         }
-        Debug.Log("placeButton item name: " +s_manager.GetCurrPlace().item.item_name);
+        Debug.Log("placeButton item name: " +s_manager.GetCurrItem().item_name);
     }
     
 

@@ -14,39 +14,17 @@ public class Place
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
     public string place_name = ""; //장소 이름
     public string place_info = ""; //장소 설명
-    public Item item; //아이템 
-    public Event game_event; //이벤트
     public int ANPC_exist; //ANPC 등장 여부
     public bool clear; //파싱용 클리어 속성
 
-    public Place()
+    public async Task InitPlace(int idx, Script script, Npc pro_npc, Event game_event, string[] place_names)
     {
-        game_event = new Event();
-        item = new Item();
-    }
-
-    public async Task InitPlace(int idx, Script script, Npc pro_npc, string chapter_obj, string[] place_names)
-    {
-        string time_background = script.GetTimeBackground();
-        string space_background = script.GetSpaceBackground();
-        string world_detail = script.GetWorldDetail();
-        string genre = script.GetGenre();
-        string pnpc_name = pro_npc.GetName();
-        string pnpc_detail = pro_npc.GetDetail();
-
-        await item.InitItem(time_background, space_background, world_detail, game_event.event_type);
-        IsANPCexists();
-        await CreatePlace(idx, time_background, space_background, world_detail, genre, pnpc_name, pnpc_detail,place_names);
-
-        // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
-        if (item.item_type != ItemType.Mob && item.item_type != ItemType.Monster && item.item_type != ItemType.Null)
-        {
-            await game_event.CreateEventTrigger(idx, world_detail, chapter_obj, place_name, item.item_name);
-        }
+        IsANPCexists(game_event);
+        await CreatePlace(idx, script, pro_npc, place_names);
     }
 
     //ANPC 미등장 == 0, 등장 == 1 (목표이벤트일 경우 무조건 0)
-    public void IsANPCexists()
+    public void IsANPCexists(Event game_event)
     {
         if (game_event.event_type == 1)
         {
@@ -57,8 +35,16 @@ public class Place
             ANPC_exist = UnityEngine.Random.Range(0, 2);
         }
     }
-    public async Task CreatePlace(int idx, string time_background, string space_background, string world_detail, string genre, string pnpc_name, string pnpc_detail,string[] place_names)
+    public async Task CreatePlace(int idx, Script script, Npc pro_npc, string[] place_names)
     {
+        string time_background = script.GetTimeBackground();
+        string space_background = script.GetSpaceBackground();
+        string world_detail = script.GetWorldDetail();
+        string genre = script.GetGenre();
+
+        string pnpc_name = pro_npc.GetName();
+        string pnpc_detail = pro_npc.GetDetail();
+
         gpt_messages.Clear();
 
         ChatMessage prompt_msg;

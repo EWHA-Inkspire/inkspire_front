@@ -27,8 +27,8 @@ public class Event
         {
             Role = "system",
             Content = @"당신은 챕터 목표에 맞는 게임 아이템의 위치를 생성한다. " + (event_type == 1 ? "챕터 목표는 " + chapter_obj + "이며 " : "") + "게임의 세계관 배경은 다음과 같다. " + world_detail
-            + "플레이어가 현재 위치한 장소 이름은 " + place_name + "이며 이 장소에서 게임 아이템인 " + item_name + @"가 존재하는 위치를 생성한다. 
-            위치의 이름은 장소 이름 및 게임 아이템과 자연스럽게 어울려야 하며 반드시 한 단어로 출력한다." // 장소 이름, 아이템 이름, 월드디테일 전달, 챕터목표 -> 이 물건이 있을만한 위치를 생성  
+            + "플레이어가 현재 위치한 장소 이름은 " + place_name + "이며 이 장소에서 게임 아이템인 " + item_name + @"가 존재하는 위치를 보통명사로 생성한다. 절대 고유명사로 출력하지 말 것
+            위치의 이름은 장소 이름 및 게임 아이템과 자연스럽게 어울려야 하며 반드시 한 단어로 출력한다. 절대 고유명사로 출력하지 말 것" // 장소 이름, 아이템 이름, 월드디테일 전달, 챕터목표 -> 이 물건이 있을만한 위치를 생성  
         };
         gpt_messages.Add(prompt_msg);
 
@@ -40,6 +40,7 @@ public class Event
         gpt_messages.Add(query_msg);
 
         event_trigger = await GptManager.gpt.CallGpt(gpt_messages); //이거 파싱 어케할지 고민
+        Debug.Log(">> 이벤트 트리거: "+event_trigger);
 
         gpt_messages.Clear();
         prompt_msg.Content = @"당신은 trpg 게임의 기획자 역할을 하며 챕터 목표와 관련있으며 현재 플레이어가 있는 장소 내에 이벤트 트리거가 위치한 곳과 자연스럽게 어울리는 판정 이벤트를 생성한다. 챕터 목표는 " + chapter_obj + "이며 게임의 세계관 배경은 다음과 같다. " + world_detail

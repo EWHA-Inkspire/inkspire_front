@@ -31,14 +31,14 @@ public class Item
     public ItemType item_type; // 아이템 타입
     public int item_stat; // 아이템 기능치
 
-    public async Task InitItem(string time_background, string space_background, string world_detail, int event_type)
+    public async Task InitItem(Script script, int event_type)
     {
         ChooseItemType(event_type);
         ItemStat();
         // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
         if (item_type != ItemType.Mob && item_type != ItemType.Monster && item_type != ItemType.Null)
         {
-            await CreateItem(time_background, space_background, world_detail);
+            await CreateItem(script);
         }
     }
 
@@ -77,8 +77,12 @@ public class Item
             i++;
         }
     }
-    private async Task CreateItem(string time_background, string space_background, string world_detail)
+    private async Task CreateItem(Script script)
     {
+        string time_background = script.GetTimeBackground();
+        string space_background = script.GetSpaceBackground();
+        string world_detail = script.GetWorldDetail();
+
         gpt_messages.Clear();
         string about_item = "";
         if (item_type == ItemType.Recover)

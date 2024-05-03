@@ -72,19 +72,19 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
         {
             result_txt.text = "<color=#074AB0>Success</color>";
             result_msg.Content += "성공";
-            Item map_item = ScriptManager.script_manager.GetPlace(curr_place).item;
+            Item map_item = ScriptManager.script_manager.GetCurrItem();
             Debug.Log("맵 아이템 이름:"+map_item.item_name);
             InventoryManager.i_manager.AddItem(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
             play_manager.AddToMessagesGPT(result_msg);
-            result_msg.Content = ScriptManager.script_manager.GetPlace(curr_place).game_event.event_succ.Replace(".", ".\n");
+            result_msg.Content = ScriptManager.script_manager.GetCurrEvent().event_succ.Replace(".", ".\n");
         }
         else
         {
             result_txt.text = "<color=#B40000>Fail</color>";
             result_msg.Content += "실패";
             play_manager.AddToMessagesGPT(result_msg);
-            result_msg.Content = ScriptManager.script_manager.GetPlace(curr_place).game_event.event_fail.Replace(".", ".\n");
+            result_msg.Content = ScriptManager.script_manager.GetCurrEvent().event_fail.Replace(".", ".\n");
         }
         result_msg.Role = "assistant";
         play_manager.AddToMessagesGPT(result_msg);

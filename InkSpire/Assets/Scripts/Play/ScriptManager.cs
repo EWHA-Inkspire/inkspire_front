@@ -18,6 +18,8 @@ public class ScriptManager : MonoBehaviour
     private Script script;
     private Goal[] chapter_obj = new Goal[5];
     private Place[] map = new Place[14];
+    private Item[] items = new Item[14];
+    private Event[] game_events = new Event[14];
     private string[] place_names = new string[14];
     private Npc pro_npc;
     private Npc anta_npc;
@@ -37,7 +39,6 @@ public class ScriptManager : MonoBehaviour
 
         // 필드 초기화
         script = new Script();
-
         for (int i = 0; i < chapter_obj.Length; i++)
         {
             chapter_obj[i] = new Goal();
@@ -47,6 +48,8 @@ public class ScriptManager : MonoBehaviour
         for (int i = 0; i < map.Length; i++)
         {
             map[i] = new Place();
+            items[i] = new Item();
+            game_events[i] = new Event();
             place_names[i] = ""; // 또는 적절한 초기값 설정
         }
 
@@ -64,7 +67,6 @@ public class ScriptManager : MonoBehaviour
 
         // 목표 생성
         await chapter_obj[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
-
         await chapter_obj[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, chapter_obj[4]);
 
         // npc 정보 생성
@@ -74,8 +76,16 @@ public class ScriptManager : MonoBehaviour
         // 맵 정보 생성
         ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
         for (int i = 0; i < 4; i++) {
-            await map[i].InitPlace(i, script, pro_npc, chapter_obj[curr_chapter].GetDetail(), place_names);
+            // 목표 정보 전달
+            await items[i].InitItem(script, game_events[i].event_type);
+            await map[i].InitPlace(i, script, pro_npc, game_events[i], place_names);
             place_names[i] = map[i].place_name;
+
+            // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
+            if (items[i].item_type != ItemType.Mob && items[i].item_type != ItemType.Monster && items[i].item_type != ItemType.Null)
+            {
+                await game_events[i].CreateEventTrigger(i, script.GetWorldDetail(), chapter_obj[curr_chapter].GetDetail(), place_names[i], items[i].item_name);
+            }
         }
 
         await script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
@@ -92,34 +102,34 @@ public class ScriptManager : MonoBehaviour
         while (i < 13) {
             flag = UnityEngine.Random.Range(0, 3);
             if (flag == 0) {
-                map[i].game_event.event_type = 1;
+                game_events[i].event_type = 1;
             }
             else {
-                map[i].game_event.event_type = 0;
+                game_events[i].event_type = 0;
             }
 
-            if (map[i].game_event.event_type == 1) {
+            if (game_events[i].event_type == 1) {
                 //100
-                map[i + 1].game_event.event_type = 0;
-                map[i + 2].game_event.event_type = 0;
+                game_events[i + 1].event_type = 0;
+                game_events[i + 2].event_type = 0;
                 i += 3;
                 continue;
             }
             else {
                 i++;
-                map[i].game_event.event_type = UnityEngine.Random.Range(0, 2);
-                if (map[i].game_event.event_type == 1){
-                    map[i + 1].game_event.event_type = 0; //010
+                game_events[i].event_type = UnityEngine.Random.Range(0, 2);
+                if (game_events[i].event_type == 1){
+                    game_events[i + 1].event_type = 0; //010
                 }
                 else {
-                    map[i + 1].game_event.event_type = 1; //001
+                    game_events[i + 1].event_type = 1; //001
                 }
                 i += 2;
             }
         }
         //최종 에필로그
         if (i == 13) {
-            map[i].game_event.event_type = 1;
+            game_events[i].event_type = 1;
             map[i].ANPC_exist = 0;
         }
     }
@@ -164,6 +174,18 @@ public class ScriptManager : MonoBehaviour
 
     public Place GetCurrPlace(){
         return map[curr_place_idx];
+    }
+
+    public Item GetItem(int idx){
+        return items[idx];
+    }
+
+    public Item GetCurrItem(){
+        return items[curr_place_idx];
+    }
+
+    public Event GetCurrEvent(){
+        return game_events[curr_place_idx];
     }
 
     public Npc GetPnpc(){
