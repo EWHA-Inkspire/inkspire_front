@@ -10,6 +10,7 @@ public class Play : MonoBehaviour
 {
     [SerializeField] private DiceEvent dice_event;
     [SerializeField] private BattleEvent battle_event;
+    [SerializeField] private HintEvent hint_event;
     [SerializeField] private TMP_InputField player_input;
     [SerializeField] public TextScrollUI text_scroll;
     [SerializeField] private Button send_button;
@@ -131,20 +132,18 @@ public class Play : MonoBehaviour
 
     private async void SendReply()
     {
-        var newMessage = new ChatMessage()
-        {
-            Role = "user",
-            Content = player_input.text
-        };
-        messages.Add(newMessage);
+        messages.Add(input_msg);
 
         send_button.enabled = false;
         player_input.text = "";
         player_input.enabled = false;
 
         var message = await GptManager.gpt.CallGpt(messages);
-        newMessage.Role = "assistant";
-        newMessage.Content = message;
+        var newMessage = new ChatMessage()
+        {
+            Role = "assistant",
+            Content = message
+        };
         messages.Add(newMessage);
 
         text_scroll.AppendMsg(newMessage);
@@ -156,8 +155,9 @@ public class Play : MonoBehaviour
     public void PlaceButton(int place_idx)
     {
         ScriptManager.script_manager.SetCurrPlace(place_idx);
-        SetSystemPrompt();
+        map_modal.gameObject.SetActive(false);
 
+        SetSystemPrompt();
         var query_msg = new ChatMessage()
         {
             Role = "user",
@@ -170,16 +170,16 @@ public class Play : MonoBehaviour
             Role = "assistant",
             Content = "Narrator: \n이곳은 " +s_manager.GetCurrPlace().place_name + "입니다.\n" + s_manager.GetCurrPlace().place_info
         };
-        if (s_manager.GetCurrPlaceIdx() == 0)
+        if (place_idx == 0)
         {
+            hint_event.SetHint(text_scroll);
             newMessage.Content += "이곳에서는 NPC " + s_manager.GetPnpc().GetName() + EulorReul(s_manager.GetPnpc().GetName()) + " 만날 수 있습니다.";
         }
         messages.Add(newMessage);
         text_scroll.AppendMsg(newMessage);
-        map_modal.gameObject.SetActive(false);
 
         // 장소의 아이템 유형이 Mob이거나 Monster일 경우 전투 이벤트 발동
-        var item_type = s_manager.GetItem(place_idx).item_type;
+        var item_type = s_manager.GetCurrItem().item_type;
         if (item_type == ItemType.Mob || item_type == ItemType.Monster)
         {
             // 전투 이벤트
@@ -222,6 +222,11 @@ public class Play : MonoBehaviour
     public void AddToMessagesGPT(ChatMessage msg)
     {
         messages.Add(msg);
+    }
+
+    public void AppendToMessageGPT(List<ChatMessage> msgs)
+    {
+        messages.AddRange(msgs);
     }
 
 }
