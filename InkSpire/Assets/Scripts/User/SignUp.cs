@@ -58,7 +58,7 @@ public class SignUp : MonoBehaviour
     private void ProcessResponse(Response response){
         if(response.success){
             Debug.Log("회원가입 성공: " + response.message);
-            SceneManager.LoadScene("Login");
+            SceneManager.LoadScene("1_Start");
         }
         else {
             Debug.Log("회원가입 실패: " + response.message);
