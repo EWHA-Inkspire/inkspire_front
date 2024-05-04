@@ -1,27 +1,50 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-class ProfileInfo {
+[Serializable]
+public class ProfileInfo {
     public string nickname;
     public string email;
     public int endingCount;
+
+    public override string ToString()
+    {
+        return "nickname: " + nickname + "\nemail: " + email + "\nendingCount: " + endingCount;
+    }
 }
 
-class CharacterList {
-    public List<Character> characters;
+[Serializable]
+public class CharacterList {
+    public List<Character> characters = new List<Character>();
 }
 
-class Character {
+[Serializable]
+public class Character {
     public int id;
     public string name;
     public string success;
     public string fail;
+
+    public override string ToString()
+    {
+        return "id: " + id + "\nname: " + name + "\nsuccess: " + success + "\nfail: " + fail;
+    }
 }
 
 public class ProfileModal : MonoBehaviour
 {
-    public void LoadProfile()
+    [SerializeField] TMPro.TextMeshProUGUI title;
+    [SerializeField] TMPro.TextMeshProUGUI nickname;
+    [SerializeField] TMPro.TextMeshProUGUI email;
+
+    private int LEVEL1 = 3;
+    private int LEVEL2 = 5;
+    private int LEVEL3 = 10;
+    private int LEVEL4 = 20;
+
+    public void Start()
     {
         if(!PlayerPrefs.HasKey("user_id")) {
             return;
@@ -37,7 +60,24 @@ public class ProfileModal : MonoBehaviour
 
     private void ProcessProfile(Response<ProfileInfo> response){
         if(response.success){
-            Debug.Log(">>GET 결과: "+response.data);
+            nickname.text = response.data.nickname;
+            email.text = response.data.email;
+            
+            if(response.data.endingCount <= LEVEL1) {
+                title.text = "초보 사서";
+            }
+            else if(response.data.endingCount <= LEVEL2) {
+                title.text = "견습 사서";
+            }
+            else if(response.data.endingCount <= LEVEL3) {
+                title.text = "일반 사서";
+            }
+            else if(response.data.endingCount <= LEVEL4) {
+                title.text = "베테랑 사서";
+            }
+            else {
+                title.text = "도서관장";
+            }
         }
     }
 
