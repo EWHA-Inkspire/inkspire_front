@@ -24,9 +24,9 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
 
     public void SetDiceEvent(int val)
     {
-        dicewindow.gameObject.SetActive(true);
+        dicewindow.SetActive(true);
 
-        resultwindow.gameObject.SetActive(false);
+        resultwindow.SetActive(false);
         pl_value = 0;
         tens_dice.text = "00";
         ones_dice.text = "00";
@@ -47,7 +47,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
         //행운 스탯은 모든 판정에 int(rand(0,행운)*0.5)만큼의 보정치를 더해준다.
         luk_value = Random.Range(0, PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Luck) / 2);
 
-        Invoke("ResultActive", 0.5f);
+        Invoke(nameof(ResultActive), 0.5f);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -56,15 +56,15 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
         {
             return;
         }
-        dicewindow.gameObject.SetActive(false);
+        dicewindow.SetActive(false);
     }
 
     void ResultActive()
     {
         int curr_place = ScriptManager.script_manager.GetCurrPlaceIdx();
-        resultwindow.gameObject.SetActive(true);
+        resultwindow.SetActive(true);
         result_calc.text = pl_value.ToString() + " + " + luk_value.ToString() + "(Bonus)\n";
-        ChatMessage result_msg = new ChatMessage(){
+        ChatMessage result_msg = new(){
             Role = "user",
             Content = "주사위 판정 "
         };

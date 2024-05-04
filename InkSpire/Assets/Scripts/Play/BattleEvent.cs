@@ -50,7 +50,7 @@ public class BattleEvent : MonoBehaviour
 
 
     public void SetBattle(BType battle_type, int mob_num){
-        battle_window.gameObject.SetActive(true);
+        battle_window.SetActive(true);
         bType = battle_type;
         m_num = mob_num;
         int[] tmp_stat = new int[5];
@@ -60,20 +60,20 @@ public class BattleEvent : MonoBehaviour
         }
 
         // 타겟몬스터 토글 개수 셋팅
-        bdice_window.gameObject.SetActive(true);
+        bdice_window.SetActive(true);
         mobgroup.gameObject.SetActive(true);
         for(int k = mob_num; k<5; k++){
             mobgroup.gameObject.transform.GetChild(k).gameObject.SetActive(false);
         }
         mobgroup.gameObject.SetActive(false);
-        bdice_window.gameObject.SetActive(false);
+        bdice_window.SetActive(false);
 
         if(bType == BType.BOSS){
             //보스몬스터 스탯 셋팅
             for(int j = 0; j<5; j++){
                 tmp_stat[j] = BOSS_BASE+(int)Mathf.Pow(-1,Random.Range(0,2))*Random.Range(0,11);
             }
-            Stats tmp = new Stats(tmp_stat[0],tmp_stat[1],tmp_stat[2],tmp_stat[3],tmp_stat[4]);
+            Stats tmp = new(tmp_stat[0],tmp_stat[1],tmp_stat[2],tmp_stat[3],tmp_stat[4]);
             Debug.Log(tmp.GetStatAmount(StatType.Defence));
             enm_stat[0] = tmp;
             enm_dex = enm_stat[0].GetStatAmount(StatType.Dexterity);
@@ -86,7 +86,7 @@ public class BattleEvent : MonoBehaviour
                     tmp_stat[j] = MOB_BASE+(int)Mathf.Pow(-1,Random.Range(0,2))*Random.Range(0,11);
                     Debug.Log(">>tmpstat"+j+": "+tmp_stat[j]);
                 }
-                Stats tmp = new Stats(tmp_stat[0],tmp_stat[1],tmp_stat[2],tmp_stat[3],tmp_stat[4]);
+                Stats tmp = new(tmp_stat[0],tmp_stat[1],tmp_stat[2],tmp_stat[3],tmp_stat[4]);
                 Debug.Log(tmp.GetStatAmount(StatType.Defence));
                 enm_stat[i]=tmp;
                 enm_stat[i].SetStatAmount(StatType.MaxHP,500);
@@ -131,10 +131,10 @@ public class BattleEvent : MonoBehaviour
             AppendMsg("공격: "+enm_stat[i].GetStatAmount(StatType.Attack).ToString()+" | 방어: "+enm_stat[i].GetStatAmount(StatType.Defence).ToString()+" | 민첩: "+enm_stat[i].GetStatAmount(StatType.Dexterity).ToString()+" | 행운: "+enm_stat[i].GetStatAmount(StatType.Luck).ToString());
         }
         AppendMsg(" ");
-        inventory_window.gameObject.SetActive(false);
-        bdice_window.gameObject.SetActive(false);
-        def_window.gameObject.SetActive(false);
-        atk_window.gameObject.SetActive(true);
+        inventory_window.SetActive(false);
+        bdice_window.SetActive(false);
+        def_window.SetActive(false);
+        atk_window.SetActive(true);
     }
 
     void SetDefenceTurn(){
@@ -149,10 +149,10 @@ public class BattleEvent : MonoBehaviour
             AppendMsg("공격: "+enm_stat[i].GetStatAmount(StatType.Attack).ToString()+" | 방어: "+enm_stat[i].GetStatAmount(StatType.Defence).ToString()+" | 민첩: "+enm_stat[i].GetStatAmount(StatType.Dexterity).ToString()+" | 행운: "+enm_stat[i].GetStatAmount(StatType.Luck).ToString());
         }
         AppendMsg(" ");
-        inventory_window.gameObject.SetActive(false);
-        bdice_window.gameObject.SetActive(false);
-        atk_window.gameObject.SetActive(false);
-        def_window.gameObject.SetActive(true);
+        inventory_window.SetActive(false);
+        bdice_window.SetActive(false);
+        atk_window.SetActive(false);
+        def_window.SetActive(true);
     }
 
     public void AtkTurnAction(int action){
@@ -161,12 +161,12 @@ public class BattleEvent : MonoBehaviour
         switch(action){
             case 1: // 공격
             case 3: // 도망
-                atk_window.gameObject.SetActive(false);
+                atk_window.SetActive(false);
                 SetBDiceWindow();
                 break;
             case 2: // 아이템
-                inventory_window.gameObject.SetActive(true);
-                atk_window.gameObject.SetActive(false);
+                inventory_window.SetActive(true);
+                atk_window.SetActive(false);
                 break;
             default:
                 Debug.Log(">> AtkTurn: Wrong Action");
@@ -182,11 +182,11 @@ public class BattleEvent : MonoBehaviour
             case 2: // 회피
             case 4: // 도망
                 SetBDiceWindow();
-                def_window.gameObject.SetActive(false);
+                def_window.SetActive(false);
                 break;
             case 3: // 아이템
-                inventory_window.gameObject.SetActive(true);
-                def_window.gameObject.SetActive(false);
+                inventory_window.SetActive(true);
+                def_window.SetActive(false);
                 break;
             default:
                 Debug.Log(">> DefTurn: Wrong Action");
@@ -195,7 +195,7 @@ public class BattleEvent : MonoBehaviour
     }
 
     void SetBDiceWindow(){
-        bdice_window.gameObject.SetActive(true);
+        bdice_window.SetActive(true);
         if(curr_turn == Turn.PL && pl_action == 1){
             mobgroup.gameObject.SetActive(true);
         }
@@ -351,11 +351,11 @@ public class BattleEvent : MonoBehaviour
     public void SetNextTurn(){
         if(curr_turn == Turn.PL){
             curr_turn = Turn.ENM;
-            Invoke("SetDefenceTurn",0.5f);
+            Invoke(nameof(SetDefenceTurn), 0.5f);
         }
         else{
             curr_turn = Turn.PL;
-            Invoke("SetAttackTurn", 0.5f);   
+            Invoke(nameof(SetAttackTurn), 0.5f);   
         }
     }
 
@@ -448,23 +448,23 @@ public class BattleEvent : MonoBehaviour
         // gpt에게 전투 결과 전달
 
 
-        bdice_window.gameObject.SetActive(true);
+        bdice_window.SetActive(true);
         mobgroup.gameObject.SetActive(true);
         for(int k = 0; k<5; k++){
             mobgroup.gameObject.transform.GetChild(k).gameObject.SetActive(true);
         }
         mobgroup.gameObject.SetActive(false);
-        bdice_window.gameObject.SetActive(false);
+        bdice_window.SetActive(false);
 
         PlayerStatManager.playerstat.wheapone = 0;
 
         //enm_stat.Clear();
         //is_dead.Clear();
         m_num = 0;
-        atk_window.gameObject.SetActive(false);
-        def_window.gameObject.SetActive(false);
-        inventory_window.gameObject.SetActive(false);
-        battle_window.gameObject.SetActive(false);
+        atk_window.SetActive(false);
+        def_window.SetActive(false);
+        inventory_window.SetActive(false);
+        battle_window.SetActive(false);
 
     }
 

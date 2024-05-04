@@ -15,8 +15,8 @@ public class Play : MonoBehaviour
     [SerializeField] private Button send_button;
     [SerializeField] private GameObject map_modal;
 
-    private List<ChatMessage> messages = new List<ChatMessage>();
-    private ChatMessage input_msg = new ChatMessage();
+    private List<ChatMessage> messages = new();
+    private ChatMessage input_msg = new();
     private static ScriptManager s_manager = ScriptManager.script_manager;
     private string system_prompt = "";
 
@@ -46,7 +46,6 @@ public class Play : MonoBehaviour
     private void SetSystemPrompt()
     {
         s_manager = ScriptManager.script_manager;
-        int curr_chap = s_manager.GetCurrChap();
         system_prompt = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
         플레이어가 선택해야 하는 모든 선택지들은 플레이어의 선택을 기다려야 한다.
         TRPG 진행을 하듯 진행하되, TRPG라는 단어는 언급하면 안된다.
@@ -154,7 +153,7 @@ public class Play : MonoBehaviour
     public void PlaceButton(int place_idx)
     {
         ScriptManager.script_manager.SetCurrPlace(place_idx);
-        map_modal.gameObject.SetActive(false);
+        map_modal.SetActive(false);
 
         SetSystemPrompt();
         var query_msg = new ChatMessage()
