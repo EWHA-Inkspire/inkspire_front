@@ -16,7 +16,7 @@ public class ProfileInfo {
 
 [Serializable]
 public class CharacterList {
-    public List<Character> characters = new List<Character>();
+    public List<Character> characters = new();
 }
 
 [Serializable]
@@ -38,10 +38,10 @@ public class ProfileModal : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI nickname;
     [SerializeField] TMPro.TextMeshProUGUI email;
 
-    private int LEVEL1 = 3;
-    private int LEVEL2 = 5;
-    private int LEVEL3 = 10;
-    private int LEVEL4 = 20;
+    private readonly int LEVEL1 = 3;
+    private readonly int LEVEL2 = 5;
+    private readonly int LEVEL3 = 10;
+    private readonly int LEVEL4 = 20;
 
     public void Start()
     {
