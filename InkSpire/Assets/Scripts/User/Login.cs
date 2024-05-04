@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class LoginScene : MonoBehaviour
+public class Login : MonoBehaviour
 {
     [SerializeField] TMP_InputField input_email;
     [SerializeField] TMP_InputField input_pw;
