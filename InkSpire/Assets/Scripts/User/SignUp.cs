@@ -17,9 +17,7 @@ public class SignUp : MonoBehaviour
     [SerializeField] TMP_InputField input_nickname;
     [SerializeField] TMP_InputField input_pw;
     [SerializeField] TMP_InputField input_pwcheck;
-
     [SerializeField] TextMeshProUGUI wrong_pw;
-    private bool post_done = false;
 
     public void SignupButton(){
         string user_email = input_email.text;
