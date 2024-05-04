@@ -52,19 +52,17 @@ public class SignUp : MonoBehaviour
         account.nickname = user_nickname;
         account.password = user_pw;
         string account_json = JsonUtility.ToJson(account);
-        Debug.Log(account_json);
         StartCoroutine(APIManager.api.PostRequest("/users/signup", account_json, ProcessResponse));
     }
 
     private void ProcessResponse(Response response){
         if(response.success){
-            Debug.Log("회원가입 성공" + response.message);
+            Debug.Log("회원가입 성공: " + response.message);
             SceneManager.LoadScene("Login");
         }
         else {
-            Debug.Log("회원가입 실패" + response.message);
+            Debug.Log("회원가입 실패: " + response.message);
             wrong_pw.text = response.message;
         }
     }
-
 }
