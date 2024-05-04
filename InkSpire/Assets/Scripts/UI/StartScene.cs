@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
@@ -7,7 +6,8 @@ public class StartScene : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI button_top;
     [SerializeField] private TextMeshProUGUI button_bottom;
-    [SerializeField] private Button profile_button;
+    [SerializeField] private GameObject logged_in;
+    [SerializeField] private GameObject logged_out;
 
     void Awake()
     {   
@@ -46,15 +46,17 @@ public class StartScene : MonoBehaviour
         }
     }
 
-    // 프로필 버튼
-    public void OnClickProfile() {
-        SceneManager.LoadScene("7_Profile");
+    // 로그아웃 버튼
+    public void OnClickLogout() {
+        PlayerPrefs.DeleteKey("user_id");
+        SetButtonsForLoggedOutUser();
     }
 
     public void SetButtonsForLoggedInUser()
     {
-        // 프로필 버튼 활성화
-        profile_button.gameObject.SetActive(true);
+        // 로그인 모달 활성화
+        logged_out.SetActive(false);
+        logged_in.SetActive(true);
         // 버튼 내용 변경
         button_top.text = "탐험 목록 보러가기";
         button_bottom.text = "새 게임 시작하기";
@@ -62,8 +64,9 @@ public class StartScene : MonoBehaviour
 
     public void SetButtonsForLoggedOutUser()
     {
-        // 프로필 버튼 바활성화
-        profile_button.gameObject.SetActive(false);
+        // 로그아웃 모달 활성화
+        logged_in.SetActive(false);
+        logged_out.SetActive(true);
         // 로그인 버튼 활성화
         button_top.text = "로그인";
         button_bottom.text = "회원가입";

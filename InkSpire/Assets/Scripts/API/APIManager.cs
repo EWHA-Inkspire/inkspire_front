@@ -19,7 +19,21 @@ public class APIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public IEnumerator PostRequest(string url, string jsonfile, Action<Response> callback)
+    public IEnumerator GetRequest<T>(string url, Action<Response<T>> callback)
+    {
+        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + url);
+        yield return www.SendWebRequest();
+
+        if (www != null)
+        {
+            Debug.Log(www.downloadHandler.text);
+            Response<T> response_json = JsonUtility.FromJson<Response<T>>(www.downloadHandler.text);
+            callback(response_json);
+        }
+        www.Dispose();
+    }
+
+    public IEnumerator PostRequest<T>(string url, string jsonfile, Action<Response<T>> callback)
     {
         byte[] json = System.Text.Encoding.UTF8.GetBytes(jsonfile);
         UnityWebRequest www = new UnityWebRequest(BASE_URL + url, "POST");
@@ -33,7 +47,7 @@ public class APIManager : MonoBehaviour
         if (www != null)
         {
             Debug.Log(www.downloadHandler.text);
-            Response response_json = JsonUtility.FromJson<Response>(www.downloadHandler.text);
+            Response<T> response_json = JsonUtility.FromJson<Response<T>>(www.downloadHandler.text);
             callback(response_json);
         }
         www.Dispose();

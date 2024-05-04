@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -33,13 +31,13 @@ public class Login : MonoBehaviour
         login_info.email = input_email.text;
         login_info.password = input_pw.text;
         string login_json = JsonUtility.ToJson(login_info);
-        StartCoroutine(APIManager.api.PostRequest("/users/login", login_json, ProcessResponse));
+        StartCoroutine(APIManager.api.PostRequest<int>("/users/login", login_json, ProcessResponse));
     }
 
-    private void ProcessResponse(Response response){
+    private void ProcessResponse(Response<int> response){
         if(response.success){
             Debug.Log("로그인 성공: " + response.message);
-            PlayerPrefs.SetInt("user_id", int.Parse(response.data));
+            PlayerPrefs.SetInt("user_id", response.data);
             SceneManager.LoadScene("1_Start");
         }
         else {

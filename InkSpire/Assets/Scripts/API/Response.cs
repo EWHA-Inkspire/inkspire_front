@@ -1,9 +1,9 @@
-public class Response
+public class Response<T>
 {
     public bool success;
     public int code;
     public string message;
-    public string data;
+    public T data;
 
     public override string ToString()
     {

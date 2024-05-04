@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+using Unity.VisualScripting;
 
 class NewAccount {
     public string email;
@@ -50,10 +51,10 @@ public class SignUp : MonoBehaviour
         account.nickname = user_nickname;
         account.password = user_pw;
         string account_json = JsonUtility.ToJson(account);
-        StartCoroutine(APIManager.api.PostRequest("/users/signup", account_json, ProcessResponse));
+        StartCoroutine(APIManager.api.PostRequest<Null>("/users/signup", account_json, ProcessResponse));
     }
 
-    private void ProcessResponse(Response response){
+    private void ProcessResponse(Response<Null> response){
         if(response.success){
             Debug.Log("회원가입 성공: " + response.message);
             SceneManager.LoadScene("1_Start");
