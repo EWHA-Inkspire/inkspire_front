@@ -15,7 +15,7 @@ public class EventChecker : MonoBehaviour {
         }
     }
 
-    private List<ChatMessage> gpt_messages = new List<ChatMessage>();
+    private List<ChatMessage> gpt_messages = new();
 
     public async Task<bool> EventCheckerGPT(string assistant_msg, string input_msg, Event game_event) {
         assistant_msg = assistant_msg.Replace("Narrator:\n", "");

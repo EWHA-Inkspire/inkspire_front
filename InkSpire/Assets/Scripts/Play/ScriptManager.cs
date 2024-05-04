@@ -58,6 +58,17 @@ public class ScriptManager : MonoBehaviour
         // 세계관 생성
         await script.InitScript(genre, time_background, space_background);
 
+        // API 호출 - 스크립트 정보 저장
+        ScenarioInfo scenarioInfo = new()
+        {
+            character = new CharacterInfo(char_name),
+            script = new ScriptInfo(genre, time_background, space_background, script.GetWorldDetail())
+        };
+        string json = JsonUtility.ToJson(scenarioInfo);
+        Debug.Log(json);
+
+        StartCoroutine(APIManager.api.PostRequest<PostScriptResponse>("/scripts", json, ProcessScriptResponse));
+
         // 목표 생성
         await goals[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
         await goals[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[4]);
@@ -130,6 +141,21 @@ public class ScriptManager : MonoBehaviour
         if (i == 13) {
             game_events[i].event_type = 1;
             map[i].ANPC_exist = 0;
+        }
+    }
+
+    // API 호출 결과를 받아오는 함수
+    private void ProcessScriptResponse(Response<PostScriptResponse> response)
+    {
+        if (response.code == 201)
+        {
+            Debug.Log("Script saved successfully");
+            PlayerPrefs.SetInt("character_id", response.data.characterId);
+            PlayerPrefs.SetInt("script_id", response.data.scriptId);
+        }
+        else
+        {
+            Debug.Log("Failed to save script");
         }
     }
 

@@ -118,6 +118,7 @@ public class Script
         Debug.Log("인트로"+response);
     }
 
+    // Getter
     public string GetGenre()
     {
         return this.genre;

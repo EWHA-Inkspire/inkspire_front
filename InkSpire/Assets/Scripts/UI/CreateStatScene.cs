@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.Networking;
+using Unity.VisualScripting;
 
 public class CreateStatScene : MonoBehaviour
 {
@@ -55,11 +55,17 @@ public class CreateStatScene : MonoBehaviour
     public void GameStartButton()
     {
         SetCharacterStat();
-        //StartCoroutine(PostCharacterScriptInfo());
         LoadingText.text = "게임을 생성중입니다";
         WaitForGPT();
 
-        //StartCoroutine(PostObjectiveInfo());
+        while (!PlayerPrefs.HasKey("character_id")) {
+            Debug.Log("Waiting for character_id");
+        }
+
+        int character_id = PlayerPrefs.GetInt("character_id");
+        CharacterStatInfo stat_info = new(stat_manager.p_stats.GetStatAmount(StatType.Attack), stat_manager.p_stats.GetStatAmount(StatType.Defence), stat_manager.p_stats.GetStatAmount(StatType.Luck), stat_manager.p_stats.GetStatAmount(StatType.Mental), stat_manager.p_stats.GetStatAmount(StatType.Dexterity), stat_manager.p_stats.GetStatAmount(StatType.Hp));
+        string json = JsonUtility.ToJson(stat_info);
+        StartCoroutine(APIManager.api.PutRequest<Null>("/characters/"+character_id+"/stat", json, ProcessStatResponse));
     }
 
     void WaitForGPT()
@@ -89,72 +95,8 @@ public class CreateStatScene : MonoBehaviour
         }
     }
 
-    IEnumerator PostCharacterScriptInfo()
+    private void ProcessStatResponse(Response<Null> response)
     {
-        WWWForm char_form = new WWWForm();
-        //char_form.AddField("userId", ScriptManager.scriptinfo.character_id);
-        char_form.AddField("name", ScriptManager.script_manager.GetCharName());
-        char_form.AddField("luck", stat_manager.p_stats.GetStatAmount(StatType.Luck));
-        char_form.AddField("defense", stat_manager.p_stats.GetStatAmount(StatType.Defence));
-        char_form.AddField("mental", stat_manager.p_stats.GetStatAmount(StatType.Mental));
-        char_form.AddField("agility", stat_manager.p_stats.GetStatAmount(StatType.Dexterity));
-        char_form.AddField("attack", stat_manager.p_stats.GetStatAmount(StatType.Attack));
-        char_form.AddField("agility", stat_manager.p_stats.GetStatAmount(StatType.Hp));
-
-        UnityWebRequest www = UnityWebRequest.Post("http://3.38.126.43:8080/characters", char_form);
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            Debug.Log(">>CharacterInfo upload complete.");
-        }
-
-        WWWForm script_form = new WWWForm();
-        // script_form.AddField("userId", ScriptManager.scriptinfo.character_id);
-        // script_form.AddField("time", ScriptManager.scriptinfo.time_background);
-        // script_form.AddField("place", ScriptManager.scriptinfo.space_background);
-        // script_form.AddField("genre", ScriptManager.scriptinfo.genre);
-
-        www = UnityWebRequest.Post("http://3.38.126.43:8080/scripts", script_form);
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            Debug.Log(">>ScriptInfo upload complete.");
-        }
-
+        Debug.Log(response.message);
     }
-
-    // IEnumerator PostObjectiveInfo()
-    // {
-    //     // WWWForm obj_form = new WWWForm();
-    //     // obj_form.AddField("scriptId", ScriptManager.scriptinfo.character_id);
-    //     // obj_form.AddField("chapter", 5);
-    //     // obj_form.AddField("content", ScriptManager.scriptinfo.chapter_obj[5].title);
-    //     // obj_form.AddField("type", ScriptManager.scriptinfo.chapter_obj[5].type);
-    //     // obj_form.AddField("require", ScriptManager.scriptinfo.chapter_obj[5].detail);
-    //     // obj_form.AddField("etc", ScriptManager.scriptinfo.chapter_obj[5].etc);
-
-    //     // UnityWebRequest www = UnityWebRequest.Post("http://3.38.126.43:8080/scripts/goal", obj_form);
-    //     // yield return www.SendWebRequest();
-
-    //     // WWWForm chap_form = new WWWForm();
-    //     // chap_form.AddField("scriptId", ScriptManager.scriptinfo.character_id);
-    //     // chap_form.AddField("chapter", 5);
-    //     // chap_form.AddField("content", ScriptManager.scriptinfo.chapter_obj[5].title);
-    //     // chap_form.AddField("type", ScriptManager.scriptinfo.chapter_obj[5].type);
-    //     // chap_form.AddField("require", ScriptManager.scriptinfo.chapter_obj[5].detail);
-    //     // chap_form.AddField("etc", ScriptManager.scriptinfo.chapter_obj[5].etc);
-
-    //     // www = UnityWebRequest.Post("http://3.38.126.43:8080/scripts/goal", obj_form);
-    //     // yield return www.SendWebRequest();
-    // }
 }
