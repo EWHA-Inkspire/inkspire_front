@@ -30,26 +30,23 @@ public class ProfileModal : MonoBehaviour
         int user_id = PlayerPrefs.GetInt("user_id");
 
         // 유저 정보 요청
-        StartCoroutine(APIManager.api.GetRequest("/users/" + user_id + "/profile", ProcessProfile));
+        StartCoroutine(APIManager.api.GetRequest<ProfileInfo>("/users/" + user_id + "/profile", ProcessProfile));
         // 캐릭터 리스트 요청
-        StartCoroutine(APIManager.api.GetRequest("/users/" + user_id + "/characterList", ProcessCharacterList));
+        StartCoroutine(APIManager.api.GetRequest<CharacterList>("/users/" + user_id + "/characterList", ProcessCharacterList));
     }
 
-    private void ProcessProfile(Response response){
+    private void ProcessProfile(Response<ProfileInfo> response){
         if(response.success){
             Debug.Log(">>GET 결과: "+response.data);
-            ProfileInfo profile = JsonUtility.FromJson<ProfileInfo>(response.data);
-            Debug.Log("프로필 정보: " + profile.ToString());
         }
     }
 
-    private void ProcessCharacterList(Response response){
+    private void ProcessCharacterList(Response<CharacterList> response){
         if(response.success){
             Debug.Log(">>GET 결과: "+response.data);
-            CharacterList characterList = JsonUtility.FromJson<CharacterList>(response.data);
 
-            if(characterList != null) {
-                foreach(Character character in characterList.characters){
+            if(response.data != null) {
+                foreach(Character character in response.data.characters){
                     Debug.Log("캐릭터: " + character.ToString());
                 }
             }
