@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StatModalButton : MonoBehaviour
@@ -8,7 +6,7 @@ public class StatModalButton : MonoBehaviour
     [SerializeField] GameObject modal_obj;
     [SerializeField] private StatusGraph status_graph;
 
-    private Stats zero_stats = new Stats(0,0,0,0,0);
+    private readonly Stats zero_stats = new Stats(0,0,0,0,0);
 
     private CanvasRenderer radarMeshCanvasRenderer;
 
@@ -18,23 +16,22 @@ public class StatModalButton : MonoBehaviour
 
     public void OnModalOpen(){
         
-        modal_obj.gameObject.SetActive(true);
+        modal_obj.SetActive(true);
         ModalActivate();
     }
 
     public void OnModalClose(){
         status_graph.SetStats(zero_stats);
-        Invoke("Deactivate",0.03f);
+        Invoke(nameof(Deactivate), 0.03f);
     }
 
     private void Deactivate(){
-        modal_obj.gameObject.SetActive(false);
+        modal_obj.SetActive(false);
         ModalActivate();
     }
 
     public void ModalActivate(){
         status_graph.SetStats(PlayerStatManager.playerstat.p_stats);
-
     }
 
 }

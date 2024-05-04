@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Cci;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,15 +7,15 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager i_manager;
 
     [SerializeField] GameObject battle_window;
-    [SerializeField] public BattleEvent battle;
+    public BattleEvent battle;
     [SerializeField] GameObject inventory_window;
 
     [SerializeField] Image[] item_bg = new Image[8];
     [SerializeField] GameObject item_list;
-    private List<Item> inventory = new List<Item>();
-    private List<InventorySlot> slots = new List<InventorySlot>();
+    private List<Item> inventory = new();
+    private List<InventorySlot> slots = new();
     public InventorySlot slotPrefab;
-    private static int SLOT_SIZE = 8;
+    private readonly int SLOT_SIZE = 8;
 
     private Stats p_stats = PlayerStatManager.playerstat.p_stats;
     public bool is_battle = false;
@@ -59,7 +56,7 @@ public class InventoryManager : MonoBehaviour
     {
         Debug.Log("아이템 추가: \n" + item.item_name + ", " + item.item_id);
         inventory.Add(item);
-        slots[inventory.Count-1].setItem(item);
+        slots[inventory.Count-1].SetItem(item);
     }
 
     public void UseItem(Item item)
@@ -100,19 +97,19 @@ public class InventoryManager : MonoBehaviour
 
         if(is_battle){
             Debug.Log(">>is_battle:"+is_battle);
-            inventory_window.gameObject.SetActive(false);
+            inventory_window.SetActive(false);
             battle.SetNextTurn();
         }
     }
 
     void OpenButton(){
-        battle_window.gameObject.SetActive(true);
-        inventory_window.gameObject.SetActive(true);
+        battle_window.SetActive(true);
+        inventory_window.SetActive(true);
     }
 
     void CloseButton(){
-        inventory_window.gameObject.SetActive(false);
-        battle_window.gameObject.SetActive(false);
+        inventory_window.SetActive(false);
+        battle_window.SetActive(false);
     }
 
     public void InventoryButton(){

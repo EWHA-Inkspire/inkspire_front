@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +12,7 @@ public class PlayScene : MonoBehaviour
     [SerializeField] GameObject place_list;
     [SerializeField] Slider slider_HP;
 
-    private ScriptManager s_manager = ScriptManager.script_manager;
+    private readonly ScriptManager s_manager = ScriptManager.script_manager;
 
     void Start(){
 
@@ -46,27 +44,15 @@ public class PlayScene : MonoBehaviour
     }
 
     public void Changechap(int int_chapnum){
-        string rome_chapnum;
-        switch(int_chapnum){
-            case 0:
-                rome_chapnum = "I";
-                break;
-            case 1:
-                rome_chapnum = "II";
-                break;
-            case 2:
-                rome_chapnum = "III";
-                break;
-            case 3:
-                rome_chapnum = "IV";
-                break;
-            case 4:
-                rome_chapnum = "V";
-                break;
-            default:
-                rome_chapnum = "NULL";
-                break;
-        }
+        string rome_chapnum = int_chapnum switch
+        {
+            0 => "I",
+            1 => "II",
+            2 => "III",
+            3 => "IV",
+            4 => "V",
+            _ => "NULL",
+        };
         title_chapnum.text = "Chapter "+rome_chapnum;
     }
 }

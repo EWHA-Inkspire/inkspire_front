@@ -1,16 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Threading.Tasks;
-using UnityEngine.SceneManagement;
-using System.Linq;
 
 public class ScriptManager : MonoBehaviour
 {
     public static ScriptManager script_manager;
-    private int char_id = 0; // 추후 API 호출 결과 값으로 변경
     private string char_name;
     private int curr_chapter = 0;
     private int curr_place_idx = 0;

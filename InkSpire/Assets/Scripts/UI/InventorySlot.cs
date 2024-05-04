@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
@@ -12,7 +10,7 @@ public class InventorySlot : MonoBehaviour
     [SerializeField] GameObject item_object;
     private Item item;
 
-    public void setItem(Item item)
+    public void SetItem(Item item)
     {
         this.item = item;
         SetSprites();
@@ -20,22 +18,22 @@ public class InventorySlot : MonoBehaviour
 
     public void SetSprites()
     {
-        item_object.gameObject.SetActive(true);
+        item_object.SetActive(true);
         text_name.text = item?.item_name;
         text_quant.text = "1";
     }
 
-    public void setUseItem(){
+    public void SetUseItem(){
         InventoryManager.i_manager.SetTarget(item.item_id);
     }
 
     public void DelSprites()
     {
-        item_object.gameObject.SetActive(false);
+        item_object.SetActive(false);
     }
 
     // Getter
-    public Item getItem()
+    public Item GetItem()
     {
         return item;
     }

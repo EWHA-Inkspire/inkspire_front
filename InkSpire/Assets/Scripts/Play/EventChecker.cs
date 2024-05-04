@@ -1,9 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenAI;
-using TMPro;
 
 public class EventChecker : MonoBehaviour {
     public static EventChecker eventChecker;

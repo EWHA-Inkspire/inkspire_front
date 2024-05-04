@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum StatType
@@ -24,9 +22,9 @@ public class Stats
     private int atk;
     private int hp;
 
-    private static int STAT_MIN = 0;
-    private static int STAT_MAX = 100;
-    private static int HP_MAX = 1000;
+    private readonly int STAT_MIN = 0;
+    private readonly int STAT_MAX = 100;
+    private readonly int HP_MAX = 1000;
 
     public Stats(int luk, int def, int mntl, int dex, int atk)
     {

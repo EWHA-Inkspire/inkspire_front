@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using OpenAI;
 using System.Threading.Tasks;
 

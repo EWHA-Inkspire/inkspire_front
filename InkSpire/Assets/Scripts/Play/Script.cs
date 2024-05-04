@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using OpenAI;
@@ -13,7 +12,7 @@ public class Script
     private string intro = "placeholder";
 
     private List<ChatMessage> gpt_messages = new List<ChatMessage>();
-    private string GPT_ERROR = "No text was generated from this prompt.";
+    private readonly string GPT_ERROR = "No text was generated from this prompt.";
 
     public async Task InitScript(string genre, string time_background, string space_background)
     {

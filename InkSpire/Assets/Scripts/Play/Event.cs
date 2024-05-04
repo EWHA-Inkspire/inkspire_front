@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using OpenAI;
 using UnityEngine;
 using System.Threading.Tasks;
-using UnityEngine.Networking;
 
 public class Event
 {

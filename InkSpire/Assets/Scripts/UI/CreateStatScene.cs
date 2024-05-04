@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
-using Unity.VisualScripting;
 
 public class CreateStatScene : MonoBehaviour
 {
@@ -66,9 +64,9 @@ public class CreateStatScene : MonoBehaviour
 
     void WaitForGPT()
     {
-        if (!LoadingPannel.gameObject.activeSelf)
+        if (!LoadingPannel.activeSelf)
         {
-            LoadingPannel.gameObject.SetActive(true);
+            LoadingPannel.SetActive(true);
         }
         if (LoadingText.text == "게임을 생성중입니다 . . .")
         {
@@ -80,13 +78,13 @@ public class CreateStatScene : MonoBehaviour
         }
         if (!ScriptManager.script_manager.GetInitScript())
         {
-            Invoke("WaitForGPT", 1f);
+            Invoke(nameof(WaitForGPT), 1f);
         }
         else
         {
             Debug.Log(ScriptManager.script_manager.GetScript().GetIntro());
             Debug.Log(ScriptManager.script_manager.GetCurrChap());
-            LoadingPannel.gameObject.SetActive(false);
+            LoadingPannel.SetActive(false);
             SceneManager.LoadScene("5_Play");
         }
     }

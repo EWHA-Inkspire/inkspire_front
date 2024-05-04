@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -32,10 +30,5 @@ public class TextScrollUI : MonoBehaviour
     public void AppendMsg(string msg)
     {
         AppendMsg(new ChatMessage(){ Role = "assistant", Content = msg});
-
-        // story_object.text += "\n"+msg;
-        // LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
-        // scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scroll.content.sizeDelta.y);
-        // scroll.verticalNormalizedPosition = 0f;
     }
 }
