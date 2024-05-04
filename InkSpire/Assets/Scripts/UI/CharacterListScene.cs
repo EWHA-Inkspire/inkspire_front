@@ -35,4 +35,8 @@ public class CharacterListScene : MonoBehaviour
             new_prefab.transform.SetParent(GameObject.Find("CharacterList").transform);
         }
     }
+
+    public void OnClickCreateCharacter(){
+        SceneManager.LoadScene("3_CreateCharacter");
+    }
 }
