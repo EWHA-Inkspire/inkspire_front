@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ScriptManager : MonoBehaviour
@@ -58,16 +59,8 @@ public class ScriptManager : MonoBehaviour
         // 세계관 생성
         await script.InitScript(genre, time_background, space_background);
 
-        // API 호출 - 스크립트 정보 저장
-        ScenarioInfo scenarioInfo = new()
-        {
-            character = new CharacterInfo(char_name),
-            script = new ScriptInfo(genre, time_background, space_background, script.GetWorldDetail())
-        };
-        string json = JsonUtility.ToJson(scenarioInfo);
-        Debug.Log(json);
-
-        StartCoroutine(APIManager.api.PostRequest<PostScriptResponse>("/scripts", json, ProcessScriptResponse));
+        // API 호출 - 스크립트 정보 저장 -> 함수로 빼기
+        PostScenarioInfo();
 
         // 목표 생성
         await goals[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
@@ -99,17 +92,18 @@ public class ScriptManager : MonoBehaviour
         await script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
         Debug.Log(script.GetIntro());
         init_script = true;
-        // API 호출 (스크립트 내용 저장)
+
+        // API 호출 - 인트로 내용 저장
+        PutIntroInfo();
     }
 
     // 장소 별 이벤트 타입 설정 (3개 장소마다 목표 이벤트 출현 장소 정하는 로직)
     private void ChooseEventType()
     {
         int i = 1;
-        int flag = 0;
         while (i < 13)
         {
-            flag = UnityEngine.Random.Range(0, 3);
+            int flag = Random.Range(0, 3);
             if (flag == 0) {
                 game_events[i].event_type = 1;
             }
@@ -144,12 +138,45 @@ public class ScriptManager : MonoBehaviour
         }
     }
 
+    // API 호출
+    private void PostScenarioInfo()
+    {
+        ScenarioInfo scenarioInfo = new()
+        {
+            character = new CharacterInfo(char_name),
+            script = new ScriptInfo(script.GetGenre(), script.GetTimeBackground(),
+                        script.GetSpaceBackground(), script.GetWorldDetail())
+        };
+        string json = JsonUtility.ToJson(scenarioInfo);
+
+        StartCoroutine(APIManager.api.PostRequest<PostScriptResponse>("/scripts", json, ProcessScriptResponse));
+    }
+
+    private void PutIntroInfo()
+    {
+        IntroInfo introInfo = new()
+        {
+            scriptId = PlayerPrefs.GetInt("script_id"),
+            intro = script.GetIntro()
+        };
+        string json = JsonUtility.ToJson(introInfo);
+        
+        StartCoroutine(APIManager.api.PutRequest<Null>("/intro", json, (response) => { 
+            if (response.success) {
+                Debug.Log("Intro saved successfully");
+            } else {
+                Debug.Log("Failed to save intro");
+            }
+        }));
+    }
+
     // API 호출 결과를 받아오는 함수
     private void ProcessScriptResponse(Response<PostScriptResponse> response)
     {
-        if (response.code == 201)
+        if (response.success)
         {
             Debug.Log("Script saved successfully");
+            // 현재 플레이 중인 캐릭터 아이디 & 스크립트 아이디 저장
             PlayerPrefs.SetInt("character_id", response.data.characterId);
             PlayerPrefs.SetInt("script_id", response.data.scriptId);
         }

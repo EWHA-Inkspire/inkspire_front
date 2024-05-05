@@ -33,3 +33,11 @@ class PostScriptResponse
     public int characterId;
     public int scriptId;
 }
+
+[Serializable]
+// 인트로 정보 저장 요청 (POST)
+class IntroInfo
+{
+    public int scriptId;
+    public string intro;
+}
