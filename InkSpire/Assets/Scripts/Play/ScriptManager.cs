@@ -19,16 +19,14 @@ public class ScriptManager : MonoBehaviour
 
     private bool init_script = false;
 
-
     // 일반함수
     void Awake()
     {
-        // 씬이 바뀔 때 파괴되지 않음
-        DontDestroyOnLoad(this.gameObject);
-
-        if (script_manager == null)
-        {
+        if (script_manager == null) {
             script_manager = this;
+            DontDestroyOnLoad(script_manager);
+        } else if (script_manager != this) {
+            Destroy(script_manager);
         }
 
         // 필드 초기화
@@ -161,7 +159,7 @@ public class ScriptManager : MonoBehaviour
         };
         string json = JsonUtility.ToJson(introInfo);
         
-        StartCoroutine(APIManager.api.PutRequest<Null>("/intro", json, (response) => { 
+        StartCoroutine(APIManager.api.PutRequest<Null>("/scripts/intro", json, (response) => { 
             if (response.success) {
                 Debug.Log("Intro saved successfully");
             } else {
@@ -176,6 +174,11 @@ public class ScriptManager : MonoBehaviour
         if (response.success)
         {
             Debug.Log("Script saved successfully");
+
+            // 기존 PlayerPrefs에 저장된 캐릭터 & 스크립트 아이디 삭제
+            PlayerPrefs.DeleteKey("character_id");
+            PlayerPrefs.DeleteKey("script_id");
+
             // 현재 플레이 중인 캐릭터 아이디 & 스크립트 아이디 저장
             PlayerPrefs.SetInt("character_id", response.data.characterId);
             PlayerPrefs.SetInt("script_id", response.data.scriptId);
@@ -242,9 +245,10 @@ public class ScriptManager : MonoBehaviour
     }
 
     public Item[] GetCurrItems(){
-        var start = 0; var end = 0;
+        int start;  int end;
         // 최종 장소일 경우
-        if (curr_chapter == 4) {
+        if (curr_chapter == 4)
+        {
             start = 13; end = 13;
             return items[start..(end + 1)];
         }

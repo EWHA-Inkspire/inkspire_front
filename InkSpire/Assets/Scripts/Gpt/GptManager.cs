@@ -9,11 +9,12 @@ public class GptManager : MonoBehaviour
     private int cnt = 0;
 
     void Awake(){
-        // 씬이 바뀔 때 파괴되지 않음
-        DontDestroyOnLoad(this.gameObject);
-
         if(gpt == null){
             gpt = this;
+            DontDestroyOnLoad(gpt);
+        }
+        else if(gpt != this){
+            Destroy(this);
         }
     }
 

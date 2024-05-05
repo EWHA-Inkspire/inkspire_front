@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using OpenAI;
 using UnityEngine;
 using System.Threading.Tasks;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 public class Event
 {
     private List<ChatMessage> gpt_messages = new();
-public string event_trigger; // 이벤트 트리거
+    public string event_trigger; // 이벤트 트리거
     public string event_title; // 이벤트 제목
     public string event_intro; // 이벤트 도입 스크립트
     public string event_succ; // 이벤트 성공 스크립트

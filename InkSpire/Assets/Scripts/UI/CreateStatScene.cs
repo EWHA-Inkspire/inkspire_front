@@ -56,15 +56,6 @@ public class CreateStatScene : MonoBehaviour
         SetCharacterStat();
         LoadingText.text = "게임을 생성중입니다";
         WaitForGPT();
-
-        while (!PlayerPrefs.HasKey("character_id")) {
-            Debug.Log("Waiting for character_id");
-        }
-
-        int character_id = PlayerPrefs.GetInt("character_id");
-        CharacterStatInfo stat_info = new(stat_manager.p_stats.GetStatAmount(StatType.Attack), stat_manager.p_stats.GetStatAmount(StatType.Defence), stat_manager.p_stats.GetStatAmount(StatType.Luck), stat_manager.p_stats.GetStatAmount(StatType.Mental), stat_manager.p_stats.GetStatAmount(StatType.Dexterity), stat_manager.p_stats.GetStatAmount(StatType.Hp));
-        string json = JsonUtility.ToJson(stat_info);
-        StartCoroutine(APIManager.api.PutRequest<Null>("/characters/"+character_id+"/stat", json, ProcessStatResponse));
     }
 
     void WaitForGPT()
@@ -87,8 +78,14 @@ public class CreateStatScene : MonoBehaviour
         }
         else
         {
+            int character_id = PlayerPrefs.GetInt("character_id");
+            CharacterStatInfo stat_info = new(stat_manager.p_stats.GetStatAmount(StatType.Attack), stat_manager.p_stats.GetStatAmount(StatType.Defence), stat_manager.p_stats.GetStatAmount(StatType.Luck), stat_manager.p_stats.GetStatAmount(StatType.Mental), stat_manager.p_stats.GetStatAmount(StatType.Dexterity), stat_manager.p_stats.GetStatAmount(StatType.Hp));
+            string json = JsonUtility.ToJson(stat_info);
+            StartCoroutine(APIManager.api.PutRequest<Null>("/characters/"+character_id+"/stat", json, ProcessStatResponse));
+
             Debug.Log(ScriptManager.script_manager.GetScript().GetIntro());
             Debug.Log(ScriptManager.script_manager.GetCurrChap());
+
             LoadingPannel.SetActive(false);
             SceneManager.LoadScene("5_Play");
         }
@@ -96,6 +93,13 @@ public class CreateStatScene : MonoBehaviour
 
     private void ProcessStatResponse(Response<Null> response)
     {
-        Debug.Log(response.message);
+        if (response.success)
+        {
+            Debug.Log("Stat saved successfully");
+        }
+        else
+        {
+            Debug.Log("Failed to save stat");
+        }
     }
 }

@@ -23,11 +23,11 @@ public class InventoryManager : MonoBehaviour
     private int cnt = 0; // inven 창 열고 닫을 때 사용
 
     void Awake() {
-        // 씬이 바뀔 때 파괴되지 않음
-        DontDestroyOnLoad(this.gameObject);
-
-        if(i_manager == null){
+        if (i_manager == null) {
             i_manager = this;
+            DontDestroyOnLoad(i_manager);
+        } else if (i_manager != this) {
+            Destroy(this);
         }
 
         // Slot 초기화

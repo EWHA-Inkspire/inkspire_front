@@ -8,11 +8,12 @@ public class PlayerStatManager : MonoBehaviour
     public int wheapone=0;  // 현재 전투시 아이템 사용에 의한 공격력 가중치
 
     void Awake(){
-        // 씬이 바뀔 때 파괴되지 않음
-        DontDestroyOnLoad(this.gameObject);
-
         if(playerstat == null){
-            playerstat=this;
+            playerstat = this;
+            DontDestroyOnLoad(playerstat);
+        }
+        else if(playerstat != this){
+            Destroy(this);
         }
 
         p_stats = new Stats(0,0,0,0,0);

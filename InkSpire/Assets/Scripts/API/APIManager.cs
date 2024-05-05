@@ -12,11 +12,11 @@ public class APIManager : MonoBehaviour
     {
         if(api == null){
             api = this;
+            DontDestroyOnLoad(api);
         }
         else if(api != this){
-            Destroy(gameObject);
+            Destroy(this);
         }
-        DontDestroyOnLoad(gameObject);
     }
 
     public IEnumerator GetRequest<T>(string url, Action<Response<T>> callback)
