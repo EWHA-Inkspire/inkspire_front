@@ -11,7 +11,7 @@ public class Script
     private string world_detail = "";
     private string intro = "placeholder";
 
-    private List<ChatMessage> gpt_messages = new List<ChatMessage>();
+    private List<ChatMessage> gpt_messages = new();
     private readonly string GPT_ERROR = "No text was generated from this prompt.";
 
     public async Task InitScript(string genre, string time_background, string space_background)

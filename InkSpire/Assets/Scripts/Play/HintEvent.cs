@@ -12,8 +12,8 @@ public class HintEvent : MonoBehaviour
     [SerializeField] private Button send_button;
     [SerializeField] Play play_manager;
     private ScriptManager s_manager;
-    private List<ChatMessage> pnpc_messages = new List<ChatMessage>();
-    private ChatMessage input_msg = new ChatMessage();
+    private List<ChatMessage> pnpc_messages = new();
+    private ChatMessage input_msg = new();
     private TextScrollUI text_scroll;
     private Npc pro_npc;
     private int save_idx = 0; // 인덱스 몇번까지 play_manager로 보냈는지 체크

@@ -3,12 +3,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 
-class NewAccount {
-    public string email;
-    public string password;
-    public string nickname;
-}
-
 public class SignUp : MonoBehaviour
 {
     [SerializeField] TMP_InputField input_email;
@@ -43,10 +37,12 @@ public class SignUp : MonoBehaviour
             return;
         }
 
-        NewAccount account = new NewAccount();
-        account.email = user_email;
-        account.nickname = user_nickname;
-        account.password = user_pw;
+        NewAccount account = new()
+        {
+            email = user_email,
+            nickname = user_nickname,
+            password = user_pw
+        };
         string account_json = JsonUtility.ToJson(account);
         StartCoroutine(APIManager.api.PostRequest<Null>("/users/signup", account_json, ProcessResponse));
     }

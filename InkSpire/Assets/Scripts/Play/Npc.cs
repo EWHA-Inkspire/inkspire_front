@@ -17,7 +17,7 @@ public class Npc
     private Stats stat;
     private string detail = "";
 
-    private List<ChatMessage> gpt_messages = new List<ChatMessage>();
+    private List<ChatMessage> gpt_messages = new();
     private readonly string GPT_ERROR = "No text was generated from this prompt.";
 
     public async Task InitNpc(string type, string world_detail, string genre, string char_name)

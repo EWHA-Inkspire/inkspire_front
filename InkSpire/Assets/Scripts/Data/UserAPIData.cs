@@ -1,6 +1,13 @@
 using System;
 using System.Collections.Generic;
 
+// 회원가입 요청 API (POST)
+class NewAccount {
+    public string email;
+    public string password;
+    public string nickname;
+}
+
 // 로그인 요청 API (POST)
 class LoginInfo {
     public string email;

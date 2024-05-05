@@ -59,9 +59,7 @@ public class Stats
                 break;
         }
 
-        if (OnStatsChanged != null) {
-            OnStatsChanged(this, EventArgs.Empty);
-        }
+        OnStatsChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public int GetStatAmount(StatType type)

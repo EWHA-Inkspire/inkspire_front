@@ -8,7 +8,7 @@ public class Place
     // 특수문자, 괄호, 점 제거를 위한 정규 표현식
     Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
 
-    private List<ChatMessage> gpt_messages = new List<ChatMessage>();
+    private List<ChatMessage> gpt_messages = new();
     public string place_name = ""; //장소 이름
     public string place_info = ""; //장소 설명
     public int ANPC_exist; //ANPC 등장 여부

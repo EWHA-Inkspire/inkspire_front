@@ -10,7 +10,7 @@ public class Goal
     private string etc;
     private bool clear;
 
-    private List<ChatMessage> gpt_messages = new List<ChatMessage>();
+    private List<ChatMessage> gpt_messages = new();
 
     public async Task InitGoal(string time_background, string space_background, string world_detail, string genre)
     {

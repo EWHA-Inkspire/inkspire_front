@@ -7,11 +7,11 @@ public class EventChecker : MonoBehaviour {
     public static EventChecker eventChecker;
 
     void Awake(){
-        // 씬이 바뀔 때 파괴되지 않음
-        DontDestroyOnLoad(this.gameObject);
-
         if(eventChecker == null){
             eventChecker = this;
+        }
+        else if(eventChecker != this){
+            Destroy(gameObject);
         }
     }
 
