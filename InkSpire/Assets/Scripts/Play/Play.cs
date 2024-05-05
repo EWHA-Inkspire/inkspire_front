@@ -19,6 +19,17 @@ public class Play : MonoBehaviour
     private ChatMessage input_msg = new();
     private static ScriptManager s_manager = ScriptManager.script_manager;
     private string system_prompt = "";
+    private int save_idx = 0;
+    private readonly int SAVING_INTERVAL = 10;
+
+    void Awake()
+    {
+        int script_id = PlayerPrefs.GetInt("script_id");
+        int chapter_num = ScriptManager.script_manager.GetCurrChap()+1;
+
+        // 스크립트 대화 내용 조회
+        StartCoroutine(APIManager.api.GetRequest<ChatList>("/chat/" + script_id + "/" + chapter_num, ProcessChatList));
+    }
 
     void Start(){
         SetSystemPrompt();
@@ -43,6 +54,7 @@ public class Play : MonoBehaviour
             text_scroll.AppendMsg(introMessage);
         }
     }
+
     private void SetSystemPrompt()
     {
         s_manager = ScriptManager.script_manager;
@@ -148,6 +160,8 @@ public class Play : MonoBehaviour
 
         send_button.enabled = true;
         player_input.enabled = true;
+
+        PostChatList();
     }
 
     public void PlaceButton(int place_idx)
@@ -184,6 +198,66 @@ public class Play : MonoBehaviour
             battle_event.SetBattle(BattleEvent.BType.MOB, 3);
         }
         Debug.Log("placeButton item name: " +s_manager.GetCurrItem().item_name);
+    }
+
+    // API 호출 - 채팅 리스트 저장
+    private void PostChatList()
+    {
+        if (save_idx + SAVING_INTERVAL >= messages.Count) {
+            return;
+        }
+
+        var chatList = new ChatList()
+        {
+            chats = messages.GetRange(save_idx, messages.Count - save_idx)
+                .Select(msg => new ChatInfo()
+                {
+                    scriptId = PlayerPrefs.GetInt("script_id"),
+                    role = msg.Role,
+                    content = msg.Content,
+                    chapter = ScriptManager.script_manager.GetCurrChap() + 1
+                }).ToList()
+        };
+
+        string chats = JsonUtility.ToJson(chatList);
+
+        StartCoroutine(APIManager.api.PostRequest<ChatList>("/chat", chats, response =>
+        {
+            if (!response.success)
+            {
+                Debug.Log("채팅 리스트 저장 실패: " + response.message);
+                return;
+            }
+            save_idx = messages.Count;
+        }));
+    }
+
+    // API 호출 결과 처리
+    private void ProcessChatList(Response<ChatList> response)
+    {
+        if (!response.success)
+        {
+            Debug.Log("채팅 리스트 조회 실패: " + response.message);
+            return;
+        }
+
+        if (response.data == null)
+        {
+            Debug.Log("채팅 리스트가 없습니다.");
+            return;
+        }
+
+        foreach (var chat in response.data.chats)
+        {
+            var newMessage = new ChatMessage()
+            {
+                Role = chat.role,
+                Content = chat.content
+            };
+            messages.Add(newMessage);
+            text_scroll.AppendMsg(newMessage);
+        }
+        save_idx = messages.Count; // 프롬프팅 인덱싱 추가
     }
     
 
