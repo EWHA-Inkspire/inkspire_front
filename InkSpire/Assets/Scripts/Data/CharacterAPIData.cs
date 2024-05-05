@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
+// 캐릭터 정보 저장 요청 (POST)
 class CharacterInfo
 {
     public int userId = PlayerPrefs.GetInt("user_id");
@@ -15,6 +16,7 @@ class CharacterInfo
 }
 
 [Serializable]
+// 캐릭터 스탯 업데이트 (PUT)
 class CharacterStatInfo
 {
     public int luck;
@@ -37,6 +39,7 @@ class CharacterStatInfo
 
 
 [Serializable]
+// 캐릭터 별 챕터 리스트 조회 응답 (GET)
 public class ChapterList {
     public List<int> chapters = new();
 }

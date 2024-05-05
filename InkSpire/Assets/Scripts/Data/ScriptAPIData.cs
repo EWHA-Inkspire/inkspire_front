@@ -1,7 +1,7 @@
-using UnityEngine;
 using System;
 
 [Serializable]
+// 캐릭터 & 스크립트 정보 저장 요청 (POST)
 class ScenarioInfo
 {
     public CharacterInfo character;
@@ -9,6 +9,7 @@ class ScenarioInfo
 }
 
 [Serializable]
+// 스크립트 정보 저장 요청 (POST)
 class ScriptInfo
 {
     public string timeBackground;
@@ -26,6 +27,7 @@ class ScriptInfo
 }
 
 [Serializable]
+// 캐릭터 & 스크립트 정보 저장 응답
 class PostScriptResponse
 {
     public int characterId;

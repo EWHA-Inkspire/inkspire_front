@@ -15,7 +15,7 @@ class LoginInfo {
 }
 
 [Serializable]
-// 프로필 정보 요청 API (GET)
+// 프로필 정보 응답 API (GET)
 public class ProfileInfo {
     public string nickname;
     public string email;
@@ -28,13 +28,13 @@ public class ProfileInfo {
 }
 
 [Serializable]
-// 캐릭터 리스트 요청 API (GET)
+// 캐릭터 리스트 응답 API (GET)
 public class CharacterList {
     public List<Character> characters = new();
 }
 
 [Serializable]
-// 캐릭터 리스트 요청 API (GET)
+// 캐릭터 정보 응답 API (GET)
 public class Character {
     public int id;
     public string name;
