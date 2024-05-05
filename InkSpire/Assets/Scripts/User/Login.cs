@@ -2,11 +2,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-class LoginInfo {
-    public string email;
-    public string password;
-}
-
 public class Login : MonoBehaviour
 {
     [SerializeField] TMP_InputField input_email;
@@ -27,9 +22,11 @@ public class Login : MonoBehaviour
             return;
         }
 
-        LoginInfo login_info = new LoginInfo();
-        login_info.email = input_email.text;
-        login_info.password = input_pw.text;
+        LoginInfo login_info = new()
+        {
+            email = input_email.text,
+            password = input_pw.text
+        };
         string login_json = JsonUtility.ToJson(login_info);
         StartCoroutine(APIManager.api.PostRequest<int>("/users/login", login_json, ProcessResponse));
     }
