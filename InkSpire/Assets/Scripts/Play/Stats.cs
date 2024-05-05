@@ -64,29 +64,31 @@ public class Stats
 
     public int GetStatAmount(StatType type)
     {
-        switch(type) {
-            case StatType.Luck:          return luk;
-            case StatType.Defence:          return def;
-            case StatType.Mental:       return mntl;
-            case StatType.Dexterity:    return dex;
-            case StatType.Attack:       return atk;
-            case StatType.Hp:           return hp;
-            case StatType.MaxHP:        return HP_MAX;
-            default: return 0;
-        }
+        return type switch
+        {
+            StatType.Luck => luk,
+            StatType.Defence => def,
+            StatType.Mental => mntl,
+            StatType.Dexterity => dex,
+            StatType.Attack => atk,
+            StatType.Hp => hp,
+            StatType.MaxHP => HP_MAX,
+            _ => 0,
+        };
     }
 
     public float GetStatAmountNormalized(StatType type)
     {
-        switch(type) {
-            case StatType.Luck:          return (float) luk/STAT_MAX;
-            case StatType.Defence:          return (float) def/STAT_MAX;
-            case StatType.Mental:       return (float) mntl/STAT_MAX;
-            case StatType.Dexterity:    return (float) dex/STAT_MAX;
-            case StatType.Attack:       return (float) atk/STAT_MAX;
-            case StatType.Hp:           return (float) hp/HP_MAX;
-            default: return 0f;
-        }
+        return type switch
+        {
+            StatType.Luck => (float)luk / STAT_MAX,
+            StatType.Defence => (float)def / STAT_MAX,
+            StatType.Mental => (float)mntl / STAT_MAX,
+            StatType.Dexterity => (float)dex / STAT_MAX,
+            StatType.Attack => (float)atk / STAT_MAX,
+            StatType.Hp => (float)hp / HP_MAX,
+            _ => 0f,
+        };
     }
     
 }

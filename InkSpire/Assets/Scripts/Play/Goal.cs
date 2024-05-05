@@ -21,7 +21,7 @@ public class Goal
     public async Task InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj)
     {
         // 챕터 목표 생성자(챕터0)
-        Goal tmp = new Goal();
+        Goal tmp = new();
         await ChapterObjectiveGPT(time_background,space_background,world_detail,genre,0,final_obj,tmp);
     }
 

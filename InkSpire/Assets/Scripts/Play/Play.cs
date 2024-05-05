@@ -98,7 +98,7 @@ public class Play : MonoBehaviour
             {
                 // 이벤트 트리거 도입 스크립트 출력
                 text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
-                ChatMessage event_msg = new ChatMessage
+                ChatMessage event_msg = new()
                 {
                     Role = "user",
                     Content = "판정 이벤트 발생"

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 public class Place
 {
     // 특수문자, 괄호, 점 제거를 위한 정규 표현식
-    Regex regex = new Regex("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
+    readonly Regex regex = new("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
 
     private List<ChatMessage> gpt_messages = new();
     public string place_name = ""; //장소 이름
@@ -45,7 +45,7 @@ public class Place
 
         gpt_messages.Clear();
 
-        ChatMessage prompt_msg = new ChatMessage()
+        ChatMessage prompt_msg = new()
         {
             Role = "system",
             Content = @"당신은 조력자 NPC가 머무는 장소를 제시한다.
