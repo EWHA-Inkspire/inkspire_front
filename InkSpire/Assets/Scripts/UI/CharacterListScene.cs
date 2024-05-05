@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class CharacterListScene : MonoBehaviour
 {
     [SerializeField] CharacterButton character_prefab;
-    [SerializeField] GameObject character_list;
+    [SerializeField] GameObject chapter_list;
     
     void Start()
     {
@@ -32,7 +32,7 @@ public class CharacterListScene : MonoBehaviour
 
         foreach(Character character in response.data.characters){
             CharacterButton new_prefab = Instantiate(character_prefab);
-            new_prefab.SetCharacter(character, character_list);
+            new_prefab.SetCharacter(character, chapter_list);
             new_prefab.transform.SetParent(GameObject.Find("CharacterList").transform);
         }
     }

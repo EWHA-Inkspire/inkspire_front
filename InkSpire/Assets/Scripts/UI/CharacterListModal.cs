@@ -18,12 +18,12 @@ public class CharacterListModal : MonoBehaviour
         chapter_5.SetActive(false);
     }
 
-    public void SetChapter(string character_name)
+    public void SetChapter(string character_name, int char_id)
     {
         title.text = character_name + "\'s Story";
 
         // 챕터 리스트 요청
-        StartCoroutine(APIManager.api.GetRequest<ChapterList>("/characters/" + character_name + "/chapterList", ProcessChapterList));
+        StartCoroutine(APIManager.api.GetRequest<ChapterList>("/characters/" + char_id + "/chapterList", ProcessChapterList));
     }
 
     private void ProcessChapterList(Response<ChapterList> response){
