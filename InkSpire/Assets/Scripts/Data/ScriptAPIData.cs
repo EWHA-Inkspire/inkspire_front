@@ -2,7 +2,7 @@ using System;
 
 [Serializable]
 // 캐릭터 & 스크립트 정보 저장 요청 (POST)
-class ScenarioInfo
+public class ScenarioInfo
 {
     public CharacterInfo character;
     public ScriptInfo script;
@@ -10,7 +10,7 @@ class ScenarioInfo
 
 [Serializable]
 // 스크립트 정보 저장 요청 (POST)
-class ScriptInfo
+public class ScriptInfo
 {
     public string timeBackground;
     public string spaceBackground;
@@ -39,7 +39,7 @@ public class GetScriptInfo
 
 [Serializable]
 // 캐릭터 & 스크립트 정보 저장 응답
-class PostScriptResponse
+public class PostScriptResponse
 {
     public int characterId;
     public int scriptId;
@@ -47,7 +47,7 @@ class PostScriptResponse
 
 [Serializable]
 // 인트로 정보 저장 요청 (POST)
-class IntroInfo
+public class IntroInfo
 {
     public int scriptId;
     public string intro;
