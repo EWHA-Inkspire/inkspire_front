@@ -29,6 +29,10 @@ public class Play : MonoBehaviour
 
         // 스크립트 대화 내용 조회
         StartCoroutine(APIManager.api.GetRequest<ChatList>("/chat/" + script_id + "/" + chapter_num, ProcessChatList));
+
+        // 인벤토리 조회
+        int character_id = PlayerPrefs.GetInt("character_id");
+        StartCoroutine(APIManager.api.GetRequest<GetInventory>("/inventory/" + character_id, ProcessInventory));
     }
 
     void Start(){
@@ -258,6 +262,28 @@ public class Play : MonoBehaviour
             text_scroll.AppendMsg(newMessage);
         }
         save_idx = messages.Count; // 프롬프팅 인덱싱 추가
+    }
+
+    private void ProcessInventory(Response<GetInventory> response)
+    {
+        if (!response.success)
+        {
+            Debug.Log("인벤토리 조회 실패: " + response.message);
+            return;
+        }
+
+        if (response.data == null)
+        {
+            Debug.Log("인벤토리가 없습니다.");
+            return;
+        }
+
+        foreach (var item in response.data.items)
+        {
+            Item[] items = ScriptManager.script_manager.GetItems();
+            int idx = System.Array.FindIndex(items, x => x.item_id == item.itemId);
+            InventoryManager.i_manager.AddItem(items[idx]);
+        }
     }
     
 

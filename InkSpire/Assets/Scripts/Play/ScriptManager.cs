@@ -310,6 +310,10 @@ public class ScriptManager : MonoBehaviour
         return map[curr_place_idx];
     }
 
+    public Item[] GetItems(){
+        return items;
+    }
+
     public Item[] GetCurrItems(){
         int start;  int end;
         // 최종 장소일 경우
