@@ -16,7 +16,7 @@ class LoginInfo {
 
 [Serializable]
 // 프로필 정보 응답 API (GET)
-public class ProfileInfo {
+class ProfileInfo {
     public string nickname;
     public string email;
     public int endingCount;

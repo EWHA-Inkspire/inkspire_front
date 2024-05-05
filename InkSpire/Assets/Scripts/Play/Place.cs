@@ -9,6 +9,7 @@ public class Place
     readonly Regex regex = new("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
 
     private List<ChatMessage> gpt_messages = new();
+    public int id; //장소 id
     public string place_name = ""; //장소 이름
     public string place_info = ""; //장소 설명
     public int ANPC_exist; //ANPC 등장 여부
@@ -139,5 +140,13 @@ public class Place
     public void SetClear(bool clr)
     {
         clear = clr;
+    }
+
+    public void SetMapInfo(GetMapInfo map_info)
+    {
+        id = map_info.mapId;
+        place_name = map_info.name;
+        place_info = map_info.info;
+        ANPC_exist = map_info.anpc ? 1 : 0;
     }
 }

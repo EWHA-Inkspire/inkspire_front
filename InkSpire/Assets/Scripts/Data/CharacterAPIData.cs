@@ -40,6 +40,6 @@ class CharacterStatInfo
 
 [Serializable]
 // 캐릭터 별 챕터 리스트 조회 응답 (GET)
-public class ChapterList {
+class ChapterList {
     public List<int> chapters = new();
 }

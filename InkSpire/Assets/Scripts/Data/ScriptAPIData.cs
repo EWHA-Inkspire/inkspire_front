@@ -27,6 +27,17 @@ class ScriptInfo
 }
 
 [Serializable]
+public class GetScriptInfo
+{
+    public int scriptId;
+    public string timeBackground;
+    public string spaceBackground;
+    public string genre;
+    public string worldDetail;
+    public string intro;
+}
+
+[Serializable]
 // 캐릭터 & 스크립트 정보 저장 응답
 class PostScriptResponse
 {

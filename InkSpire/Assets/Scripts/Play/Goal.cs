@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 public class Goal
 {
+    private int id;
     private int type;
     private string title = "";
     private string detail;
@@ -251,5 +252,26 @@ public class Goal
     public bool GetClear()
     {
         return clear;
+    }
+
+    // Setter
+    public void SetGoalInfo(GetGoalInfo goal_info)
+    {
+        id = goal_info.goalId;
+        type = ConvertToType(goal_info.type);
+        title = goal_info.title;
+        detail = goal_info.detail;
+        etc = goal_info.etc;
+    }
+
+    private int ConvertToType(string type)
+    {
+        return type switch
+        {
+            "MONSTER" => 1,
+            "ITEM" => 2,
+            "REPORT" => 3,
+            _ => 0,
+        };
     }
 }

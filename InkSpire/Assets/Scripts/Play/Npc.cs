@@ -106,4 +106,11 @@ public class Npc
     {
         return this.detail;
     }
+
+    public void SetNpcInfo(GetNpcInfo npc) {
+        this.name = npc.name;
+        this.detail = npc.detail;
+        this.stat = new Stats(npc.luck, npc.defence, npc.mental, npc.dexterity, npc.attack);
+        this.stat.SetStatAmount(StatType.Hp, npc.hp);
+    }
 }

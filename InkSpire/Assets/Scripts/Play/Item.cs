@@ -132,4 +132,14 @@ public class Item
 
         item_name = regex.Replace(response, "");
     }
+
+    // Setter
+    public void SetItemInfo(GetItemInfo itemInfo)
+    {
+        item_id = itemInfo.itemId;
+        item_name = itemInfo.name;
+        item_info = itemInfo.info;
+        item_type = (ItemType)Enum.Parse(typeof(ItemType), itemInfo.type);
+        item_stat = itemInfo.stat;
+    }
 }

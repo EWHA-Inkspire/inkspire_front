@@ -26,7 +26,7 @@ public class ScriptManager : MonoBehaviour
             script_manager = this;
             DontDestroyOnLoad(script_manager);
         } else if (script_manager != this) {
-            Destroy(script_manager);
+            Destroy(this);
         }
 
         // 필드 초기화
@@ -175,10 +175,6 @@ public class ScriptManager : MonoBehaviour
         {
             Debug.Log("Script saved successfully");
 
-            // 기존 PlayerPrefs에 저장된 캐릭터 & 스크립트 아이디 삭제
-            PlayerPrefs.DeleteKey("character_id");
-            PlayerPrefs.DeleteKey("script_id");
-
             // 현재 플레이 중인 캐릭터 아이디 & 스크립트 아이디 저장
             PlayerPrefs.SetInt("character_id", response.data.characterId);
             PlayerPrefs.SetInt("script_id", response.data.scriptId);
@@ -203,6 +199,62 @@ public class ScriptManager : MonoBehaviour
     public void SetInitScript(bool setscript)
     {
         init_script = setscript;
+    }
+
+    public void SetScriptInfo(GetScriptInfo script_info)
+    {
+        script.SetScriptInfo(script_info);
+    }
+
+    public void SetGoalList(GetGoalList goal_list)
+    {
+        for (int i = 0; i < goals.Length; i++)
+        {
+            int chapter_num = goal_list.goals[i].chapter;
+            this.goals[chapter_num].SetGoalInfo(goal_list.goals[i]);
+        }
+    }
+
+    public void SetNpcList(GetNpcList npc_list)
+    {
+        foreach (GetNpcInfo npc in npc_list.npcs)
+        {
+            if(npc.pnpc)
+                pro_npc.SetNpcInfo(npc);
+            else
+                anta_npc.SetNpcInfo(npc);
+        }
+    }
+
+    public void SetMapList(GetMapList map_list)
+    {
+        foreach (GetMapInfo map in map_list.maps)
+        {
+            int idx = map.idx;
+            this.map[idx].SetMapInfo(map);
+            this.place_names[idx] = map.name;
+        }
+    }
+
+    public void SetItemList(GetItemList item_list)
+    {
+        foreach (GetItemInfo item in item_list.items)
+        {
+            int mapId = item.mapId;
+            // map의 mapId와 item의 mapId가 같은 경우의 map 배열의 idx 찾기
+            int idx = System.Array.FindIndex(map, x => x.id == mapId);
+            this.items[idx].SetItemInfo(item);
+        }
+    }
+
+    public void SetEventList(GetEventList event_list)
+    {
+        foreach (GetEventInfo game_event in event_list.events)
+        {
+            int mapId = game_event.mapId;
+            int idx = System.Array.FindIndex(map, x => x.id == mapId);
+            this.game_events[idx].SetEventInfo(game_event);
+        }
     }
 
     // Getter

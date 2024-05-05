@@ -141,4 +141,14 @@ public class Script
     public string GetIntro(){
         return this.intro;
     }
+
+    // Setter
+    public void SetScriptInfo(GetScriptInfo script_info)
+    {
+        this.genre = script_info.genre;
+        this.time_background = script_info.timeBackground;
+        this.space_background = script_info.spaceBackground;
+        this.world_detail = script_info.worldDetail;
+        this.intro = script_info.intro;
+    }
 }

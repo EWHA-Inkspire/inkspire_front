@@ -94,4 +94,14 @@ public class Event
         event_succ = event_arr[5];
         event_fail = event_arr[7];
     }
+
+    public void SetEventInfo(GetEventInfo event_info)
+    {
+        event_trigger = event_info.eventTrigger;
+        event_title = event_info.title;
+        event_intro = event_info.intro;
+        event_succ = event_info.success;
+        event_fail = event_info.failure;
+        event_type = event_info.goal ? 1 : 0;
+    }
 }

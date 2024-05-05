@@ -48,9 +48,7 @@ public class StartScene : MonoBehaviour
 
     // 로그아웃 버튼
     public void OnClickLogout() {
-        PlayerPrefs.DeleteKey("user_id");
-        PlayerPrefs.DeleteKey("character_id");
-        PlayerPrefs.DeleteKey("script_id");
+        PlayerPrefs.DeleteAll();
         SetButtonsForLoggedOutUser();
     }
 
