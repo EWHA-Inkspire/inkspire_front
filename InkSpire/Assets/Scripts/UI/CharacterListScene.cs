@@ -5,6 +5,7 @@ public class CharacterListScene : MonoBehaviour
 {
     [SerializeField] CharacterButton character_prefab;
     [SerializeField] GameObject character_list;
+    
     void Start()
     {
         if(!PlayerPrefs.HasKey("user_id")) {

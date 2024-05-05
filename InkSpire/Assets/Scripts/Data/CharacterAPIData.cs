@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -32,4 +33,10 @@ class CharacterStatInfo
         this.dexterity = dexterity;
         this.hp = hp;
     }
+}
+
+
+[Serializable]
+public class ChapterList {
+    public List<int> chapters = new();
 }

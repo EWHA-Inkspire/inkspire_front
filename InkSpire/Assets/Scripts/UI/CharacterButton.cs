@@ -14,5 +14,7 @@ public class CharacterButton : MonoBehaviour
     public void OnClick()
     {
         chapter_list.SetActive(true);
+        CharacterListModal modal = new();
+        modal.SetChapter(character_name.text);
     }
 }
