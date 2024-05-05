@@ -5,6 +5,7 @@ public class ProfileModal : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI title;
     [SerializeField] TMPro.TextMeshProUGUI nickname;
     [SerializeField] TMPro.TextMeshProUGUI email;
+    public GameObject characterName;
 
     private readonly int LEVEL1 = 3;
     private readonly int LEVEL2 = 5;
@@ -50,11 +51,12 @@ public class ProfileModal : MonoBehaviour
 
     private void ProcessCharacterList(Response<CharacterList> response){
         if(response.success){
-            Debug.Log(">>GET 결과: "+response.data);
-
             if(response.data != null) {
                 foreach(Character character in response.data.characters){
-                    Debug.Log("캐릭터: " + character.ToString());
+                    // 캐릭터 이름 표시 게임 오브젝트 새로 생성
+                    GameObject new_character = Instantiate(characterName);
+                    new_character.GetComponent<TMPro.TextMeshProUGUI>().text = character.name;
+                    new_character.transform.SetParent(GameObject.Find("CharacterList").transform);
                 }
             }
         }
