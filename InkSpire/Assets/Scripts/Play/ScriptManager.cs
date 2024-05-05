@@ -186,6 +186,16 @@ public class ScriptManager : MonoBehaviour
     }
 
     // Settter
+    public void SetCurrChap(int chap)
+    {
+        curr_chapter = chap;
+    }
+
+    public void SetCharName(string name)
+    {
+        char_name = name;
+    }
+
     public void SetCurrPlace(int idx)
     {
         curr_place_idx = idx;
@@ -208,10 +218,10 @@ public class ScriptManager : MonoBehaviour
 
     public void SetGoalList(GetGoalList goal_list)
     {
-        for (int i = 0; i < goals.Length; i++)
+        for (int i = 0; i < goal_list.goals.Count; i++)
         {
             int chapter_num = goal_list.goals[i].chapter;
-            this.goals[chapter_num].SetGoalInfo(goal_list.goals[i]);
+            this.goals[chapter_num-1].SetGoalInfo(goal_list.goals[i]);
         }
     }
 
@@ -233,6 +243,10 @@ public class ScriptManager : MonoBehaviour
             int idx = map.idx;
             this.map[idx].SetMapInfo(map);
             this.place_names[idx] = map.name;
+
+            if(map.lastVisited) {
+                curr_place_idx = idx;
+            }
         }
     }
 

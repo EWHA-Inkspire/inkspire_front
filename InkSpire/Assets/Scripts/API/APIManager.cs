@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class APIManager : MonoBehaviour
 {
     public static APIManager api;
-    private readonly string BASE_URL = "http://3.38.126.43:8080";
+    private readonly string BASE_URL = "http://localhost:8080"; // 3.38.126.43
 
     private void Awake()
     {

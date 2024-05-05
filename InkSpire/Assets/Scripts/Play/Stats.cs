@@ -36,6 +36,16 @@ public class Stats
         this.hp = HP_MAX;
     }
 
+    public void SetCharacterStat(CharacterStatInfo statInfo)
+    {
+        SetStatAmount(StatType.Luck, statInfo.luck);
+        SetStatAmount(StatType.Defence, statInfo.defence);
+        SetStatAmount(StatType.Mental, statInfo.mental);
+        SetStatAmount(StatType.Dexterity, statInfo.dexterity);
+        SetStatAmount(StatType.Attack, statInfo.attack);
+        SetStatAmount(StatType.Hp, statInfo.hp);
+    }
+
     public void SetStatAmount(StatType type, int amount)
     {
         switch(type) {

@@ -21,6 +21,7 @@ public class CharacterListModal : MonoBehaviour
     public void SetChapter(string character_name, int char_id)
     {
         title.text = character_name + "\'s Story";
+        PlayerPrefs.SetString("character_name", character_name);
 
         // 챕터 리스트 요청
         StartCoroutine(APIManager.api.GetRequest<ChapterList>("/characters/" + char_id + "/chapterList", ProcessChapterList));
