@@ -78,6 +78,9 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
             ScriptManager.script_manager.SetPlaceClear(true);
             play_manager.AddToMessagesGPT(result_msg);
             result_msg.Content = ScriptManager.script_manager.GetCurrEvent().event_succ.Replace(".", ".\n");
+            if(map_item.item_type==ItemType.Item||map_item.item_type==ItemType.Monster||map_item.item_type==ItemType.Report){
+                ScriptManager.script_manager.SetNextChapter();
+            }
         }
         else
         {
