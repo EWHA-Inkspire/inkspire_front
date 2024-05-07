@@ -4,20 +4,74 @@ using TMPro;
 
 public class StartScene : MonoBehaviour
 {
+    public static StartScene start_scene;
     [SerializeField] private TextMeshProUGUI button_top;
     [SerializeField] private TextMeshProUGUI button_bottom;
     [SerializeField] private GameObject logged_in;
     [SerializeField] private GameObject logged_out;
 
+    public string title;
+    public string nickname;
+    public string email;
+
+    private readonly int LEVEL1 = 3;
+    private readonly int LEVEL2 = 5;
+    private readonly int LEVEL3 = 10;
+    private readonly int LEVEL4 = 20;
+
     void Awake()
     {   
-        // 로그인 여부에 따라 버튼 내용 변경
+        if(start_scene == null){
+            start_scene = this;
+        }
+        else if(start_scene != this){
+            Destroy(this);
+        }
+
+        int user_id = PlayerPrefs.GetInt("user_id");
+        // 유저 정보 요청
+        StartCoroutine(APIManager.api.GetRequest<ProfileInfo>("/users/" + user_id + "/profile", ProcessProfile));
+    }
+
+    void Start()
+    {
         if (PlayerPrefs.HasKey("user_id"))
         {
             SetButtonsForLoggedInUser();
         }
         else
         {
+            SetButtonsForLoggedOutUser();
+        }
+    }
+
+    private void ProcessProfile(Response<ProfileInfo> response){
+        if(response == null) {
+            Debug.Log("서버와의 통신에 실패했습니다.");
+            return;
+        }
+
+        if(response.success){
+            nickname = response.data.nickname;
+            email = response.data.email;
+            
+            if(response.data.endingCount <= LEVEL1) {
+                title = "초보 사서";
+            }
+            else if(response.data.endingCount <= LEVEL2) {
+                title = "견습 사서";
+            }
+            else if(response.data.endingCount <= LEVEL3) {
+                title = "일반 사서";
+            }
+            else if(response.data.endingCount <= LEVEL4) {
+                title = "베테랑 사서";
+            }
+            else {
+                title = "도서관장";
+            }
+        } else {
+            PlayerPrefs.DeleteAll();
             SetButtonsForLoggedOutUser();
         }
     }

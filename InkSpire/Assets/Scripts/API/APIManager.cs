@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 public class APIManager : MonoBehaviour
 {
     public static APIManager api;
-    private readonly string BASE_URL = "http://localhost:8080"; // 3.38.126.43
 
     private void Awake()
     {
@@ -21,7 +20,7 @@ public class APIManager : MonoBehaviour
 
     public IEnumerator GetRequest<T>(string url, Action<Response<T>> callback)
     {
-        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + url);
+        UnityWebRequest www = UnityWebRequest.Get(Const.BASE_URL + url);
         yield return www.SendWebRequest();
 
         if (www != null)
@@ -35,8 +34,9 @@ public class APIManager : MonoBehaviour
 
     public IEnumerator PostRequest<T>(string url, string jsonfile, Action<Response<T>> callback)
     {
+        Debug.Log(Const.BASE_URL + url);
         byte[] json = System.Text.Encoding.UTF8.GetBytes(jsonfile);
-        UnityWebRequest www = new(BASE_URL + url, "POST");
+        UnityWebRequest www = new(Const.BASE_URL + url, "POST");
         UploadHandlerRaw uhr = new(json)
         {
             contentType = "application/json"
@@ -58,7 +58,7 @@ public class APIManager : MonoBehaviour
     public IEnumerator PutRequest<T>(string url, string jsonfile, Action<Response<T>> callback)
     {
         byte[] json = System.Text.Encoding.UTF8.GetBytes(jsonfile);
-        UnityWebRequest www = new(BASE_URL + url, "PUT");
+        UnityWebRequest www = new(Const.BASE_URL + url, "PUT");
         UploadHandlerRaw uhr = new(json)
         {
             contentType = "application/json"
