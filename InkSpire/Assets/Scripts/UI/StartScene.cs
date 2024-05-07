@@ -4,15 +4,14 @@ using TMPro;
 
 public class StartScene : MonoBehaviour
 {
-    public static StartScene start_scene;
     [SerializeField] private TextMeshProUGUI button_top;
     [SerializeField] private TextMeshProUGUI button_bottom;
     [SerializeField] private GameObject logged_in;
     [SerializeField] private GameObject logged_out;
 
-    public string title;
-    public string nickname;
-    public string email;
+    public static string title;
+    public static string nickname;
+    public static string email;
 
     private readonly int LEVEL1 = 3;
     private readonly int LEVEL2 = 5;
@@ -20,14 +19,7 @@ public class StartScene : MonoBehaviour
     private readonly int LEVEL4 = 20;
 
     void Awake()
-    {   
-        if(start_scene == null){
-            start_scene = this;
-        }
-        else if(start_scene != this){
-            Destroy(this);
-        }
-
+    {
         int user_id = PlayerPrefs.GetInt("user_id");
         // 유저 정보 요청
         StartCoroutine(APIManager.api.GetRequest<ProfileInfo>("/users/" + user_id + "/profile", ProcessProfile));

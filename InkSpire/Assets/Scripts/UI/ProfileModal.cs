@@ -21,9 +21,9 @@ public class ProfileModal : MonoBehaviour
     }
 
     private void SetProfile() {
-        title.text = StartScene.start_scene.title;
-        nickname.text = StartScene.start_scene.nickname;
-        email.text = StartScene.start_scene.email;
+        title.text = StartScene.title;
+        nickname.text = StartScene.nickname;
+        email.text = StartScene.email;
     }
 
     private void ProcessCharacterList(Response<CharacterList> response){
