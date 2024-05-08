@@ -145,8 +145,8 @@ public class ScriptManager : MonoBehaviour
         await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[4]);
         for(int i = 0; i<3;i++){
             // 목표 정보 전달
-            await items[place_base+i].InitItem(script, goals[curr_chapter].GetGoalType(), goals[curr_chapter].GetEtc(), game_events[place_base+i].event_type);
-            await map[place_base+i].InitPlace(place_base+i, script, pro_npc, game_events[place_base+i].event_type, place_names);
+            await items[place_base+i].InitItem(script, goals[curr_chapter], game_events[place_base+i].event_type);
+            await map[place_base+i].InitPlace(place_base+i, script, items[place_base+i], game_events[place_base+i].event_type, place_names);
             place_names[place_base+i] = map[place_base+i].place_name;
 
             // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음

@@ -71,8 +71,8 @@ public class Play : MonoBehaviour
 
         현재 플레이중인 게임은" + ScriptManager.script_manager.GetScript().GetTimeBackground() + "시대 " + ScriptManager.script_manager.GetScript().GetSpaceBackground() + " 배경으로 하는 " + ScriptManager.script_manager.GetScript().GetGenre() + "장르의 게임이며 세계관은 다음과 같다.\n"
         + ScriptManager.script_manager.GetScript().GetWorldDetail() + "\n\n"
-        + "게임의 최종 목표는 " + ScriptManager.script_manager.GetGoal(4).GetTitle() + "\n" + ScriptManager.script_manager.GetGoal(4).GetDetail() + "이며"
-        + "현재 챕터의 목표는 다음과 같다." + ScriptManager.script_manager.GetGoal(curr_chap).GetTitle() + "\n" + ScriptManager.script_manager.GetGoal(curr_chap).GetDetail()
+        + "게임의 최종 목표는 " + ScriptManager.script_manager.GetFinalGoal().GetTitle() + "\n" + ScriptManager.script_manager.GetFinalGoal().GetDetail() + "이며"
+        + "현재 챕터의 목표는 다음과 같다." + ScriptManager.script_manager.GetCurrGoal().GetTitle() + "\n" + ScriptManager.script_manager.GetCurrGoal().GetDetail()
         + "\n현재 플레이어가 있는 장소는 \"" + ScriptManager.script_manager.GetCurrPlace().place_name + "\"로, " + ScriptManager.script_manager.GetCurrPlace().place_info
         + @"이 아래로 게임 진행 양식이 이어진다. ** 이 표시 안의 내용은 문맥에 맞게 채운 후 *기호는 모두 삭제한다. 
         ------------------------------------------------

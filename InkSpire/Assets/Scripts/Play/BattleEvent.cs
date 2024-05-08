@@ -246,6 +246,7 @@ public class BattleEvent : MonoBehaviour
             int dex_diff = enm_dex-PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Dexterity);
             if(dex_diff<0 || pl_dice>dex_diff){
                 //도망 성공
+                AppendMsg("RESULT>> 도망 성공!!");
                 EndBattle(2);
                 return;
             }
@@ -430,7 +431,15 @@ public class BattleEvent : MonoBehaviour
         string result_str;
         if(result==0){
             result_str = "WIN";
-            // 인벤토리에 보상 아이템 추가
+            
+            Item map_item = ScriptManager.script_manager.GetCurrItem();
+            Debug.Log("맵 아이템 이름:"+map_item.item_name);
+            InventoryManager.i_manager.AddItem(map_item);
+            ScriptManager.script_manager.SetPlaceClear(true);
+            
+            if(bType == BType.BOSS){    // 목표 전투였을 경우 다음 챕터 셋팅
+                ScriptManager.script_manager.SetNextChapter();
+            }
             
         }
         else if(result==1){
