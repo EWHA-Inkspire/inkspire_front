@@ -34,7 +34,6 @@ public class APIManager : MonoBehaviour
 
     public IEnumerator PostRequest<T>(string url, string jsonfile, Action<Response<T>> callback)
     {
-        Debug.Log(Const.BASE_URL + url);
         byte[] json = System.Text.Encoding.UTF8.GetBytes(jsonfile);
         UnityWebRequest www = new(Const.BASE_URL + url, "POST");
         UploadHandlerRaw uhr = new(json)
@@ -66,6 +65,20 @@ public class APIManager : MonoBehaviour
         www.uploadHandler = uhr;
         www.downloadHandler = new DownloadHandlerBuffer();
 
+        yield return www.SendWebRequest();
+
+        if (www != null)
+        {
+            Debug.Log(www.downloadHandler.text);
+            Response<T> response_json = JsonUtility.FromJson<Response<T>>(www.downloadHandler.text);
+            callback(response_json);
+        }
+        www.Dispose();
+    }
+
+    public IEnumerator DeleteRequest<T>(string url, Action<Response<T>> callback)
+    {
+        UnityWebRequest www = UnityWebRequest.Delete(Const.BASE_URL + url);
         yield return www.SendWebRequest();
 
         if (www != null)

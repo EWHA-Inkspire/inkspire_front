@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using OpenAI;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public enum ItemType
 {
@@ -23,7 +24,7 @@ public class Item
 
     // 특수문자, 괄호, 점 제거를 위한 정규 표현식
     readonly Regex regex = new("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
-    public int item_id = (int)DateTime.Now.Ticks; // 아이템 아이디
+    public int item_id; // 아이템 아이디
     public string item_name; // 아이템 이름
     public string item_info; // 아이템 설명
     public ItemType item_type = ItemType.Null; // 아이템 타입
@@ -141,5 +142,7 @@ public class Item
         item_info = itemInfo.info;
         item_type = (ItemType)Enum.Parse(typeof(ItemType), itemInfo.type);
         item_stat = itemInfo.stat;
+
+        Debug.Log("아이템 정보 설정: \n" + item_name + ", " + item_id + ", " + item_info + ", " + item_type + ", " + item_stat);
     }
 }

@@ -259,6 +259,12 @@ public class ScriptManager : MonoBehaviour
             int idx = System.Array.FindIndex(map, x => x.id == mapId);
             this.items[idx].SetItemInfo(item);
         }
+
+        // 저장된 아이템 정보 출력
+        for (int i = 0; i < items.Length; i++)
+        {
+            Debug.Log(">저장된 아이템 정보: " + items[i].item_id + items[i].item_name + ", " + items[i].item_info + ", " + items[i].item_type + ", " + items[i].item_stat);
+        }
     }
 
     public void SetEventList(GetEventList event_list)

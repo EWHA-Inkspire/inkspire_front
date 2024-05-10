@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,11 +62,14 @@ public class InventoryManager : MonoBehaviour
 
     public void UseItem(Item item)
     {
-        // 만약 inventory의 크기가 0 이하이거나 inventory에 item이 없는 경우 => TODO: API 연결 후 ID값 비교로 수정
+        // 만약 inventory의 크기가 0 이하일 경우 사용할 아이템 없음
         if (inventory.Count <= 0) return;
-        if (!inventory.Exists(x => x.item_id == item.item_id)) return;
 
         int i_idx = inventory.FindIndex(x => x.item_id == item.item_id);
+        if (i_idx == -1) return;
+
+        // 아이템 사용 API 호출
+        StartCoroutine(APIManager.api.DeleteRequest<Null>("/inventory/"+PlayerPrefs.GetInt("character_id")+"/"+item.item_id, ProcessUseItem));
 
         switch (item.item_type) {
             case ItemType.Recover:
@@ -99,6 +103,15 @@ public class InventoryManager : MonoBehaviour
             Debug.Log(">>is_battle:"+is_battle);
             inventory_window.SetActive(false);
             battle.SetNextTurn();
+        }
+    }
+
+    private void ProcessUseItem(Response<Null> response)
+    {
+        if (response.success) {
+            Debug.Log("아이템 사용 성공");
+        } else {
+            Debug.Log("아이템 사용 실패");
         }
     }
 

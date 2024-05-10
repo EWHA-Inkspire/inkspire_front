@@ -282,6 +282,7 @@ public class Play : MonoBehaviour
         {
             Item[] items = ScriptManager.script_manager.GetItems();
             int idx = System.Array.FindIndex(items, x => x.item_id == item.itemId);
+            Debug.Log("아이템 인덱스"+idx);
             InventoryManager.i_manager.AddItem(items[idx]);
         }
     }
