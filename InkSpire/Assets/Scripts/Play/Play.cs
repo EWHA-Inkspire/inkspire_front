@@ -17,7 +17,6 @@ public class Play : MonoBehaviour
 
     private List<ChatMessage> messages = new();
     private ChatMessage input_msg = new();
-    private static ScriptManager s_manager = ScriptManager.script_manager;
     private string system_prompt = "";
     private int save_idx = 1; // 프롬프팅 제외
     private readonly int SAVING_INTERVAL = 10;
@@ -49,19 +48,18 @@ public class Play : MonoBehaviour
             var introMessage = new ChatMessage()
             {
                 Role = "assistant",
-                Content = s_manager.GetScript().GetIntro() + "\n\nNarrator:\n" + s_manager.GetCharName() + "님, 처음으로 조사할 장소를 선택해주십시오.\n" 
-                +"Map 창의 "+ s_manager.GetPlace(0).place_name + EulorReul(s_manager.GetPlace(0).place_name) + " 선택할 시, " 
-                + s_manager.GetPnpc().GetName()+ EorGa(s_manager.GetPnpc().GetName()) + " 당신을 반겨줄 것입니다."
+                Content = ScriptManager.script_manager.GetScript().GetIntro() + "\n\nNarrator:\n" + ScriptManager.script_manager.GetCharName() + "님, 처음으로 조사할 장소를 선택해주십시오.\n" 
+                +"Map 창의 "+ ScriptManager.script_manager.GetPlace(0).place_name + EulorReul(ScriptManager.script_manager.GetPlace(0).place_name) + " 선택할 시, " 
+                + ScriptManager.script_manager.GetPnpc().GetName()+ EorGa(ScriptManager.script_manager.GetPnpc().GetName()) + " 당신을 반겨줄 것입니다."
             };
             messages.Add(introMessage);
             Debug.Log("PlayStart: \n"+introMessage.Content);
             text_scroll.AppendMsg(introMessage);
         }
     }
-
     private void SetSystemPrompt()
     {
-        s_manager = ScriptManager.script_manager;
+        int curr_chap = ScriptManager.script_manager.GetCurrChap();
         system_prompt = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
         플레이어가 선택해야 하는 모든 선택지들은 플레이어의 선택을 기다려야 한다.
         TRPG 진행을 하듯 진행하되, TRPG라는 단어는 언급하면 안된다.
@@ -71,11 +69,11 @@ public class Play : MonoBehaviour
         게임 배경에 대한 정보는 출력을 위한 참고사항이며, 해당 정보들을 바탕으로 다음 시나리오 진행한다.
         npc 정보들을 토대로 적절한 시점에 npc를 등장시킨다.
 
-        현재 플레이중인 게임은" + s_manager.GetScript().GetTimeBackground() + "시대 " + s_manager.GetScript().GetSpaceBackground() + " 배경으로 하는 " + s_manager.GetScript().GetGenre() + "장르의 게임이며 세계관은 다음과 같다.\n"
-        + s_manager.GetScript().GetWorldDetail() + "\n\n"
-        + "게임의 최종 목표는 " + s_manager.GetFinalGoal().GetTitle() + "\n" + s_manager.GetFinalGoal().GetDetail() + "이며"
-        + "현재 챕터의 목표는 다음과 같다." + s_manager.GetCurrGoal().GetTitle() + "\n" + s_manager.GetCurrGoal().GetDetail()
-        + "\n현재 플레이어가 있는 장소는 \"" + s_manager.GetCurrPlace().place_name + "\"로, " + s_manager.GetCurrPlace().place_info
+        현재 플레이중인 게임은" + ScriptManager.script_manager.GetScript().GetTimeBackground() + "시대 " + ScriptManager.script_manager.GetScript().GetSpaceBackground() + " 배경으로 하는 " + ScriptManager.script_manager.GetScript().GetGenre() + "장르의 게임이며 세계관은 다음과 같다.\n"
+        + ScriptManager.script_manager.GetScript().GetWorldDetail() + "\n\n"
+        + "게임의 최종 목표는 " + ScriptManager.script_manager.GetFinalGoal().GetTitle() + "\n" + ScriptManager.script_manager.GetFinalGoal().GetDetail() + "이며"
+        + "현재 챕터의 목표는 다음과 같다." + ScriptManager.script_manager.GetCurrGoal().GetTitle() + "\n" + ScriptManager.script_manager.GetCurrGoal().GetDetail()
+        + "\n현재 플레이어가 있는 장소는 \"" + ScriptManager.script_manager.GetCurrPlace().place_name + "\"로, " + ScriptManager.script_manager.GetCurrPlace().place_info
         + @"이 아래로 게임 진행 양식이 이어진다. ** 이 표시 안의 내용은 문맥에 맞게 채운 후 *기호는 모두 삭제한다. 
         ------------------------------------------------
         Narrator (내레이터):
@@ -107,10 +105,10 @@ public class Play : MonoBehaviour
 
         text_scroll.AppendMsg(input_msg);
 
-        var item_type = s_manager.GetCurrItem().item_type;
+        var item_type = ScriptManager.script_manager.GetCurrItem().item_type;
         if (item_type == ItemType.Recover || item_type == ItemType.Weapon || item_type == ItemType.Item || item_type == ItemType.Report)
         {
-            if (!s_manager.GetCurrPlace().clear && await EventChecker.eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, s_manager.GetCurrEvent()))
+            if (!ScriptManager.script_manager.GetCurrPlace().clear && await EventChecker.eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, ScriptManager.script_manager.GetCurrEvent()))
             {
                 // 이벤트 트리거 도입 스크립트 출력
                 text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
@@ -122,8 +120,8 @@ public class Play : MonoBehaviour
                 messages.Add(event_msg);
                 event_msg.Role = "assistant";
 
-                string event_title = s_manager.GetCurrEvent().event_title.Replace(".", ".\n");
-                string event_intro = s_manager.GetCurrEvent().event_intro.Replace(".", ".\n");
+                string event_title = ScriptManager.script_manager.GetCurrEvent().event_title.Replace(".", ".\n");
+                string event_intro = ScriptManager.script_manager.GetCurrEvent().event_intro.Replace(".", ".\n");
 
                 event_msg.Content = event_title + "\n" + event_intro + "\n\n";
                 messages.Add(event_msg);
@@ -177,31 +175,31 @@ public class Play : MonoBehaviour
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = s_manager.GetCurrPlace().place_name + "으로 이동"
+            Content = ScriptManager.script_manager.GetCurrPlace().place_name + "으로 이동"
         };
         messages.Add(query_msg);
 
         var newMessage = new ChatMessage()
         {
             Role = "assistant",
-            Content = "Narrator: \n이곳은 " +s_manager.GetCurrPlace().place_name + "입니다.\n" + s_manager.GetCurrPlace().place_info
+            Content = "Narrator: \n이곳은 " +ScriptManager.script_manager.GetCurrPlace().place_name + "입니다.\n" + ScriptManager.script_manager.GetCurrPlace().place_info
         };
         if (place_idx == 0)
         {
             hint_event.SetHint(text_scroll);
-            newMessage.Content += "이곳에서는 NPC " + s_manager.GetPnpc().GetName() + EulorReul(s_manager.GetPnpc().GetName()) + " 만날 수 있습니다.";
+            newMessage.Content += "이곳에서는 NPC " + ScriptManager.script_manager.GetPnpc().GetName() + EulorReul(ScriptManager.script_manager.GetPnpc().GetName()) + " 만날 수 있습니다.";
         }
         messages.Add(newMessage);
         text_scroll.AppendMsg(newMessage);
 
         // 장소의 아이템 유형이 Mob이거나 Monster일 경우 전투 이벤트 발동
-        var item_type = s_manager.GetCurrItem().item_type;
+        var item_type = ScriptManager.script_manager.GetCurrItem().item_type;
         if (item_type == ItemType.Mob || item_type == ItemType.Monster)
         {
             // 전투 이벤트
             battle_event.SetBattle(BattleEvent.BType.MOB, 3);
         }
-        Debug.Log("placeButton item name: " +s_manager.GetCurrItem().item_name);
+        Debug.Log("placeButton item name: " +ScriptManager.script_manager.GetCurrItem().item_name);
     }
 
     // API 호출 - 채팅 리스트 저장

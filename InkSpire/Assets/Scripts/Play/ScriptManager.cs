@@ -135,6 +135,27 @@ public class ScriptManager : MonoBehaviour
             map[i].ANPC_exist = 0;
         }
     }
+    public async void SetNextChapter(){
+        string genre = script.GetGenre();
+        string time_background = script.GetTimeBackground();
+        string space_background = script.GetSpaceBackground();
+
+        curr_chapter++;
+        int place_base = (curr_chapter-1)*3+1;
+        await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[4]);
+        for(int i = 0; i<3;i++){
+            // 목표 정보 전달
+            await items[place_base+i].InitItem(script, goals[curr_chapter], game_events[place_base+i].event_type);
+            await map[place_base+i].InitPlace(place_base+i, script, items[place_base+i], game_events[place_base+i].event_type, place_names);
+            place_names[place_base+i] = map[place_base+i].place_name;
+
+            // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
+            if (items[place_base+i].item_type != ItemType.Mob && items[place_base+i].item_type != ItemType.Monster && items[place_base+i].item_type != ItemType.Null)
+            {
+                await game_events[place_base+i].CreateEventTrigger(script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[place_base+i], items[place_base+i].item_name);
+            }
+        }
+    }
 
     // API 호출
     private void PostScenarioInfo()
@@ -184,6 +205,7 @@ public class ScriptManager : MonoBehaviour
             Debug.Log("Failed to save script");
         }
     }
+        
 
     // Settter
     public void SetCurrChap(int chap)
