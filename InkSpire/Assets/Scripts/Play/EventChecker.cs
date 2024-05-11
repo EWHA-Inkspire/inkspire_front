@@ -21,7 +21,7 @@ public class EventChecker : MonoBehaviour {
         assistant_msg = assistant_msg.Replace("Narrator:\n", "");
         assistant_msg = assistant_msg.Replace("Narrator:", "");
 
-        Debug.Log("이벤트 정보\n" + game_event.event_trigger + "\n" + game_event.event_title + "\n" + game_event.event_intro + "\n" + game_event.event_succ);
+        Debug.Log("이벤트 정보\n" + game_event.trigger + "\n" + game_event.title + "\n" + game_event.intro + "\n" + game_event.succ);
         // 시스템 프롬프팅 추가
         var newMessage = new ChatMessage()
         {
@@ -66,9 +66,9 @@ public class EventChecker : MonoBehaviour {
         gpt_messages.Add(newMessage);
 
         newMessage.Role = "user";
-        newMessage.Content = "이벤트 트리거: " + game_event.event_trigger + @"
-            이벤트 제목: " + game_event.event_title + @"
-            도입 스크립트: " + game_event.event_intro + @"
+        newMessage.Content = "이벤트 트리거: " + game_event.trigger + @"
+            이벤트 제목: " + game_event.title + @"
+            도입 스크립트: " + game_event.intro + @"
             시나리오: " + assistant_msg + @"
             >> " + input_msg + @"
             출력: ";

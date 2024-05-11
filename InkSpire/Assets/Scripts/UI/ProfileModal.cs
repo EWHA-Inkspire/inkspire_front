@@ -27,8 +27,7 @@ public class ProfileModal : MonoBehaviour
     }
 
     private void ProcessCharacterList(Response<CharacterList> response){
-        if(response == null) {
-            Debug.Log("서버와의 통신에 실패했습니다.");
+        if(response == null || !response.success || response.data == null) {
             return;
         }
 

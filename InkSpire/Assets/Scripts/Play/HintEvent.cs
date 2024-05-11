@@ -34,9 +34,8 @@ public class HintEvent : MonoBehaviour
 
     public void PlaceHint()
     {
-        Item[] items = s_manager.GetCurrItems();
-        int idx = Array.FindIndex(items, 
-                item => item.item_type == ItemType.Monster || item.item_type == ItemType.Item || item.item_type == ItemType.Report);
+        List<Item> items = s_manager.GetCurrItems();
+        int idx = items.FindIndex(item => item.type == ItemType.Monster || item.type == ItemType.Item || item.type == ItemType.Report);
         
         // 목표 이벤트에 해당하는 아이템이 없는 경우
         if (idx == -1) {
@@ -71,9 +70,9 @@ public class HintEvent : MonoBehaviour
 
     public void RecoverHP()
     {
-        Item[] items = s_manager.GetCurrItems();
+        List<Item> items = s_manager.GetCurrItems();
 
-        if(!Array.Exists(items, item => item.item_type == ItemType.Monster || item.item_type == ItemType.Mob)) {
+        if(!items.Exists(item => item.type == ItemType.Monster || item.type == ItemType.Mob)) {
             text_scroll.AppendMsg(pro_npc.GetName() + ":\n당분간은 hp를 사용하지 않아도 플레이가 가능해요.");
             return;
         }
@@ -139,10 +138,5 @@ public class HintEvent : MonoBehaviour
         }
         play_manager.AppendToMessageGPT(pnpc_messages.GetRange(save_idx + 1, pnpc_messages.Count - save_idx - 1));
         save_idx = pnpc_messages.Count - 1;
-
-        Debug.Log(">>저장된 대화");
-        for (int i = 1; i <= save_idx; i++) {
-            Debug.Log(pnpc_messages[i].Role+": "+pnpc_messages[i].Content);
-        }
     }
 }

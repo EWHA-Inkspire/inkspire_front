@@ -264,6 +264,11 @@ public class Goal
         etc = goal_info.etc;
     }
 
+    public void SetGoalId(int id)
+    {
+        this.id = id;
+    }
+
     private int ConvertToType(string type)
     {
         return type switch

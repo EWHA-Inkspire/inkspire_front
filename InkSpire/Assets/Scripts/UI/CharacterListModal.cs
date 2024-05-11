@@ -28,17 +28,9 @@ public class CharacterListModal : MonoBehaviour
     }
 
     private void ProcessChapterList(Response<ChapterList> response){
-        if(!response.success){
-            Debug.Log("챕터 리스트 요청 실패: " + response.message);
+        if(!response.success || response.data == null){
             return;
         }
-
-        if(response.data == null){
-            Debug.Log("챕터 리스트가 없습니다.");
-            return;
-        }
-
-        Debug.Log(response.data.chapters);
 
         foreach(int chapter_num in response.data.chapters){
             switch(chapter_num){

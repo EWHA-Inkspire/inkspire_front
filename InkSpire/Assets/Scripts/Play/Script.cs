@@ -64,7 +64,6 @@ public class Script
         gpt_messages.Add(newMessage);
 
         string response = await GptManager.gpt.CallGpt(gpt_messages);
-        Debug.Log("세계관 출력:" + response);
 
         if(response == GPT_ERROR) {
             // 출력 안 될 경우 처리
@@ -115,7 +114,6 @@ public class Script
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
         this.intro = response.Replace("###", "");
-        Debug.Log("인트로"+response);
     }
 
     // Getter

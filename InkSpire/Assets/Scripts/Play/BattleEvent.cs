@@ -433,7 +433,7 @@ public class BattleEvent : MonoBehaviour
             result_str = "WIN";
             
             Item map_item = ScriptManager.script_manager.GetCurrItem();
-            Debug.Log("맵 아이템 이름:"+map_item.item_name);
+            Debug.Log("맵 아이템 이름:"+map_item.name);
             InventoryManager.i_manager.AddItem(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
             

@@ -33,3 +33,13 @@ public class GetInventoryItemInfo
     public string type;
     public int stat;
 }
+
+[Serializable]
+public class PostItemInfo
+{
+    public int mapId;
+    public string name;
+    public string info;
+    public string type;
+    public int stat;
+}

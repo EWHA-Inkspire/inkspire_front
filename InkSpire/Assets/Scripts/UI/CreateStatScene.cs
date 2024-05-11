@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class CreateStatScene : MonoBehaviour
 {
@@ -81,25 +83,18 @@ public class CreateStatScene : MonoBehaviour
             int character_id = PlayerPrefs.GetInt("character_id");
             CharacterStatInfo stat_info = new(stat_manager.p_stats.GetStatAmount(StatType.Attack), stat_manager.p_stats.GetStatAmount(StatType.Defence), stat_manager.p_stats.GetStatAmount(StatType.Luck), stat_manager.p_stats.GetStatAmount(StatType.Mental), stat_manager.p_stats.GetStatAmount(StatType.Dexterity), stat_manager.p_stats.GetStatAmount(StatType.Hp));
             string json = JsonUtility.ToJson(stat_info);
-            StartCoroutine(APIManager.api.PutRequest<Null>("/characters/"+character_id+"/stat", json, ProcessStatResponse));
+            StartCoroutine(APIManager.api.PutRequest<Null>("/characters/"+character_id+"/stat", json, (response) => {
+                Debug.Log(response.success);
+            }));
 
-            Debug.Log(ScriptManager.script_manager.GetScript().GetIntro());
-            Debug.Log(ScriptManager.script_manager.GetCurrChap());
+            // API 호출 - PNPC, ANPC 정보 저장
+            List<Place> map = ScriptManager.script_manager.GetMap();
+            Npc pro_npc = ScriptManager.script_manager.GetPnpc();
+            Npc anta_npc = ScriptManager.script_manager.GetAnpc();
+            ScriptAPI.script_api.PostNpcInfo(map, pro_npc, anta_npc);
 
             LoadingPannel.SetActive(false);
             SceneManager.LoadScene("5_Play");
-        }
-    }
-
-    private void ProcessStatResponse(Response<Null> response)
-    {
-        if (response.success)
-        {
-            Debug.Log("Stat saved successfully");
-        }
-        else
-        {
-            Debug.Log("Failed to save stat");
         }
     }
 }

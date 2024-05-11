@@ -24,31 +24,31 @@ public class Item
 
     // 특수문자, 괄호, 점 제거를 위한 정규 표현식
     readonly Regex regex = new("[`~!@#$%^&*()_|+\\-=?;:'\",.<>{}[\\]\\\\/]", RegexOptions.IgnoreCase);
-    public int item_id; // 아이템 아이디
-    public string item_name; // 아이템 이름
-    public string item_info; // 아이템 설명
-    public ItemType item_type = ItemType.Null; // 아이템 타입
-    public int item_stat; // 아이템 기능치
+    public int id; // 아이템 아이디
+    public string name; // 아이템 이름
+    public string info; // 아이템 설명
+    public ItemType type = ItemType.Null; // 아이템 타입
+    public int stat; // 아이템 기능치
 
     public async Task InitItem(Script script, Goal goal, int event_type)
     {
         // 아이템 타입 설정
         ChooseItemType(goal.GetGoalType(), event_type);
         // 아이템 스탯 설정
-        if (item_type != ItemType.Null) {
-            item_stat = UnityEngine.Random.Range(1, 6);
+        if (type != ItemType.Null) {
+            stat = UnityEngine.Random.Range(1, 6);
         }
         // 아이템 이름 설정
-        if (item_type == ItemType.Item) 
+        if (type == ItemType.Item) 
         {
-            item_name = goal.GetEtc();
-            item_info = goal.GetDetail();
+            name = goal.GetEtc();
+            info = goal.GetDetail();
         }
-        else if (item_type == ItemType.Report)
+        else if (type == ItemType.Report)
         {
             await CreateReportName(goal.GetEtc());
         }
-        else if (item_type == ItemType.Recover || item_type == ItemType.Mob && item_type == ItemType.Weapon)
+        else if (type == ItemType.Recover || type == ItemType.Mob && type == ItemType.Weapon)
         {
             await CreateItemName(script);
         }
@@ -62,14 +62,14 @@ public class Item
             ItemType[] normalEventItems = { ItemType.Recover, ItemType.Weapon, ItemType.Mob, ItemType.Null, ItemType.Null, ItemType.Null, ItemType.Null };
             int randomIdx = UnityEngine.Random.Range(0, normalEventItems.Length);
 
-            item_type = normalEventItems[randomIdx]; // 열거형을 문자열로 변환하여 할당
+            type = normalEventItems[randomIdx]; // 열거형을 문자열로 변환하여 할당
         }
         else //목표 이벤트일 경우
         {
             // 목표 이벤트일 때의 항목 정의
             ItemType[] goalEventItems = { ItemType.Monster, ItemType.Item, ItemType.Report  };
 
-            item_type = goalEventItems[goal_type-1]; // 열거형을 문자열로 변환하여 할당
+            type = goalEventItems[goal_type-1]; // 열거형을 문자열로 변환하여 할당
         }
     }
 
@@ -94,7 +94,7 @@ public class Item
 
         string response = await GptManager.gpt.CallGpt(gpt_messages);
 
-        item_name = regex.Replace(response, "");
+        name = regex.Replace(response, "");
     }
 
     private async Task CreateItemName(Script script)
@@ -105,12 +105,12 @@ public class Item
 
         gpt_messages.Clear();
         string about_item = "";
-        if (item_type == ItemType.Recover)
-            item_info = "플레이어의 HP를 회복시켜주는 아이템";
-        else if (item_type == ItemType.Mob)
-            item_info = "잡몹을 처치했을 때 얻는 보상 아이템";
-        else if (item_type == ItemType.Weapon)
-            item_info = "플레이어의 공격력을 높여주는 무기 아이템";
+        if (type == ItemType.Recover)
+            info = "플레이어의 HP를 회복시켜주는 아이템";
+        else if (type == ItemType.Mob)
+            info = "잡몹을 처치했을 때 얻는 보상 아이템";
+        else if (type == ItemType.Weapon)
+            info = "플레이어의 공격력을 높여주는 무기 아이템";
 
         var prompt_msg = new ChatMessage()
         {
@@ -131,18 +131,16 @@ public class Item
 
         string response = await GptManager.gpt.CallGpt(gpt_messages);
 
-        item_name = regex.Replace(response, "");
+        name = regex.Replace(response, "");
     }
 
     // Setter
     public void SetItemInfo(GetItemInfo itemInfo)
     {
-        item_id = itemInfo.itemId;
-        item_name = itemInfo.name;
-        item_info = itemInfo.info;
-        item_type = (ItemType)Enum.Parse(typeof(ItemType), itemInfo.type);
-        item_stat = itemInfo.stat;
-
-        Debug.Log("아이템 정보 설정: \n" + item_name + ", " + item_id + ", " + item_info + ", " + item_type + ", " + item_stat);
+        id = itemInfo.itemId;
+        name = itemInfo.name;
+        info = itemInfo.info;
+        type = (ItemType)Enum.Parse(typeof(ItemType), itemInfo.type);
+        stat = itemInfo.stat;
     }
 }

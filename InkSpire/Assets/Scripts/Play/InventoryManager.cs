@@ -49,13 +49,13 @@ public class InventoryManager : MonoBehaviour
         item_bg[target_idx].color = new Color32(237,237,233,255);
 
         // 선택된 색상 표기
-        target_idx = inventory.FindIndex(x => x.item_id == item_id);
+        target_idx = inventory.FindIndex(x => x.id == item_id);
         item_bg[target_idx].color = new Color32(212,204,195,255);
     }
 
     public void AddItem(Item item)
     {
-        Debug.Log("아이템 추가: \n" + item.item_name + ", " + item.item_id);
+        Debug.Log("아이템 추가: \n" + item.name + ", " + item.id);
         inventory.Add(item);
         slots[inventory.Count-1].SetItem(item);
     }
@@ -65,16 +65,16 @@ public class InventoryManager : MonoBehaviour
         // 만약 inventory의 크기가 0 이하일 경우 사용할 아이템 없음
         if (inventory.Count <= 0) return;
 
-        int i_idx = inventory.FindIndex(x => x.item_id == item.item_id);
+        int i_idx = inventory.FindIndex(x => x.id == item.id);
         if (i_idx == -1) return;
 
         // 아이템 사용 API 호출
-        StartCoroutine(APIManager.api.DeleteRequest<Null>("/inventory/"+PlayerPrefs.GetInt("character_id")+"/"+item.item_id, ProcessUseItem));
+        StartCoroutine(APIManager.api.DeleteRequest<Null>("/inventory/"+PlayerPrefs.GetInt("character_id")+"/"+item.id, ProcessUseItem));
 
-        switch (item.item_type) {
+        switch (item.type) {
             case ItemType.Recover:
-                battle.AppendMsg(">> 아이템 사용: 체력 회복(+"+item.item_stat.ToString()+")\n");
-                p_stats.SetStatAmount(StatType.Hp, p_stats.GetStatAmount(StatType.Hp)+item.item_stat);
+                battle.AppendMsg(">> 아이템 사용: 체력 회복(+"+item.stat.ToString()+")\n");
+                p_stats.SetStatAmount(StatType.Hp, p_stats.GetStatAmount(StatType.Hp)+item.stat);
                 slots[i_idx].DelSprites();  inventory.RemoveAt(i_idx);
                 break;
             case ItemType.Mob:
@@ -83,16 +83,15 @@ public class InventoryManager : MonoBehaviour
                 battle.AppendMsg(">> 보고서 아이템은 사용할 수 없습니다.");
                 break;
             case ItemType.Weapon:
-                PlayerStatManager.playerstat.wheapone = item.item_stat;
+                PlayerStatManager.playerstat.wheapone = item.stat;
                 slots[i_idx].DelSprites();  inventory.RemoveAt(i_idx);
-                battle.AppendMsg(">> 아이템 사용: 진행중인 전투 동안 공격력 증가(+"+item.item_stat.ToString()+")\n");
+                battle.AppendMsg(">> 아이템 사용: 진행중인 전투 동안 공격력 증가(+"+item.stat.ToString()+")\n");
                 break;
         }
     }
 
     public void UseTargetItem()
     {
-        Debug.Log("Traget idx: "+target_idx);
         if(target_idx < 0 || target_idx >= inventory.Count) {
             return;
         }
@@ -100,7 +99,6 @@ public class InventoryManager : MonoBehaviour
         UseItem(inventory[target_idx]);
 
         if(is_battle){
-            Debug.Log(">>is_battle:"+is_battle);
             inventory_window.SetActive(false);
             battle.SetNextTurn();
         }

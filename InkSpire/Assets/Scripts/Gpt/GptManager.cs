@@ -18,7 +18,7 @@ public class GptManager : MonoBehaviour
         }
     }
 
-    private OpenAIApi openai = new OpenAIApi();
+    private readonly OpenAIApi openai = new();
 
     public async Task<string> CallGpt(List<ChatMessage> messages) {
         // gpt 호출

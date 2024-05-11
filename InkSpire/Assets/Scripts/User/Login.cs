@@ -33,18 +33,15 @@ public class Login : MonoBehaviour
 
     private void ProcessResponse(Response<int> response){
         if(response == null) {
-            Debug.Log("서버와의 통신에 실패했습니다.");
             wrong_pw.text = "로그인에 실패했습니다. 다시 시도해주세요.";
             return;
         }
 
         if(response.success){
-            Debug.Log("로그인 성공: " + response.message);
             PlayerPrefs.SetInt("user_id", response.data);
             SceneManager.LoadScene("1_Start");
         }
         else {
-            Debug.Log("로그인 실패: " + response.message);
             wrong_pw.text = response.message;
         }
     }

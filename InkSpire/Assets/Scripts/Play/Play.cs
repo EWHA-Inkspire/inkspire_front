@@ -53,7 +53,6 @@ public class Play : MonoBehaviour
                 + ScriptManager.script_manager.GetPnpc().GetName()+ EorGa(ScriptManager.script_manager.GetPnpc().GetName()) + " 당신을 반겨줄 것입니다."
             };
             messages.Add(introMessage);
-            Debug.Log("PlayStart: \n"+introMessage.Content);
             text_scroll.AppendMsg(introMessage);
         }
     }
@@ -105,7 +104,7 @@ public class Play : MonoBehaviour
 
         text_scroll.AppendMsg(input_msg);
 
-        var item_type = ScriptManager.script_manager.GetCurrItem().item_type;
+        var item_type = ScriptManager.script_manager.GetCurrItem().type;
         if (item_type == ItemType.Recover || item_type == ItemType.Weapon || item_type == ItemType.Item || item_type == ItemType.Report)
         {
             if (!ScriptManager.script_manager.GetCurrPlace().clear && await EventChecker.eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, ScriptManager.script_manager.GetCurrEvent()))
@@ -120,8 +119,8 @@ public class Play : MonoBehaviour
                 messages.Add(event_msg);
                 event_msg.Role = "assistant";
 
-                string event_title = ScriptManager.script_manager.GetCurrEvent().event_title.Replace(".", ".\n");
-                string event_intro = ScriptManager.script_manager.GetCurrEvent().event_intro.Replace(".", ".\n");
+                string event_title = ScriptManager.script_manager.GetCurrEvent().title.Replace(".", ".\n");
+                string event_intro = ScriptManager.script_manager.GetCurrEvent().intro.Replace(".", ".\n");
 
                 event_msg.Content = event_title + "\n" + event_intro + "\n\n";
                 messages.Add(event_msg);
@@ -193,13 +192,12 @@ public class Play : MonoBehaviour
         text_scroll.AppendMsg(newMessage);
 
         // 장소의 아이템 유형이 Mob이거나 Monster일 경우 전투 이벤트 발동
-        var item_type = ScriptManager.script_manager.GetCurrItem().item_type;
+        var item_type = ScriptManager.script_manager.GetCurrItem().type;
         if (item_type == ItemType.Mob || item_type == ItemType.Monster)
         {
             // 전투 이벤트
             battle_event.SetBattle(BattleEvent.BType.MOB, 3);
         }
-        Debug.Log("placeButton item name: " +ScriptManager.script_manager.GetCurrItem().item_name);
     }
 
     // API 호출 - 채팅 리스트 저장
@@ -225,9 +223,7 @@ public class Play : MonoBehaviour
 
         StartCoroutine(APIManager.api.PostRequest<ChatList>("/chat", chats, response =>
         {
-            if (!response.success)
-            {
-                Debug.Log("채팅 리스트 저장 실패: " + response.message);
+            if (!response.success) {
                 return;
             }
             save_idx = messages.Count;
@@ -237,15 +233,7 @@ public class Play : MonoBehaviour
     // API 호출 결과 처리
     private void ProcessChatList(Response<ChatList> response)
     {
-        if (!response.success)
-        {
-            Debug.Log("채팅 리스트 조회 실패: " + response.message);
-            return;
-        }
-
-        if (response.data == null)
-        {
-            Debug.Log("채팅 리스트가 없습니다.");
+        if (!response.success || response.data == null) {
             return;
         }
 
@@ -264,32 +252,22 @@ public class Play : MonoBehaviour
 
     private void ProcessInventory(Response<GetInventory> response)
     {
-        if (!response.success)
-        {
-            Debug.Log("인벤토리 조회 실패: " + response.message);
+        if (!response.success || response.data == null) {
             return;
         }
 
-        if (response.data == null)
+        foreach(var item in response.data.items)
         {
-            Debug.Log("인벤토리가 없습니다.");
-            return;
-        }
-
-        foreach (var item in response.data.items)
-        {
-            Item[] items = ScriptManager.script_manager.GetItems();
-            int idx = System.Array.FindIndex(items, x => x.item_id == item.itemId);
-            Debug.Log("아이템 인덱스"+idx);
+            List<Item> items = ScriptManager.script_manager.GetItems();
+            int idx = items.FindIndex(x => x.id == item.itemId);
             InventoryManager.i_manager.AddItem(items[idx]);
         }
     }
-    
 
     // 조사 선택 함수
     static string EorGa(string noun)
     {
-        char lastChar = noun[noun.Length - 1]; // 마지막 글자 추출
+        char lastChar = noun[^1]; // 마지막 글자 추출
         bool hasJongsung = (lastChar - '가') % 28 > 0; // 받침 여부 확인
 
         // 받침 여부에 따라 조사 선택
@@ -298,7 +276,7 @@ public class Play : MonoBehaviour
 
     static string EunorNeun(string noun)
     {
-        char lastChar = noun[noun.Length - 1]; // 마지막 글자 추출
+        char lastChar = noun[^1]; // 마지막 글자 추출
         bool hasJongsung = (lastChar - '가') % 28 > 0; // 받침 여부 확인
 
         // 받침 여부에 따라 조사 선택
@@ -307,7 +285,7 @@ public class Play : MonoBehaviour
 
     public static string EulorReul(string noun)
     {
-        char lastChar = noun[noun.Length - 1]; // 마지막 글자 추출
+        char lastChar = noun[^1]; // 마지막 글자 추출
         bool hasJongsung = (lastChar - '가') % 28 > 0; // 받침 여부 확인
 
         // 받침 여부에 따라 조사 선택

@@ -21,3 +21,18 @@ public class GetNpcInfo
     public int hp;
     public bool pnpc;
 }
+
+[Serializable]
+public class PostNpcInfo
+{
+    public int mapId;
+    public string name;
+    public bool isPnpc;
+    public string detail;
+    public int luck;
+    public int defence;
+    public int mental;
+    public int dexterity;
+    public int attack;
+    public int hp;
+}

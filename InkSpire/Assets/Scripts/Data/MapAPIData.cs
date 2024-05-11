@@ -19,3 +19,14 @@ public class GetMapInfo
     public bool lastVisited;
     public bool anpc;
 }
+
+[Serializable]
+public class PostMapInfo
+{
+    public int scriptId;
+    public int idx;
+    public int chapter;
+    public string name;
+    public string info;
+    public bool isANPC;
+}

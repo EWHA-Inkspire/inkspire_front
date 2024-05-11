@@ -20,13 +20,7 @@ public class CharacterListScene : MonoBehaviour
     }
 
     private void ProcessCharacterList(Response<CharacterList> response){
-        if(!response.success){
-            Debug.Log("캐릭터 리스트 요청 실패: " + response.message);
-            return;
-        }
-
-        if(response.data == null){
-            Debug.Log("캐릭터 리스트가 없습니다.");
+        if(!response.success || response.data == null){
             return;
         }
 

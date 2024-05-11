@@ -12,6 +12,7 @@ public class Npc
         etc
     }
 
+    private int id;
     private string name;
     private NPCType type;
     private Stats stat;
@@ -25,7 +26,7 @@ public class Npc
         this.type = (NPCType)Enum.Parse(typeof(NPCType),type);
         await NameGPT(this.type, world_detail, genre, char_name);
         await NpcDetailGPT(this.type, world_detail, genre);
-        this.stat = new Stats(50, 50, 50, 50, 50);
+        stat = new Stats(50, 50, 50, 50, 50);
     }
 
     private async Task<string> NameGPT(NPCType type, string world_detail, string genre, string char_name){
@@ -70,7 +71,7 @@ public class Npc
 
         newMessage = new ChatMessage(){
             Role = "user",
-            Content = "NPC\""+this.name+"\"의 직업, 성격, 말투설정 생성"
+            Content = "NPC\""+name+"\"의 직업, 성격, 말투설정 생성"
         };
         gpt_messages.Add(newMessage);
 
@@ -79,7 +80,7 @@ public class Npc
             // 출력 안 될 경우 처리
         }
 
-        this.detail = response;
+        detail = response;
         return response;
     }
 
@@ -99,18 +100,28 @@ public class Npc
 
     public string GetName()
     {
-        return this.name;
+        return name;
     }
 
     public string GetDetail()
     {
-        return this.detail;
+        return detail;
+    }
+
+    public Stats GetStat()
+    {
+        return stat;
     }
 
     public void SetNpcInfo(GetNpcInfo npc) {
-        this.name = npc.name;
-        this.detail = npc.detail;
-        this.stat = new Stats(npc.luck, npc.defence, npc.mental, npc.dexterity, npc.attack);
-        this.stat.SetStatAmount(StatType.Hp, npc.hp);
+        id = npc.npcId;
+        name = npc.name;
+        detail = npc.detail;
+        stat = new Stats(npc.luck, npc.defence, npc.mental, npc.dexterity, npc.attack);
+        stat.SetStatAmount(StatType.Hp, npc.hp);
+    }
+
+    public void SetNpcId(int id) {
+        this.id = id;
     }
 }

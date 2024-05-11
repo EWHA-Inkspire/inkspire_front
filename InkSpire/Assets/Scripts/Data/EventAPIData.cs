@@ -19,3 +19,15 @@ public class GetEventInfo
     public string failure;
     public bool goal;
 }
+
+[Serializable]
+public class PostEventInfo
+{
+    public int mapId;
+    public bool isGoal;
+    public string eventTrigger;
+    public string title;
+    public string intro;
+    public string success;
+    public string failure;
+}

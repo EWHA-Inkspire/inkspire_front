@@ -34,6 +34,7 @@ public class APIManager : MonoBehaviour
 
     public IEnumerator PostRequest<T>(string url, string jsonfile, Action<Response<T>> callback)
     {
+        Debug.Log(jsonfile);
         byte[] json = System.Text.Encoding.UTF8.GetBytes(jsonfile);
         UnityWebRequest www = new(Const.BASE_URL + url, "POST");
         UploadHandlerRaw uhr = new(json)
@@ -56,6 +57,7 @@ public class APIManager : MonoBehaviour
 
     public IEnumerator PutRequest<T>(string url, string jsonfile, Action<Response<T>> callback)
     {
+        Debug.Log(jsonfile);
         byte[] json = System.Text.Encoding.UTF8.GetBytes(jsonfile);
         UnityWebRequest www = new(Const.BASE_URL + url, "PUT");
         UploadHandlerRaw uhr = new(json)

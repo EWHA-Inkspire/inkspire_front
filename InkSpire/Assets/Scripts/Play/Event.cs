@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 public class Event
 {
     private List<ChatMessage> gpt_messages = new();
-    public string event_trigger; // 이벤트 트리거
-    public string event_title; // 이벤트 제목
-    public string event_intro; // 이벤트 도입 스크립트
-    public string event_succ; // 이벤트 성공 스크립트
-    public string event_fail; // 이벤트 실패 스크립트
-    public int event_type; //일반 이벤트 == 0, 목표 이벤트 == 1;
+    public int id;
+    public string trigger; // 이벤트 트리거
+    public string title; // 이벤트 제목
+    public string intro; // 이벤트 도입 스크립트
+    public string succ; // 이벤트 성공 스크립트
+    public string fail; // 이벤트 실패 스크립트
+    public int type; //일반 이벤트 == 0, 목표 이벤트 == 1;
 
     public async Task CreateEventTrigger(string world_detail, string chapter_obj, string place_name, string item_name)
     {
@@ -35,14 +36,13 @@ public class Event
         };
         gpt_messages.Add(query_msg);
 
-        event_trigger = await GptManager.gpt.CallGpt(gpt_messages); //이거 파싱 어케할지 고민
-        Debug.Log(">> 이벤트 트리거: "+event_trigger);
+        trigger = await GptManager.gpt.CallGpt(gpt_messages);
 
         gpt_messages.Clear();
-        prompt_msg.Content = @"당신은 trpg 게임의 기획자 역할을 하며 "+ (event_type == 1 ? "챕터 목표와 관련있으며 " : "") + "현재 플레이어가 있는 장소 내에 이벤트 트리거가 위치한 곳과 자연스럽게 어울리는 판정 이벤트를 생성한다. \n게임의 세계관 배경: " + world_detail
-            + (event_type == 1 ? "\n챕터 목표: " + chapter_obj + "\n" : "")
-            + "플레이어가 현재 위치한 장소 이름은 " + place_name + "이며 이 장소의 이벤트 트리거인 " + event_trigger + "를 통해 생성되는 이벤트 성공시 유저는 게임 아이템인 " + item_name + @"을 획득한다. 
-            발생한 이벤트의 내용은 장소 이름," + (event_type == 1 ? " 챕터 목표," : "") +  @" 게임 아이템과 자연스럽게 어울려야 한다.
+        prompt_msg.Content = @"당신은 trpg 게임의 기획자 역할을 하며 "+ (type == 1 ? "챕터 목표와 관련있으며 " : "") + "현재 플레이어가 있는 장소 내에 이벤트 트리거가 위치한 곳과 자연스럽게 어울리는 판정 이벤트를 생성한다. \n게임의 세계관 배경: " + world_detail
+            + (type == 1 ? "\n챕터 목표: " + chapter_obj + "\n" : "")
+            + "플레이어가 현재 위치한 장소 이름은 " + place_name + "이며 이 장소의 이벤트 트리거인 " + trigger + "를 통해 생성되는 이벤트 성공시 유저는 게임 아이템인 " + item_name + @"을 획득한다. 
+            발생한 이벤트의 내용은 장소 이름," + (type == 1 ? " 챕터 목표," : "") +  @" 게임 아이템과 자연스럽게 어울려야 한다.
             이어지는 출력 양식의 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. 아래는 출력 예시이다.
             
             ex 1)
@@ -75,7 +75,6 @@ public class Event
         gpt_messages.Add(query_msg);
 
         string response = await GptManager.gpt.CallGpt(gpt_messages);
-        // Debug.Log(">>이벤트 제목, 스크립트 결과 출력: \n" + response);
         StringToEvent(response);
     }
 
@@ -89,19 +88,19 @@ public class Event
         event_string = event_string.Replace(": ", ":");
 
         event_arr = event_string.Split(':');
-        event_title = event_arr[1];
-        event_intro = event_arr[3];
-        event_succ = event_arr[5];
-        event_fail = event_arr[7];
+        title = event_arr[1];
+        intro = event_arr[3];
+        succ = event_arr[5];
+        fail = event_arr[7];
     }
 
     public void SetEventInfo(GetEventInfo event_info)
     {
-        event_trigger = event_info.eventTrigger;
-        event_title = event_info.title;
-        event_intro = event_info.intro;
-        event_succ = event_info.success;
-        event_fail = event_info.failure;
-        event_type = event_info.goal ? 1 : 0;
+        trigger = event_info.eventTrigger;
+        title = event_info.title;
+        intro = event_info.intro;
+        succ = event_info.success;
+        fail = event_info.failure;
+        type = event_info.goal ? 1 : 0;
     }
 }

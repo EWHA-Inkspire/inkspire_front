@@ -19,12 +19,12 @@ public class InventorySlot : MonoBehaviour
     public void SetSprites()
     {
         item_object.SetActive(true);
-        text_name.text = item?.item_name;
+        text_name.text = item?.name;
         text_quant.text = "1";
     }
 
     public void SetUseItem(){
-        InventoryManager.i_manager.SetTarget(item.item_id);
+        InventoryManager.i_manager.SetTarget(item.id);
     }
 
     public void DelSprites()

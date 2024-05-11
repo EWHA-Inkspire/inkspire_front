@@ -47,7 +47,6 @@ public class ScriptInfoLoad : MonoBehaviour
 
     private void ProcessScriptInfo(Response<GetScriptInfo> response) {
         if (!response.success) {
-            Debug.Log("스크립트 정보 조회 실패: " + response.message);
             return;
         }
         ScriptManager.script_manager.SetScriptInfo(response.data);
@@ -57,7 +56,6 @@ public class ScriptInfoLoad : MonoBehaviour
 
     private void ProcessCharacterStat(Response<CharacterStatInfo> response) {
         if (!response.success) {
-            Debug.Log("캐릭터 스탯 조회 실패: " + response.message);
             return;
         }
         PlayerStatManager.playerstat.p_stats.SetCharacterStat(response.data);
@@ -65,7 +63,6 @@ public class ScriptInfoLoad : MonoBehaviour
 
     private void ProcessGoalList(Response<GetGoalList> response) {
         if (!response.success) {
-            Debug.Log("목표 정보 조회 실패: " + response.message);
             return;
         }
         ScriptManager.script_manager.SetGoalList(response.data);
@@ -73,7 +70,6 @@ public class ScriptInfoLoad : MonoBehaviour
 
     private void ProcessNpcList(Response<GetNpcList> response) {
         if (!response.success) {
-            Debug.Log("NPC 정보 조회 실패: " + response.message);
             return;
         }
         ScriptManager.script_manager.SetNpcList(response.data);
@@ -81,7 +77,6 @@ public class ScriptInfoLoad : MonoBehaviour
 
     private void ProcessMapList(Response<GetMapList> response) {
         if (!response.success) {
-            Debug.Log("맵 정보 조회 실패: " + response.message);
             return;
         }
         ScriptManager.script_manager.SetMapList(response.data);
@@ -89,7 +84,6 @@ public class ScriptInfoLoad : MonoBehaviour
 
     private void ProcessItemList(Response<GetItemList> response) {
         if (!response.success) {
-            Debug.Log("아이템 정보 조회 실패: " + response.message);
             return;
         }
         ScriptManager.script_manager.SetItemList(response.data);
@@ -97,7 +91,6 @@ public class ScriptInfoLoad : MonoBehaviour
 
     private void ProcessEventList(Response<GetEventList> response) {
         if (!response.success) {
-            Debug.Log("이벤트 정보 조회 실패: " + response.message);
             return;
         }
         ScriptManager.script_manager.SetEventList(response.data);
