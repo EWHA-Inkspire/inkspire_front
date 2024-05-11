@@ -38,7 +38,7 @@ public class StartScene : MonoBehaviour
     }
 
     private void ProcessProfile(Response<ProfileInfo> response){
-        if(response == null || !response.success || response.data == null) {
+        if(response == null || response.data == null) {
             return;
         }
 
