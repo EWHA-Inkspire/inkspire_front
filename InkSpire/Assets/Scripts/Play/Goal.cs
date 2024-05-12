@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using OpenAI;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class Goal
 {
@@ -44,7 +45,7 @@ public class Goal
 최종 목표의 유형은 반드시 다음 세가지 중 하나이며 게임의 배경에 맞춰 하나만 생성된다.
 
 - 최종목표 유형 1: 적대 npc나 보스 몬스터를 처치
-비고: *{적의 이름,적의 공격력,적의 방어력,적의 체력} 과 같은 양식으로 정확한 수치를 출력*
+비고: *적의 이름 출력*
 
 - 최종목표 유형 2: 스토리 설정상 중요한 아이템을 획득한다.
 비고: *아이템 이름만 출력*
@@ -104,11 +105,11 @@ public class Goal
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "진행될 게임의 "+genre+"장르에 어울리는 최종 목표 생성\n\n최종목표유형:"
+            Content = "진행될 게임의 "+genre+"장르에 어울리는 최종 목표 생성\n\n최종목표유형: "
         };
         gpt_messages.Add(query_msg);
 
-        StringToObjective("최종목표유형:"+await GptManager.gpt.CallGpt(gpt_messages));
+        StringToObjective("최종목표유형: "+await GptManager.gpt.CallGpt(gpt_messages));
         
     }
 
@@ -190,38 +191,34 @@ public class Goal
         {
             Role = "user",
             Content = "진행중인 게임의 "+genre+"장르에 어울리는 챕터 목표 생성"
-                    +"\n챕터목표유형:"
+                    +"\n챕터목표유형: "
         };
         gpt_messages.Add(query_msg);
 
-        StringToObjective("챕터목표유형:"+await GptManager.gpt.CallGpt(gpt_messages));
+        StringToObjective("챕터목표유형: "+await GptManager.gpt.CallGpt(gpt_messages));
     }
     private void StringToObjective(string obj_string)
     {
-        
         clear = false;
 
         string[] obj_arr;
-        obj_string = obj_string.Replace("\n",":");
-        obj_arr = obj_string.Split(':');
-        for(int i = 0; i<obj_arr.Length; i++ ){
-            switch(i){
-                case 1:
-                    int.TryParse(obj_arr[1],out type);
-                    continue;
-                case 3:
-                    title = obj_arr[3];
-                    continue;
-                case 5:
-                    detail = obj_arr[5];
-                    continue;
-                case 7:
-                    etc = obj_arr[7];
-                    continue;
-                default:
-                    continue;
-            }
-        }
+        obj_string = obj_string.Replace("최종목표유형: ","#");
+        obj_string = obj_string.Replace("최종목표: ","#");
+        obj_string = obj_string.Replace("최종목표 설명: ","#");
+        obj_string = obj_string.Replace("비고: ","#");
+
+
+        obj_string = obj_string.Replace("챕터목표유형: ","#");
+        obj_string = obj_string.Replace("챕터목표: ","#");
+        obj_string = obj_string.Replace("챕터목표 설명: ","#");
+
+        Debug.Log(">>목표 생성 결과\n" + obj_string);
+
+        obj_arr = obj_string.Split('#');
+        type = int.Parse(obj_arr[1].Trim('\n'));
+        title = obj_arr[2].Trim('\n');
+        detail = obj_arr[3].Trim('\n');
+        etc = obj_arr[4].Trim('\n');
     }
 
     // 변수 호출 함수들

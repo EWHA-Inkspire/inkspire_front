@@ -73,23 +73,30 @@ ex 3)
         gpt_messages.Add(query_msg);
 
         string response = await GptManager.gpt.CallGpt(gpt_messages);
-        StringToEvent(response);
+        StringToEvent("출력"+response);
     }
 
     //장소 이름 및 장소 설명 파싱 함수
     public void StringToEvent(string event_string)
     {
         string[] event_arr;
-        event_string = event_string.Replace("\n\n", ":");
-        event_string = event_string.Replace(":\n", ":");
-        event_string = event_string.Replace("\n", ":");
-        event_string = event_string.Replace(": ", ":");
 
-        event_arr = event_string.Split(':');
-        title = event_arr[1];
-        intro = event_arr[3];
-        succ = event_arr[5];
-        fail = event_arr[7];
+        event_string = event_string.Replace("이벤트제목: ", "#");
+        event_string = event_string.Replace("도입 스크립트: ", "#");
+        event_string = event_string.Replace("성공 스크립트: ", "#");
+        event_string = event_string.Replace("실패 스크립트: ", "#");
+        Debug.Log(">>이벤트 생성 결과\n" + event_string);
+
+        event_arr = event_string.Split('#');
+        for (int i = 0; i < event_arr.Length; i++)
+        {
+            Debug.Log("event_arr[" + i + "]: " + event_arr[i]);
+        }
+        
+        title = event_arr[1].Trim('\n');
+        intro = event_arr[2].Trim('\n');
+        succ = event_arr[3].Trim('\n');
+        fail = event_arr[4].Trim('\n');
     }
 
     public void SetEventInfo(GetEventInfo event_info)
