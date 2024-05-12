@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,18 +6,18 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager i_manager;
 
-    [SerializeField] GameObject battle_window;
+    [SerializeField] readonly GameObject battle_window;
     public BattleEvent battle;
-    [SerializeField] GameObject inventory_window;
+    [SerializeField] readonly GameObject inventory_window;
 
-    [SerializeField] Image[] item_bg = new Image[8];
-    [SerializeField] GameObject item_list;
+    [SerializeField] readonly Image[] item_bg = new Image[8];
+    [SerializeField] readonly GameObject item_list;
     private List<Item> inventory = new();
     private List<InventorySlot> slots = new();
     public InventorySlot slotPrefab;
     private readonly int SLOT_SIZE = 8;
 
-    private PlayerStatManager p_manager = PlayerStatManager.playerstat;
+    private readonly PlayerStatManager p_manager = PlayerStatManager.playerstat;
     public bool is_battle = false;
     private int target_idx = 0;
     private int cnt = 0; // inven 창 열고 닫을 때 사용
