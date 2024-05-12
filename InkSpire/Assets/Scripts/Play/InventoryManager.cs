@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +18,7 @@ public class InventoryManager : MonoBehaviour
     public InventorySlot slotPrefab;
     private readonly int SLOT_SIZE = 8;
 
-    private Stats p_stats = PlayerStatManager.playerstat.p_stats;
+    private readonly PlayerStatManager p_manager = PlayerStatManager.playerstat;
     public bool is_battle = false;
     private int target_idx = 0;
     private int cnt = 0; // inven 창 열고 닫을 때 사용
@@ -59,6 +58,9 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("아이템 추가: \n" + item.name + ", " + item.id);
         inventory.Add(item);
         slots[inventory.Count-1].SetItem(item);
+
+        // 인벤토리 아이템 등록
+        PlayAPI.play_api.PostInventory(item.id);
     }
 
     public void UseItem(Item item)
@@ -69,26 +71,27 @@ public class InventoryManager : MonoBehaviour
         int i_idx = inventory.FindIndex(x => x.id == item.id);
         if (i_idx == -1) return;
 
-        // 아이템 사용 API 호출
-        StartCoroutine(APIManager.api.DeleteRequest<Null>("/inventory/"+PlayerPrefs.GetInt("character_id")+"/"+item.id, ProcessUseItem));
-
         switch (item.type) {
             case ItemType.Recover:
                 battle.AppendMsg(">> 아이템 사용: 체력 회복(+"+item.stat.ToString()+")\n");
-                p_stats.SetStatAmount(StatType.Hp, p_stats.GetStatAmount(StatType.Hp)+item.stat);
+                p_manager.SetStatAmount(StatType.Hp, p_manager.GetStatAmount(StatType.Hp)+item.stat);
                 slots[i_idx].DelSprites();  inventory.RemoveAt(i_idx);
                 break;
             case ItemType.Mob:
+                // Mob 사용시 스탯 늘려줌??
                 break;
             case ItemType.Report:
                 battle.AppendMsg(">> 보고서 아이템은 사용할 수 없습니다.");
-                break;
+                return;
             case ItemType.Weapon:
                 PlayerStatManager.playerstat.wheapone = item.stat;
                 slots[i_idx].DelSprites();  inventory.RemoveAt(i_idx);
                 battle.AppendMsg(">> 아이템 사용: 진행중인 전투 동안 공격력 증가(+"+item.stat.ToString()+")\n");
                 break;
         }
+
+        // 인벤토리 아이템 삭제
+        PlayAPI.play_api.DeleteInventory(item.id);
     }
 
     public void UseTargetItem()

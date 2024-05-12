@@ -89,7 +89,7 @@ public class ScriptManager : MonoBehaviour
             {
                 await game_events[i].CreateEventTrigger(script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[i], items[i].name);
             }
-
+            
             ScriptAPI.script_api.PostMapInfo(map[i], items[i], game_events[i], i, curr_chapter+1);
         }
 
@@ -144,9 +144,13 @@ public class ScriptManager : MonoBehaviour
         string time_background = script.GetTimeBackground();
         string space_background = script.GetSpaceBackground();
 
+        // 챕터 목표 달성 API 호출
+        PlayAPI.play_api.UpdateGoalSuccess(goals[curr_chapter].GetId());
+
         curr_chapter++;
-        int place_base = (curr_chapter-1)*3+1;
+        int place_base = curr_chapter*3+1;
         await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[4]);
+        ScriptAPI.script_api.PostGoalInfo(goals[curr_chapter], curr_chapter+1);
         for(int i = 0; i<3;i++){
             // 목표 정보 전달
             await items[place_base+i].InitItem(script, goals[curr_chapter], game_events[place_base+i].type);
@@ -158,7 +162,11 @@ public class ScriptManager : MonoBehaviour
             {
                 await game_events[place_base+i].CreateEventTrigger(script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[place_base+i], items[place_base+i].name);
             }
+            
+            ScriptAPI.script_api.PostMapInfo(map[place_base+i], items[place_base+i], game_events[place_base+i], place_base+i, curr_chapter+1);
         }
+
+        PlayScene.play_scene.Start();
     }
 
     // Settter

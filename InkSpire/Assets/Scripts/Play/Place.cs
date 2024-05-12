@@ -116,7 +116,7 @@ ex)
         }
 
         gpt_messages.Add(query_msg);
-        StringToPlace(await GptManager.gpt.CallGpt(gpt_messages));
+        StringToPlace("출력 " + await GptManager.gpt.CallGpt(gpt_messages));
     }
 
     //장소 이름 및 장소 설명 파싱 함수
@@ -125,15 +125,12 @@ ex)
         clear = false;
 
         string[] place_arr;
-        place_string = place_string.Replace("\n\n", "\n");
-        place_string = place_string.Replace(":\n", ":");
-        place_string = place_string.Replace("\n", ":");
-        place_string = place_string.Replace(": ", ":");
+        place_string = place_string.Replace("장소명: ", "#");
+        place_string = place_string.Replace("장소설명: ", "#");
 
-        place_arr = place_string.Split(':');
-        place_name = regex.Replace(place_arr[1], "");
-        place_name = place_name.Trim();
-        place_info = place_arr[3];
+        place_arr = place_string.Split('#');
+        place_name = regex.Replace(place_arr[1].Trim('\n'), "");
+        place_info = place_arr[2].Trim('\n');
     }
 
     public void SetClear(bool clr)
