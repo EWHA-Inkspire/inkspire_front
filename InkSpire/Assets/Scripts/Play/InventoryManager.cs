@@ -6,12 +6,12 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager i_manager;
 
-    [SerializeField] readonly GameObject battle_window;
+    [SerializeField] GameObject battle_window;
     public BattleEvent battle;
-    [SerializeField] readonly GameObject inventory_window;
+    [SerializeField] GameObject inventory_window;
 
-    [SerializeField] readonly Image[] item_bg = new Image[8];
-    [SerializeField] readonly GameObject item_list;
+    [SerializeField] Image[] item_bg = new Image[8];
+    [SerializeField] GameObject item_list;
     private List<Item> inventory = new();
     private List<InventorySlot> slots = new();
     public InventorySlot slotPrefab;
