@@ -105,11 +105,11 @@ public class Goal
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "진행될 게임의 "+genre+"장르에 어울리는 최종 목표 생성\n\n최종목표유형: "
+            Content = "진행될 게임의 "+genre+"장르에 어울리는 최종 목표 생성"
         };
         gpt_messages.Add(query_msg);
 
-        StringToObjective("최종목표유형: "+await GptManager.gpt.CallGpt(gpt_messages));
+        StringToObjective("출력 "+await GptManager.gpt.CallGpt(gpt_messages));
         
     }
 
@@ -191,11 +191,10 @@ public class Goal
         {
             Role = "user",
             Content = "진행중인 게임의 "+genre+"장르에 어울리는 챕터 목표 생성"
-                    +"\n챕터목표유형: "
         };
         gpt_messages.Add(query_msg);
 
-        StringToObjective("챕터목표유형: "+await GptManager.gpt.CallGpt(gpt_messages));
+        StringToObjective("출력 "+await GptManager.gpt.CallGpt(gpt_messages));
     }
     private void StringToObjective(string obj_string)
     {
