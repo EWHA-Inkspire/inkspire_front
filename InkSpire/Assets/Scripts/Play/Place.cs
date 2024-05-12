@@ -53,9 +53,8 @@ public class Place
             다음은 게임의 배경인 " + time_background + "시대 " + space_background + "를 배경으로 하는 세계관에 대한 설명이다. " + world_detail +
             @" 장소는 해당 게임의 조력자 NPC의 집 혹은 직장으로 생성되며 조력자 NPC의 정보는 다음과 같다. " +
             "이름은 " + pnpc_name + "이며, " + pnpc_detail +
-            @" 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. 또한, 출력의 영어표기를 생략하고 한글표기만 나타낸다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
-
-
+            @" 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 반드시 아래 양식을 따라야 한다. 또한, 출력의 영어표기를 생략하고 한글표기만 나타낸다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
+            ex)
             장소명: *장소 이름을 한 단어로 출력*
             장소설명: *장소에 대한 설명을 50자 내외로 설명, 어미는 입니다 체로 통일합니다.* "
         };
@@ -93,8 +92,8 @@ public class Place
             아이템 이름: " + item.name + @"
             아이템 설명: " + item.info;
         }
-        prompt_msg.Content += @"장소는 게임의 배경에 맞추어 플레이어가 흥미롭게 탐색할 수 있는 곳으로 생성된다. 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
-        
+        prompt_msg.Content += @"장소는 게임의 배경에 맞추어 플레이어가 흥미롭게 탐색할 수 있는 곳으로 생성된다. 장소 생성 양식은 아래와 같다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 반드시 아래 생성 양식을 따라야 한다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
+        ex)
         장소명: *장소 이름을 한 단어로 출력*
         장소설명: *장소에 대한 설명을 50자 내외로 설명, 어미는 입니다 체로 통일합니다.*";
         gpt_messages.Add(prompt_msg);
@@ -126,7 +125,7 @@ public class Place
         clear = false;
 
         string[] place_arr;
-        place_string = place_string.Replace("\n\n", ":");
+        place_string = place_string.Replace("\n\n", "\n");
         place_string = place_string.Replace(":\n", ":");
         place_string = place_string.Replace("\n", ":");
         place_string = place_string.Replace(": ", ":");

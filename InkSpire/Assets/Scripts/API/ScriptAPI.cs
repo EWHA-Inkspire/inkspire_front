@@ -118,7 +118,7 @@ public class ScriptAPI : MonoBehaviour
             if (response.success) {
                 ScriptManager.script_manager.SetMapId(response.data, idx);
 
-                if(item.type != ItemType.Null) {
+                if(item.type != ItemType.Null && item.type != ItemType.Monster) {
                     PostItemInfo(item, response.data);
                 }
                 if(item.type != ItemType.Mob && item.type != ItemType.Monster && item.type != ItemType.Null) {
