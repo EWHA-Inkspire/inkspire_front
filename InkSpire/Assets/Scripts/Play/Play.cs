@@ -18,7 +18,7 @@ public class Play : MonoBehaviour
     private List<ChatMessage> messages = new();
     private ChatMessage input_msg = new();
     private string system_prompt = "";
-    private int save_idx = 1; // 프롬프팅 제외
+    private int save_idx = 0;
     private readonly int SAVING_INTERVAL = 10;
 
     void Awake()
@@ -58,37 +58,36 @@ public class Play : MonoBehaviour
     }
     private void SetSystemPrompt()
     {
-        int curr_chap = ScriptManager.script_manager.GetCurrChap();
         system_prompt = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
-        플레이어가 선택해야 하는 모든 선택지들은 플레이어의 선택을 기다려야 한다.
-        TRPG 진행을 하듯 진행하되, TRPG라는 단어는 언급하면 안된다.
+플레이어가 선택해야 하는 모든 선택지들은 플레이어의 선택을 기다려야 한다.
+TRPG 진행을 하듯 진행하되, TRPG라는 단어는 언급하면 안된다.
 
-        아래와 같은 양식으로 사용자가 입력한 배경과 분위기에 맞는 다른 내용의 게임 시나리오를 출력한다.
-        게임의 최종 목표나 챕터 목표를 절대로 직접언급해서는 안 되며, npc 정보 또한 절대로 직접언급해서는 안 된다.
-        게임 배경에 대한 정보는 출력을 위한 참고사항이며, 해당 정보들을 바탕으로 다음 시나리오 진행한다.
-        npc 정보들을 토대로 적절한 시점에 npc를 등장시킨다.
+아래와 같은 양식으로 사용자가 입력한 배경과 분위기에 맞는 다른 내용의 게임 시나리오를 출력한다.
+게임의 최종 목표나 챕터 목표를 절대로 직접언급해서는 안 되며, npc 정보 또한 절대로 직접언급해서는 안 된다.
+게임 배경에 대한 정보는 출력을 위한 참고사항이며, 해당 정보들을 바탕으로 다음 시나리오 진행한다.
+npc 정보들을 토대로 적절한 시점에 npc를 등장시킨다.
 
-        현재 플레이중인 게임은" + ScriptManager.script_manager.GetScript().GetTimeBackground() + "시대 " + ScriptManager.script_manager.GetScript().GetSpaceBackground() + " 배경으로 하는 " + ScriptManager.script_manager.GetScript().GetGenre() + "장르의 게임이며 세계관은 다음과 같다.\n"
+현재 플레이중인 게임은" + ScriptManager.script_manager.GetScript().GetTimeBackground() + "시대 " + ScriptManager.script_manager.GetScript().GetSpaceBackground() + " 배경으로 하는 " + ScriptManager.script_manager.GetScript().GetGenre() + "장르의 게임이며 세계관은 다음과 같다.\n"
         + ScriptManager.script_manager.GetScript().GetWorldDetail() + "\n\n"
         + "게임의 최종 목표는 " + ScriptManager.script_manager.GetFinalGoal().GetTitle() + "\n" + ScriptManager.script_manager.GetFinalGoal().GetDetail() + "이며"
         + "현재 챕터의 목표는 다음과 같다." + ScriptManager.script_manager.GetCurrGoal().GetTitle() + "\n" + ScriptManager.script_manager.GetCurrGoal().GetDetail()
         + "\n현재 플레이어가 있는 장소는 \"" + ScriptManager.script_manager.GetCurrPlace().place_name + "\"로, " + ScriptManager.script_manager.GetCurrPlace().place_info
         + @"이 아래로 게임 진행 양식이 이어진다. ** 이 표시 안의 내용은 문맥에 맞게 채운 후 *기호는 모두 삭제한다. 
-        ------------------------------------------------
-        Narrator (내레이터):
-        *게임 스토리 진행 멘트와 플레이어의 선택지 생성, 선택지는 반드시 4가지 생성되며 각 선택지끼리의 내용은 절대 중복되지 않는다. *
+-------------------------진행 양식-----------------------
+Narrator (내레이터):
+*게임 스토리 진행 멘트와 플레이어의 선택지 생성, 선택지는 반드시 4가지 생성되며 각 선택지끼리의 내용은 절대 중복되지 않는다. *
 
-        *필요할 경우 현재 상황에 대한 설명*
+*필요할 경우 현재 상황에 대한 설명*
 
-        당신은 아래의 선택지를 고르거나, 다른 행동을 입력할 수 있습니다. 
+당신은 아래의 선택지를 고르거나, 다른 행동을 입력할 수 있습니다. 
 
-        1. *플레이어가 할 수 있는 행동 첫번째*
-        2. *플레이어가 할 수 있는 행동 두번째*
-        3. *플레이어가 할 수 있는 행동 세번째*
-        4. *플레이어가 할 수 있는 행동 네번째*
+1. *플레이어가 할 수 있는 행동 첫번째*
+2. *플레이어가 할 수 있는 행동 두번째*
+3. *플레이어가 할 수 있는 행동 세번째*
+4. *플레이어가 할 수 있는 행동 네번째*
 
-        *NPC 이름*:
-        *npc 대사 내용*";
+*NPC 이름*:
+*npc 대사 내용*";
         if(messages.Count == 0){
             messages.Add(new ChatMessage{Role = "system", Content = system_prompt});
         }
@@ -107,7 +106,7 @@ public class Play : MonoBehaviour
         var item_type = ScriptManager.script_manager.GetCurrItem().type;
         if (item_type == ItemType.Recover || item_type == ItemType.Weapon || item_type == ItemType.Item || item_type == ItemType.Report)
         {
-            if (!ScriptManager.script_manager.GetCurrPlace().clear && await EventChecker.eventChecker.EventCheckerGPT(messages.Last().Content, input_msg.Content, ScriptManager.script_manager.GetCurrEvent()))
+            if (!ScriptManager.script_manager.GetCurrPlace().clear && await EventChecker.eventChecker.EventCheckerGPT(input_msg.Content, ScriptManager.script_manager.GetCurrEvent()))
             {
                 // 이벤트 트리거 도입 스크립트 출력
                 text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");

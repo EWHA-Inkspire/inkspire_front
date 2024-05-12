@@ -130,7 +130,6 @@ public class ScriptAPI : MonoBehaviour
 
     public void PostItemInfo(Item item, int map_id)
     {
-        Debug.Log("ItemInfo: " + item.name + " " + item.info + " " + item.type + " " + item.stat);
         PostItemInfo itemInfo = new()
         {
             mapId = map_id,

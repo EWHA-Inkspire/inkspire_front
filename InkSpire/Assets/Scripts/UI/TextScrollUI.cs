@@ -14,6 +14,11 @@ public class TextScrollUI : MonoBehaviour
 
     public void AppendMsg(ChatMessage msg)
     {
+        if (msg.Role == "system")
+        {
+            return;
+        }
+
         string add_text = "";
         if (msg.Role == "user")
         {
