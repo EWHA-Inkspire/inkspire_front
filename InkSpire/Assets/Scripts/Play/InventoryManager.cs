@@ -8,6 +8,7 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager i_manager;
 
     [SerializeField] GameObject battle_window;
+    [SerializeField] GameObject back_button;
     public BattleEvent battle;
     [SerializeField] GameObject inventory_window;
 
@@ -113,9 +114,25 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public void DeleteTargetItem(){
+
+        if(target_idx < 0 || target_idx >= inventory.Count) {
+            return;
+        }
+        
+        slots[target_idx].DelSprites();  inventory.RemoveAt(target_idx);
+    }
+
+    public void BackButton(){
+        battle.BackButton();
+    }
+
     void OpenButton(){
         battle_window.SetActive(true);
         inventory_window.SetActive(true);
+        if(!is_battle){
+            back_button.gameObject.SetActive(false);
+        }
     }
 
     void CloseButton(){
