@@ -77,7 +77,7 @@ public class HintEvent : MonoBehaviour
             return;
         }
 
-        int hp = PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Hp);
+        int hp = PlayerStatManager.playerstat.GetStatAmount(StatType.Hp);
         if (hp < 100) {
             text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + (100 - hp) + "hp를 회복했어요. 다음에는 꼭 전투에서 승리하시길 기원합니다!");
         } else {

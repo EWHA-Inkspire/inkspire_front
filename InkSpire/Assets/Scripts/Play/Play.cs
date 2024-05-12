@@ -200,6 +200,9 @@ Narrator (내레이터):
             // 전투 이벤트
             battle_event.SetBattle(BattleEvent.BType.MOB, 3);
         }
+
+        // 현재 플레이 장소 업데이트 API 호출
+        PlayAPI.play_api.UpdateCurrPlace(ScriptManager.script_manager.GetCurrPlace().id);
     }
 
     // API 호출 - 채팅 리스트 저장

@@ -45,7 +45,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
         tens_dice.text = tens.ToString();
         pl_value = tens * 10 + ones;
         //행운 스탯은 모든 판정에 int(rand(0,행운)*0.5)만큼의 보정치를 더해준다.
-        luk_value = Random.Range(0, PlayerStatManager.playerstat.p_stats.GetStatAmount(StatType.Luck) / 2);
+        luk_value = Random.Range(0, PlayerStatManager.playerstat.GetStatAmount(StatType.Luck) / 2);
 
         Invoke(nameof(ResultActive), 0.5f);
     }

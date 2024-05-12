@@ -43,3 +43,10 @@ public class PostItemInfo
     public string type;
     public int stat;
 }
+
+[Serializable]
+public class PostInventory
+{
+    public int characterId;
+    public int itemId;
+}

@@ -220,7 +220,11 @@ public class Goal
         etc = obj_arr[4].Trim('\n');
     }
 
-    // 변수 호출 함수들
+    // Getter
+    public int GetId()
+    {
+        return id;
+    }
     public int GetGoalType()
     {
         return type;

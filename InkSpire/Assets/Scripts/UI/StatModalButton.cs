@@ -31,7 +31,7 @@ public class StatModalButton : MonoBehaviour
     }
 
     public void ModalActivate(){
-        status_graph.SetStats(PlayerStatManager.playerstat.p_stats);
+        status_graph.SetStats(PlayerStatManager.playerstat.GetStats());
     }
 
 }

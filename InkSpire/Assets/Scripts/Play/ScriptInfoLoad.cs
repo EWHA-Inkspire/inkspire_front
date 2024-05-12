@@ -58,7 +58,7 @@ public class ScriptInfoLoad : MonoBehaviour
         if (!response.success) {
             return;
         }
-        PlayerStatManager.playerstat.p_stats.SetCharacterStat(response.data);
+        PlayerStatManager.playerstat.SetCharacterStat(response.data);
     }
 
     private void ProcessGoalList(Response<GetGoalList> response) {
