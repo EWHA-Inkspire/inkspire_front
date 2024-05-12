@@ -19,7 +19,7 @@ public class Play : MonoBehaviour
     private ChatMessage input_msg = new();
     private string system_prompt = "";
     private int save_idx = 2; // 프롬프팅 + 인트로 보여줘 문구 제외
-    private readonly int SAVING_INTERVAL = 10;
+    private readonly int SAVING_INTERVAL = 2;
 
     void Awake()
     {
@@ -56,6 +56,7 @@ public class Play : MonoBehaviour
             text_scroll.AppendMsg(introMessage);
         }
     }
+
     private void SetSystemPrompt()
     {
         system_prompt = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
@@ -161,7 +162,9 @@ Narrator (내레이터):
         send_button.enabled = true;
         player_input.enabled = true;
 
-        PostChatList();
+        if(messages.Count - save_idx >= SAVING_INTERVAL){
+            PostChatList();
+        }
     }
 
     public void PlaceButton(int place_idx)
@@ -202,10 +205,6 @@ Narrator (내레이터):
     // API 호출 - 채팅 리스트 저장
     private void PostChatList()
     {
-        if (save_idx + SAVING_INTERVAL >= messages.Count) {
-            return;
-        }
-
         var chatList = new ChatList()
         {
             chats = messages.GetRange(save_idx, messages.Count - save_idx)
@@ -246,7 +245,7 @@ Narrator (내레이터):
             messages.Add(newMessage);
             text_scroll.AppendMsg(newMessage);
         }
-        save_idx = messages.Count; // 프롬프팅 인덱싱 추가
+        save_idx = Mathf.Max(messages.Count, 2); // 프롬프팅 인덱싱 추가
     }
 
     private void ProcessInventory(Response<GetInventory> response)

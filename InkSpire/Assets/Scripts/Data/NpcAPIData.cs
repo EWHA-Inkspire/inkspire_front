@@ -27,7 +27,7 @@ public class PostNpcInfo
 {
     public int mapId;
     public string name;
-    public bool isPnpc;
+    public bool pnpc;
     public string detail;
     public int luck;
     public int defence;

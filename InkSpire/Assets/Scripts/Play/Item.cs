@@ -52,6 +52,13 @@ public class Item
             info = goal.GetEtc();
             return;
         }
+
+        if (type == ItemType.Monster)
+        {
+            name = goal.GetEtc();
+            info = goal.GetDetail();
+            return;
+        }
         
         if (type == ItemType.Recover || type == ItemType.Mob || type == ItemType.Weapon)
         {

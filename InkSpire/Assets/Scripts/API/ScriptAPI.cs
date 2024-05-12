@@ -46,7 +46,7 @@ public class ScriptAPI : MonoBehaviour
         {
             mapId = map[0].id,
             name = pro_npc.GetName(),
-            isPnpc = true,
+            pnpc = true,
             detail = pro_npc.GetDetail(),
             luck = pro_npc.GetStat().GetStatAmount(StatType.Luck),
             defence = pro_npc.GetStat().GetStatAmount(StatType.Defence),
@@ -56,12 +56,19 @@ public class ScriptAPI : MonoBehaviour
             hp = pro_npc.GetStat().GetStatAmount(StatType.Hp),
         };
 
+        string json = JsonUtility.ToJson(pnpc);
+        StartCoroutine(APIManager.api.PostRequest<int>("/npcs", json, (response) => {
+            if (response.success) {
+                ScriptManager.script_manager.SetNpcId(response.data, true);
+            }
+        }));
+
         int anpc_idx = map.FindIndex(x => x.ANPC_exist == 1);
         PostNpcInfo anpc = new()
         {
             mapId = anpc_idx >= 0 ? map[anpc_idx].id : map[0].id,
             name = anta_npc.GetName(),
-            isPnpc = false,
+            pnpc = false,
             detail = anta_npc.GetDetail(),
             luck = anta_npc.GetStat().GetStatAmount(StatType.Luck),
             defence = anta_npc.GetStat().GetStatAmount(StatType.Defence),
@@ -70,15 +77,7 @@ public class ScriptAPI : MonoBehaviour
             attack = anta_npc.GetStat().GetStatAmount(StatType.Attack),
             hp = anta_npc.GetStat().GetStatAmount(StatType.Hp),
         };
-
-        string json = JsonUtility.ToJson(pnpc);
         string json2 = JsonUtility.ToJson(anpc);
-
-        StartCoroutine(APIManager.api.PostRequest<int>("/npcs", json, (response) => {
-            if (response.success) {
-                ScriptManager.script_manager.SetNpcId(response.data, true);
-            }
-        }));
 
         StartCoroutine(APIManager.api.PostRequest<int>("/npcs", json2, (response) => {
             if (response.success) {
@@ -118,7 +117,7 @@ public class ScriptAPI : MonoBehaviour
             if (response.success) {
                 ScriptManager.script_manager.SetMapId(response.data, idx);
 
-                if(item.type != ItemType.Null && item.type != ItemType.Monster) {
+                if(item.type != ItemType.Null) {
                     PostItemInfo(item, response.data);
                 }
                 if(item.type != ItemType.Mob && item.type != ItemType.Monster && item.type != ItemType.Null) {
