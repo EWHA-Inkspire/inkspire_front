@@ -18,7 +18,7 @@ public class Play : MonoBehaviour
     private List<ChatMessage> messages = new();
     private ChatMessage input_msg = new();
     private string system_prompt = "";
-    private int save_idx = 0;
+    private int save_idx = 2; // 프롬프팅 + 인트로 보여줘 문구 제외
     private readonly int SAVING_INTERVAL = 10;
 
     void Awake()

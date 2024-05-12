@@ -65,7 +65,7 @@ public class Stats
                 atk = Mathf.Clamp(amount, STAT_MIN, STAT_MAX);
                 break;
             case StatType.Hp:
-                hp = Mathf.Clamp(amount, STAT_MIN, STAT_MAX);
+                hp = Mathf.Clamp(amount, 0, HP_MAX);
                 break;
         }
 
