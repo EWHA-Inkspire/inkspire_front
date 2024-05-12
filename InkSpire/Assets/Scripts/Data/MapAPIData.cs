@@ -28,5 +28,5 @@ public class PostMapInfo
     public int chapter;
     public string name;
     public string info;
-    public bool isANPC;
+    public bool anpc;
 }

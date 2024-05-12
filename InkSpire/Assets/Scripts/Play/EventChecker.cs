@@ -66,7 +66,7 @@ ex 4)
             이벤트 발생: ";
         gpt_messages.Add(newMessage);
 
-        var response = await GptManager.gpt.CallGpt(gpt_messages);
+        var response = await GptManager.gpt.CallGpt4(gpt_messages);
 
         if(response == "T") {
             return true;

@@ -108,7 +108,7 @@ public class ScriptAPI : MonoBehaviour
             chapter = chapter_num,
             name = place.place_name,
             info = place.place_info,
-            isANPC = place.ANPC_exist == 1
+            anpc = place.ANPC_exist == 1
         };
 
         string json = JsonUtility.ToJson(mapInfo);
