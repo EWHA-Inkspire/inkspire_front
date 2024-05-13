@@ -23,14 +23,18 @@ public class PlayerStatManager : MonoBehaviour
         p_stats = new(atk, def, luk, intl, dex);
 
         // 플레이어 스탯 변경 API 호출
-        PlayAPI.play_api.UpdateCharacterStat(p_stats);
+        if(PlayerPrefs.HasKey("character_id")){
+            PlayAPI.play_api.UpdateCharacterStat(p_stats);
+        }
     }
 
     public void SetStatAmount(StatType type, int amount){
         p_stats.SetStatAmount(type, amount);
 
         // 플레이어 스탯 변경 API 호출
-        PlayAPI.play_api.UpdateCharacterStat(p_stats);
+        if(PlayerPrefs.HasKey("character_id")){
+            PlayAPI.play_api.UpdateCharacterStat(p_stats);
+        }
     }
 
     public int GetStatAmount(StatType type){

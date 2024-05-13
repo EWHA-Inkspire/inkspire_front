@@ -78,7 +78,8 @@ public class HintEvent : MonoBehaviour
 
         int hp = PlayerStatManager.playerstat.GetStatAmount(StatType.Hp);
         if (hp < 100) {
-            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + (100 - hp) + "hp를 회복했어요. 다음에는 꼭 전투에서 승리하시길 기원합니다!");
+            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + (500 - hp) + "hp를 회복했어요. 다음에는 꼭 전투에서 승리하시길 기원합니다!");
+            PlayerStatManager.playerstat.SetStatAmount(StatType.Hp, 500);
         } else {
             text_scroll.AppendMsg(pro_npc.GetName() + ":\n아직 최소 체력에 도달하지 않았어요. 체력 회복은 hp가 100 이하일 경우에만 가능하니 다음에 찾아와주세요!");
         }

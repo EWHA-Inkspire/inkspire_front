@@ -63,7 +63,7 @@ public class GptManager : MonoBehaviour
         else if(cnt != 3)
         {
             cnt++;
-            return await CallGpt(messages);
+            return await CallGpt4(messages);
         }
         else
         {
