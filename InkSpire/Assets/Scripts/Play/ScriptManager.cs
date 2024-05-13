@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ScriptManager : MonoBehaviour
 {
@@ -322,6 +323,7 @@ public class ScriptManager : MonoBehaviour
             {
                 Epilogue.FailOutroGPT();
                 // 에필로그 씬 로드
+                SceneManager.LoadScene("6_Epilogue");
 
             }
         }
@@ -335,11 +337,13 @@ public class ScriptManager : MonoBehaviour
             {
                 Epilogue.SuccessOutroGPT();
                 // 에필로그 씬 로드
+                SceneManager.LoadScene("6_Epilogue");
             }
             else
             {
                 Epilogue.FailOutroGPT();
                 // 에필로그 씬 로드
+                SceneManager.LoadScene("6_Epilogue");
             }
         }
     }
