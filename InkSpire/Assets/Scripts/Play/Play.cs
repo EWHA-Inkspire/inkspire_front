@@ -24,7 +24,7 @@ public class Play : MonoBehaviour
     void Awake()
     {
         int script_id = PlayerPrefs.GetInt("script_id");
-        int chapter_num = ScriptManager.script_manager.GetCurrChap()+1;
+        int chapter_num = ScriptManager.script_manager.GetCurrChap() + 1;
 
         // 스크립트 대화 내용 조회
         StartCoroutine(APIManager.api.GetRequest<ChatList>("/chat/" + script_id + "/" + chapter_num, ProcessChatList));
@@ -34,7 +34,8 @@ public class Play : MonoBehaviour
         StartCoroutine(APIManager.api.GetRequest<GetInventory>("/inventory/" + character_id, ProcessInventory));
     }
 
-    void Start(){
+    void Start()
+    {
         SetSystemPrompt();
         if (messages.Count == 1 && ScriptManager.script_manager.GetCurrChap() == 0)
         {
@@ -48,9 +49,9 @@ public class Play : MonoBehaviour
             var introMessage = new ChatMessage()
             {
                 Role = "assistant",
-                Content = ScriptManager.script_manager.GetScript().GetIntro() + "\n\nNarrator:\n" + ScriptManager.script_manager.GetCharName() + "님, 처음으로 조사할 장소를 선택해주십시오.\n" 
-                +"Map 창의 "+ ScriptManager.script_manager.GetPlace(0).place_name + EulorReul(ScriptManager.script_manager.GetPlace(0).place_name) + " 선택할 시, " 
-                + ScriptManager.script_manager.GetPnpc().GetName()+ EorGa(ScriptManager.script_manager.GetPnpc().GetName()) + " 당신을 반겨줄 것입니다."
+                Content = ScriptManager.script_manager.GetScript().GetIntro() + "\n\nNarrator:\n" + ScriptManager.script_manager.GetCharName() + "님, 처음으로 조사할 장소를 선택해주십시오.\n"
+                + "Map 창의 " + ScriptManager.script_manager.GetPlace(0).place_name + EulorReul(ScriptManager.script_manager.GetPlace(0).place_name) + " 선택할 시, "
+                + ScriptManager.script_manager.GetPnpc().GetName() + EorGa(ScriptManager.script_manager.GetPnpc().GetName()) + " 당신을 반겨줄 것입니다."
             };
             messages.Add(introMessage);
             text_scroll.AppendMsg(introMessage);
@@ -89,11 +90,13 @@ Narrator (내레이터):
 
 *NPC 이름*:
 *npc 대사 내용*";
-        if(messages.Count == 0){
-            messages.Add(new ChatMessage{Role = "system", Content = system_prompt});
+        if (messages.Count == 0)
+        {
+            messages.Add(new ChatMessage { Role = "system", Content = system_prompt });
         }
-        else{
-            messages[0] = new ChatMessage{Role = "system", Content = system_prompt};
+        else
+        {
+            messages[0] = new ChatMessage { Role = "system", Content = system_prompt };
         }
     }
 
@@ -126,7 +129,7 @@ Narrator (내레이터):
                 messages.Add(event_msg);
                 text_scroll.AppendMsg(event_msg.Content);
 
-                dice_event.SetDiceEvent(50+(int)Mathf.Pow(-1,Random.Range(0,2))*Random.Range(0,30));
+                dice_event.SetDiceEvent(50 + (int)Mathf.Pow(-1, Random.Range(0, 2)) * Random.Range(0, 30));
 
                 player_input.text = "";
             }
@@ -161,6 +164,8 @@ Narrator (내레이터):
 
         send_button.enabled = true;
         player_input.enabled = true;
+
+        PostChatList();
     }
 
     public void PlaceButton(int place_idx)
@@ -179,7 +184,7 @@ Narrator (내레이터):
         var newMessage = new ChatMessage()
         {
             Role = "assistant",
-            Content = "Narrator: \n이곳은 " +ScriptManager.script_manager.GetCurrPlace().place_name + "입니다.\n" + ScriptManager.script_manager.GetCurrPlace().place_info
+            Content = "Narrator: \n이곳은 " + ScriptManager.script_manager.GetCurrPlace().place_name + "입니다.\n" + ScriptManager.script_manager.GetCurrPlace().place_info
         };
         if (place_idx == 0)
         {
@@ -204,7 +209,8 @@ Narrator (내레이터):
     // API 호출 - 채팅 리스트 저장
     public void PostChatList()
     {
-        if(messages.Count - save_idx < SAVING_INTERVAL){
+        if (messages.Count - save_idx < SAVING_INTERVAL)
+        {
             return;
         }
 
@@ -224,7 +230,8 @@ Narrator (내레이터):
 
         StartCoroutine(APIManager.api.PostRequest<ChatList>("/chat", chats, response =>
         {
-            if (!response.success) {
+            if (!response.success)
+            {
                 return;
             }
             save_idx = messages.Count;
@@ -234,7 +241,8 @@ Narrator (내레이터):
     // API 호출 결과 처리
     private void ProcessChatList(Response<ChatList> response)
     {
-        if (!response.success || response.data == null) {
+        if (!response.success || response.data == null)
+        {
             return;
         }
 
@@ -253,13 +261,14 @@ Narrator (내레이터):
 
     private void ProcessInventory(Response<GetInventory> response)
     {
-        if (!response.success || response.data == null) {
+        if (!response.success || response.data == null)
+        {
             return;
         }
 
         List<Item> inventories = new();
 
-        foreach(var item in response.data.items)
+        foreach (var item in response.data.items)
         {
             List<Item> items = ScriptManager.script_manager.GetItems();
             int idx = items.FindIndex(x => x.id == item.itemId);
