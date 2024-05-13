@@ -66,6 +66,14 @@ public class InventoryManager : MonoBehaviour
         PlayAPI.play_api.PostInventory(item.id);
     }
 
+    public void SetInventory(List<Item> items)
+    {
+        inventory = items;
+        for (int i = 0; i < inventory.Count; i++) {
+            slots[i].SetItem(inventory[i]);
+        }
+    }
+
     public void UseItem(Item item)
     {
         // 만약 inventory의 크기가 0 이하일 경우 사용할 아이템 없음

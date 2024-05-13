@@ -161,10 +161,6 @@ Narrator (내레이터):
 
         send_button.enabled = true;
         player_input.enabled = true;
-
-        if(messages.Count - save_idx >= SAVING_INTERVAL){
-            PostChatList();
-        }
     }
 
     public void PlaceButton(int place_idx)
@@ -261,12 +257,16 @@ Narrator (내레이터):
             return;
         }
 
+        List<Item> inventories = new();
+
         foreach(var item in response.data.items)
         {
             List<Item> items = ScriptManager.script_manager.GetItems();
             int idx = items.FindIndex(x => x.id == item.itemId);
-            InventoryManager.i_manager.AddItem(items[idx]);
+            inventories.Add(items[idx]);
         }
+
+        InventoryManager.i_manager.SetInventory(inventories);
     }
 
     // 조사 선택 함수
