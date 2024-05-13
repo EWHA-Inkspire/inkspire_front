@@ -308,20 +308,21 @@ public class ScriptManager : MonoBehaviour
             if (CheckGoalCleared() == true)
             {
                 // 최종 장소 목표 정보 전달
-                await items[4].InitItem(script, goals[4], game_events[4].type);
-                await map[4].InitPlace(4, script, items[4], game_events[4].type, place_names);
-                place_names[i4] = map[4].place_name;
+                await items[13].InitItem(script, goals[4], game_events[13].type);
+                await map[13].InitPlace(4, script, items[13], game_events[13].type, place_names);
+                place_names[13] = map[13].place_name;
 
-                if (items[4].type != ItemType.Monster)
+                if (items[13].type != ItemType.Monster)
                 {
-                    await game_events[4].CreateEventTrigger(script.GetWorldDetail(), goals[4].GetDetail(), place_names[4], items[4].name);
+                    await game_events[13].CreateEventTrigger(script.GetWorldDetail(), goals[4].GetDetail(), place_names[13], items[13].name);
                 }
-
                 PlayScene.play_scene.Start();
             }
             else
             {
                 Epilogue.FailOutroGPT();
+                // 에필로그 씬 로드
+
             }
         }
     }
@@ -333,10 +334,12 @@ public class ScriptManager : MonoBehaviour
             if (goals[4].GetClear() == true)
             {
                 Epilogue.SuccessOutroGPT();
+                // 에필로그 씬 로드
             }
             else
             {
                 Epilogue.FailOutroGPT();
+                // 에필로그 씬 로드
             }
         }
     }
