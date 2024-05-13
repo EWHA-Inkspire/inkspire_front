@@ -24,9 +24,9 @@ public class Epilogue
 적대자 NPC : " + anta_npc.GetName() + "(" + anta_npc.GetDetail() + @") 
 게임 장르 : " + Script.GetGenre() + @" 게임 배경 : " + Script.GetTimeBackground() + "/" + Script.GetSpaceBackground() +
 @"** 이 표시 안의 내용은 문맥에 맞게 채운다.
-###
+### 
 
-*조력자 NPC의 성공 축하 멘트*
+*조력자 NPC의 성공 축하 멘트*    
 *게임 마무리 에필로그 (500자 내외의 소설체)*
 
 ###"
