@@ -7,6 +7,7 @@ public class TextScrollUI : MonoBehaviour
 {
     [SerializeField] private ScrollRect scroll;
     [SerializeField] private TextMeshProUGUI story_object;
+    [SerializeField] private Play play_manager;
 
     void Awake(){
         story_object.text = "";
@@ -31,7 +32,10 @@ public class TextScrollUI : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
         scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scroll.content.sizeDelta.y);
         scroll.verticalNormalizedPosition = 0f;
+
+        play_manager.PostChatList();
     }
+
     public void AppendMsg(string msg)
     {
         AppendMsg(new ChatMessage(){ Role = "assistant", Content = msg});

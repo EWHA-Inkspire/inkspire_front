@@ -15,7 +15,11 @@ public class PlayScene : MonoBehaviour
 
     private readonly ScriptManager s_manager = ScriptManager.script_manager;
 
-    public void Start(){
+    void Start(){
+        LoadPlayScene();
+    }
+
+    public void LoadPlayScene(){
 
         Changechap(s_manager.GetCurrChap());
         header_name.text = s_manager.GetCharName()+" HP";

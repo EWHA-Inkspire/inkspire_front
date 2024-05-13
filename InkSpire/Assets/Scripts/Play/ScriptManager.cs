@@ -166,7 +166,7 @@ public class ScriptManager : MonoBehaviour
             ScriptAPI.script_api.PostMapInfo(map[place_base+i], items[place_base+i], game_events[place_base+i], place_base+i, curr_chapter+1);
         }
 
-        PlayScene.play_scene.Start();
+        PlayScene.play_scene.LoadPlayScene();
     }
 
     // Settter

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -56,7 +57,8 @@ public class InventoryManager : MonoBehaviour
     {
         Debug.Log("아이템 추가: \n" + item.name + ", " + item.id);
         inventory.Add(item);
-        slots[inventory.Count-1].SetItem(item);
+        int idx = Mathf.Max(0, inventory.Count-1);
+        slots[idx].SetItem(item);
 
         // 인벤토리 아이템 등록
         PlayAPI.play_api.PostInventory(item.id);

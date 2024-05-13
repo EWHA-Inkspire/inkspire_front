@@ -36,7 +36,7 @@ public class Play : MonoBehaviour
 
     void Start(){
         SetSystemPrompt();
-        if (messages.Count == 1)
+        if (messages.Count == 1 && ScriptManager.script_manager.GetCurrChap() == 0)
         {
             var newMessage = new ChatMessage()
             {
@@ -206,8 +206,12 @@ Narrator (내레이터):
     }
 
     // API 호출 - 채팅 리스트 저장
-    private void PostChatList()
+    public void PostChatList()
     {
+        if(messages.Count - save_idx < SAVING_INTERVAL){
+            return;
+        }
+
         var chatList = new ChatList()
         {
             chats = messages.GetRange(save_idx, messages.Count - save_idx)
