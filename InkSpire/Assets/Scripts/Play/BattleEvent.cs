@@ -13,6 +13,7 @@ public class BattleEvent : MonoBehaviour
     [SerializeField] GameObject atk_window;     // 공격 행동 버튼 그룹
     [SerializeField] GameObject def_window;     // 방어 행동 버튼 그룹
     [SerializeField] GameObject inventory_window;   // 전투용 인벤토리창
+    [SerializeField] GameObject inventory_back;     // 전투 뒤로 버튼
 
     [SerializeField] GameObject bdice_window;   // 전투용 주사위 UI
     [SerializeField] TextMeshProUGUI tens_dice; // 십의 자리 텍스트
@@ -166,7 +167,8 @@ public class BattleEvent : MonoBehaviour
                 break;
             case 2: // 아이템
                 inventory_window.SetActive(true);
-                atk_window.SetActive(false);
+                
+                //atk_window.SetActive(false);
                 break;
             default:
                 Debug.Log(">> AtkTurn: Wrong Action");
@@ -358,6 +360,19 @@ public class BattleEvent : MonoBehaviour
             Invoke(nameof(SetAttackTurn), 0.5f);   
         }
     }
+
+    public void BackButton(){
+        inventory_window.gameObject.SetActive(false);
+        bdice_window.gameObject.SetActive(false);
+
+        if(curr_turn == Turn.ENM){
+            def_window.gameObject.SetActive(true);
+        }
+        else{
+            atk_window.gameObject.SetActive(true);
+        }
+    }
+
 
     int CalcATKDamage(string name, int dice, int luk_stat, int atk_stat){
         // 공격 데미지 계산 함수
