@@ -161,10 +161,6 @@ Narrator (내레이터):
 
         send_button.enabled = true;
         player_input.enabled = true;
-
-        if(messages.Count - save_idx >= SAVING_INTERVAL){
-            PostChatList();
-        }
     }
 
     public void PlaceButton(int place_idx)
