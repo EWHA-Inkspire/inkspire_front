@@ -167,8 +167,8 @@ public class BattleEvent : MonoBehaviour
                 break;
             case 2: // 아이템
                 inventory_window.SetActive(true);
-                
-                //atk_window.SetActive(false);
+                inventory_back.SetActive(true);
+                atk_window.SetActive(false);
                 break;
             default:
                 Debug.Log(">> AtkTurn: Wrong Action");
@@ -188,6 +188,7 @@ public class BattleEvent : MonoBehaviour
                 break;
             case 3: // 아이템
                 inventory_window.SetActive(true);
+                inventory_back.SetActive(true);
                 def_window.SetActive(false);
                 break;
             default:
