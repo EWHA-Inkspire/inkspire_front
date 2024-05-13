@@ -16,6 +16,7 @@ public class ScriptManager : MonoBehaviour
     private List<string> place_names = new();
     private Npc pro_npc;
     private Npc anta_npc;
+    private string achivement;
 
     private bool init_script = false;
 
@@ -93,6 +94,8 @@ public class ScriptManager : MonoBehaviour
             ScriptAPI.script_api.PostMapInfo(map[i], items[i], game_events[i], i, curr_chapter+1);
         }
 
+        achivement = await script.AchivementGPT();
+        Debug.Log("업적명:"+achivement);
         await script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
         ScriptAPI.script_api.PutIntroInfo(script);
         init_script = true;

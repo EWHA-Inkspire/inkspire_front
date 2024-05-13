@@ -71,6 +71,51 @@ public class Script
         this.world_detail = response;
     }
 
+    public async Task<string> AchivementGPT(){
+        gpt_messages.Clear();
+        var newMessage = new ChatMessage()
+        {
+            Role = "system",
+            Content = @"당신은 TRPG 게임을 클리어 하였을 때 달성되는 업적의 제목을 5단어 이내로 출력한다."
+            +@"아래는 출력 예시이다. 
+            
+            시간적 배경:근미래
+            공간적 배경:영국
+            장르:SF
+            최종목표:바스커빌 도시의 지하의 음모를 파헤치기
+            업적:바스커빌 도시의 비밀
+
+            시간적 배경:중세
+            공간적 배경:유럽 가상국가
+            장르:판타지
+            최종목표:미쉘스웨이트 저택을 조사하여 전설의 보검을 찾아라!
+            업적:미쉘스웨이트 저택의 보검
+
+            시간적 배경:19세기
+            공간적 배경:영국
+            장르:추리
+            최종목표:도미스 살인사건의 진범을 찾아라!
+            업적:도미스 살인사건의 진실
+            "
+        };
+        gpt_messages.Add(newMessage);
+
+        newMessage = new ChatMessage()
+        {
+            Role = "user",
+            Content = "시간적 배경:"+time_background+
+            "\n공간적 배경:"+space_background
+            +"\n장르:"+genre
+            +"\n최종목표:"+ScriptManager.script_manager.GetFinalGoal().GetTitle()
+            +"\n업적:"
+        };
+
+        gpt_messages.Add(newMessage);
+
+        var response = await GptManager.gpt.CallGpt(gpt_messages);
+        return response;
+    }
+
     public async Task IntroGPT(Npc pro_npc, Npc anta_npc, string place_name, string place_info, string char_name)
     {
         gpt_messages.Clear();
