@@ -98,9 +98,6 @@ public class ScriptManager : MonoBehaviour
             ScriptAPI.script_api.PostMapInfo(map[i], items[i], game_events[i], i, curr_chapter + 1);
         }
 
-        SetFinalPlace();
-        SetEpilogue();
-
         await script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
         ScriptAPI.script_api.PutIntroInfo(script);
         init_script = true;
