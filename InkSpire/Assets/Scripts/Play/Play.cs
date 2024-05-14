@@ -196,10 +196,13 @@ Narrator (내레이터):
 
         // 장소의 아이템 유형이 Mob이거나 Monster일 경우 전투 이벤트 발동
         var item_type = ScriptManager.script_manager.GetCurrItem().type;
-        if (item_type == ItemType.Mob || item_type == ItemType.Monster)
+        if (item_type == ItemType.Mob)
         {
             // 전투 이벤트
-            battle_event.SetBattle(BattleEvent.BType.MOB, 3);
+            battle_event.SetBattle(BattleEvent.BType.MOB, Random.Range(1,6));
+        }
+        else if(item_type == ItemType.Monster){
+            battle_event.SetBattle(BattleEvent.BType.BOSS,1);
         }
 
         // 현재 플레이 장소 업데이트 API 호출
