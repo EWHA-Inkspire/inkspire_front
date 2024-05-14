@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 public class Epilogue
 {
+    [SerializeField] public TextScrollUI text_scroll;
     private List<ChatMessage> gpt_messages = new();
     private readonly string GPT_ERROR = "No text was generated from this prompt.";
 
@@ -52,7 +53,7 @@ public class Epilogue
         var response = await GptManager.gpt.CallGpt(gpt_messages);
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
-        this.intro = response.Replace("###", "");
+        text_scroll.AppendMsg(newMessage);
     }
 
     public async Task FailOutroGPT(Npc pro_npc, Npc anta_npc)
@@ -103,6 +104,6 @@ public class Epilogue
         var response = await GptManager.gpt.CallGpt(gpt_messages);
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
-        this.intro = response.Replace("###", "");
+        text_scroll.AppendMsg(newMessage);
     }
 }
