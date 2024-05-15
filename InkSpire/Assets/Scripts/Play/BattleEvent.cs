@@ -33,6 +33,7 @@ public class BattleEvent : MonoBehaviour
     int m_num = 1;
     int target = 0;
     int pl_action;
+    string boss_name;
 
     // *****열거형, 상수 선언 및 정의*****
     public enum BType
@@ -76,6 +77,8 @@ public class BattleEvent : MonoBehaviour
 
         if (bType == BType.BOSS)
         {
+            boss_name = ScriptManager.script_manager.GetCurrGoal().GetEtc();
+            mobgroup.gameObject.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = boss_name;
             //보스몬스터 스탯 셋팅
             for (int j = 0; j < 5; j++)
             {
@@ -125,7 +128,12 @@ public class BattleEvent : MonoBehaviour
             curr_turn = Turn.ENM;
 
             // 선공 메시지 append
-            AppendMsg("\n<b>:: 전투 시작 ::</b>\n>> 선공: Enemy");
+            if(bType == BType.BOSS){
+                AppendMsg("\n<b>:: 전투 시작 ::</b>\n>> 선공: "+GetMobName(0));
+            }
+            else{
+                AppendMsg("\n<b>:: 전투 시작 ::</b>\n>> 선공: Enemy");
+            }
 
             SetDefenceTurn();
         }
@@ -142,7 +150,7 @@ public class BattleEvent : MonoBehaviour
 
         for (int i = 0; i < m_num; i++)
         {
-            AppendMsg("\n>> Enemy" + (i + 1) + "\tHP: " + enm_stat[i].GetStatAmount(StatType.Hp) + "/" + enm_stat[i].GetStatAmount(StatType.MaxHP));
+            AppendMsg("\n>> "+GetMobName(i) + "\tHP: " + enm_stat[i].GetStatAmount(StatType.Hp) + "/" + enm_stat[i].GetStatAmount(StatType.MaxHP));
             AppendMsg("공격: " + enm_stat[i].GetStatAmount(StatType.Attack).ToString() + " | 방어: " + enm_stat[i].GetStatAmount(StatType.Defence).ToString() + " | 민첩: " + enm_stat[i].GetStatAmount(StatType.Dexterity).ToString() + " | 행운: " + enm_stat[i].GetStatAmount(StatType.Luck).ToString());
         }
         AppendMsg(" ");
@@ -162,7 +170,7 @@ public class BattleEvent : MonoBehaviour
 
         for (int i = 0; i < m_num; i++)
         {
-            AppendMsg("\n>> Enemy" + (i + 1) + "\tHP: " + enm_stat[i].GetStatAmount(StatType.Hp) + "/" + enm_stat[i].GetStatAmount(StatType.MaxHP));
+            AppendMsg("\n>> " + GetMobName(i) + "\tHP: " + enm_stat[i].GetStatAmount(StatType.Hp) + "/" + enm_stat[i].GetStatAmount(StatType.MaxHP));
             AppendMsg("공격: " + enm_stat[i].GetStatAmount(StatType.Attack).ToString() + " | 방어: " + enm_stat[i].GetStatAmount(StatType.Defence).ToString() + " | 민첩: " + enm_stat[i].GetStatAmount(StatType.Dexterity).ToString() + " | 행운: " + enm_stat[i].GetStatAmount(StatType.Luck).ToString());
         }
         AppendMsg(" ");
@@ -360,7 +368,7 @@ public class BattleEvent : MonoBehaviour
 
             }
             damage -= d_damage;
-            AppendMsg("DAMAGE>> Enemy" + (target + 1).ToString() + " HP" + enm_stat[target].GetStatAmount(StatType.Hp).ToString() + " -> " + (enm_stat[target].GetStatAmount(StatType.Hp) - damage).ToString() + "\n");
+            AppendMsg("DAMAGE>> " + GetMobName(target) + " HP" + enm_stat[target].GetStatAmount(StatType.Hp).ToString() + " -> " + (enm_stat[target].GetStatAmount(StatType.Hp) - damage).ToString() + "\n");
             enm_stat[target].SetStatAmount(StatType.Hp, enm_stat[target].GetStatAmount(StatType.Hp) - damage);
         }
 
@@ -371,7 +379,7 @@ public class BattleEvent : MonoBehaviour
             if (enm_stat[i].GetStatAmount(StatType.Hp) == 0 && !is_dead[i])
             {
                 // 적 처치 메시지 출력
-                AppendMsg("DEFEAT>> Enemy" + (i + 1).ToString() + " 처치!!");
+                AppendMsg("DEFEAT>> " + GetMobName(i) + " 처치!!");
                 is_dead[i] = true;
             }
         }
@@ -551,10 +559,14 @@ public class BattleEvent : MonoBehaviour
 
         bdice_window.SetActive(true);
         mobgroup.gameObject.SetActive(true);
+        if(bType  == BType.BOSS){
+            mobgroup.gameObject.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = "Enemy1";
+        }
         for (int k = 0; k < 5; k++)
         {
             mobgroup.gameObject.transform.GetChild(k).gameObject.SetActive(true);
         }
+
         mobgroup.gameObject.SetActive(false);
         bdice_window.SetActive(false);
 
@@ -568,6 +580,17 @@ public class BattleEvent : MonoBehaviour
         inventory_window.SetActive(false);
         battle_window.SetActive(false);
 
+    }
+
+    string GetMobName(int idx){
+        string mobname = "Enemy";
+        if(idx == 0 && bType == BType.BOSS){
+            mobname = boss_name;
+        }
+        else{
+            mobname += (idx+1).ToString();
+        }
+        return mobname;
     }
 
     public void AppendMsg(string msg)
