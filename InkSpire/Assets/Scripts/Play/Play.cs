@@ -51,7 +51,10 @@ public class Play : MonoBehaviour
                 + "Map 창의 " + ScriptManager.script_manager.GetPlace(0).place_name + EulorReul(ScriptManager.script_manager.GetPlace(0).place_name) + " 선택할 시, "
                 + ScriptManager.script_manager.GetPnpc().GetName() + EorGa(ScriptManager.script_manager.GetPnpc().GetName()) + " 당신을 반겨줄 것입니다."
             };
-            messages.Add(introMessage);
+            if(!messages.Exists(x => x.Content == introMessage.Content))
+            {
+                messages.Add(introMessage);
+            }
             text_scroll.AppendMsg(introMessage);
         }
     }
@@ -98,7 +101,11 @@ Narrator (내레이터):
 
 *NPC 이름*:
 *npc 대사 내용*";
-        if(!messages.Exists(x => x.Content == system_prompt))
+        if(messages.Exists(x => x.Role == "system"))
+        {
+            messages[0] = new ChatMessage { Role = "system", Content = system_prompt };
+        }
+        else
         {
             messages.Insert(0, new ChatMessage { Role = "system", Content = system_prompt });
         }
