@@ -19,6 +19,8 @@ public class ScriptManager : MonoBehaviour
     private Npc anta_npc;
     private string achivement;
 
+    Epilogue epilogue = new Epilogue();
+
     private bool init_script = false;
 
     // 일반함수
@@ -100,7 +102,7 @@ public class ScriptManager : MonoBehaviour
         }
 
         achivement = await script.AchivementGPT();
-        Debug.Log("업적명:"+achivement);
+        Debug.Log("업적명:" + achivement);
         await script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
         ScriptAPI.script_api.PutIntroInfo(script);
         init_script = true;
@@ -302,7 +304,7 @@ public class ScriptManager : MonoBehaviour
         }
     }
 
-    public void SetFinalPlace()
+    public async void SetFinalPlace()
     {
         if (curr_place_idx == 12)
         {
@@ -317,11 +319,10 @@ public class ScriptManager : MonoBehaviour
                 {
                     await game_events[13].CreateEventTrigger(script.GetWorldDetail(), goals[4].GetDetail(), place_names[13], items[13].name);
                 }
-                PlayScene.play_scene.Start();
             }
             else
             {
-                Epilogue.FailOutroGPT();
+                epilogue.FailOutroGPT(pro_npc, anta_npc, script);
                 // 에필로그 씬 로드
                 SceneManager.LoadScene("6_Epilogue");
 
@@ -335,13 +336,13 @@ public class ScriptManager : MonoBehaviour
         {
             if (goals[4].GetClear() == true)
             {
-                Epilogue.SuccessOutroGPT();
+                epilogue.SuccessOutroGPT(pro_npc, anta_npc, script);
                 // 에필로그 씬 로드
                 SceneManager.LoadScene("6_Epilogue");
             }
             else
             {
-                Epilogue.FailOutroGPT();
+                epilogue.FailOutroGPT(pro_npc, anta_npc, script);
                 // 에필로그 씬 로드
                 SceneManager.LoadScene("6_Epilogue");
             }
@@ -353,7 +354,7 @@ public class ScriptManager : MonoBehaviour
         int i = 0;
         while (i < 4)
         {
-            if (!goal[i].GetClear())
+            if (!goals[i].GetClear())
             {
                 return false;
             }

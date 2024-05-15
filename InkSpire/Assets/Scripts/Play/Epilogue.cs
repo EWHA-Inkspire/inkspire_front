@@ -9,7 +9,7 @@ public class Epilogue
     private List<ChatMessage> gpt_messages = new();
     private readonly string GPT_ERROR = "No text was generated from this prompt.";
 
-    public async Task SuccessOutroGPT(Npc pro_npc, Npc anta_npc)
+    public async Task SuccessOutroGPT(Npc pro_npc, Npc anta_npc, Script script)
     {
         gpt_messages.Clear();
 
@@ -23,7 +23,7 @@ public class Epilogue
 이 게임의 정보는 아래와 같다. 
 조력자 npc : " + pro_npc.GetName() + "(" + pro_npc.GetDetail() + @")
 적대자 NPC : " + anta_npc.GetName() + "(" + anta_npc.GetDetail() + @") 
-게임 장르 : " + Script.GetGenre() + @" 게임 배경 : " + Script.GetTimeBackground() + "/" + Script.GetSpaceBackground() +
+게임 장르 : " + script.GetGenre() + @" 게임 배경 : " + script.GetTimeBackground() + "/" + script.GetSpaceBackground() +
 @"** 이 표시 안의 내용은 문맥에 맞게 채운다.
 ### 
 
@@ -39,10 +39,10 @@ public class Epilogue
         {
             Role = "user",
             Content = "플레이어의 이름은 다음과 같다. 플레이어 이름:" + ScriptManager.script_manager.GetCharName()
-            + "\n현재 플레이중인 게임은 " + Script.GetTimeBackground() + ", "
-            + Script.GetSpaceBackground() + "(을)를 배경으로 하는 "
-            + Script.GetGenre() + " 장르의 게임이며 세계관은 다음과 같다.\n"
-            + Script.GetWorldDetail()
+            + "\n현재 플레이중인 게임은 " + script.GetTimeBackground() + ", "
+            + script.GetSpaceBackground() + "(을)를 배경으로 하는 "
+            + script.GetGenre() + " 장르의 게임이며 세계관은 다음과 같다.\n"
+            + script.GetWorldDetail()
             + "\n 또한 이 게임의 최종 목표는 다음과 같다."
             + ScriptManager.script_manager.GetFinalGoal()
             + "\n플레이어는 게임의 마지막 관문인 이 목표 통과하였다. 이에 따른 게임의 에필로그를 출력하라."
@@ -56,7 +56,7 @@ public class Epilogue
         text_scroll.AppendMsg(newMessage);
     }
 
-    public async Task FailOutroGPT(Npc pro_npc, Npc anta_npc)
+    public async Task FailOutroGPT(Npc pro_npc, Npc anta_npc, Script script)
     {
         gpt_messages.Clear();
 
@@ -71,7 +71,7 @@ public class Epilogue
 이 게임의 정보는 아래와 같다. 
 조력자 npc : " + pro_npc.GetName() + "(" + pro_npc.GetDetail() + @")
 적대자 NPC : " + anta_npc.GetName() + "(" + anta_npc.GetDetail() + @") 
-게임 장르 : " + Script.GetGenre() + @" 게임 배경 : " + Script.GetTimeBackground() + "/" + Script.GetSpaceBackground() +
+게임 장르 : " + script.GetGenre() + @" 게임 배경 : " + script.GetTimeBackground() + "/" + script.GetSpaceBackground() +
 @"** 이 표시 안의 내용은 문맥에 맞게 채운다.
 ###
 
@@ -90,10 +90,10 @@ public class Epilogue
         {
             Role = "user",
             Content = "플레이어의 이름은 다음과 같다. 플레이어 이름:" + ScriptManager.script_manager.GetCharName()
-            + "\n현재 플레이중인 게임은 " + Script.GetTimeBackground() + ", "
-            + Script.GetSpaceBackground() + "(을)를 배경으로 하는 "
-            + Script.GetGenre() + " 장르의 게임이며 세계관은 다음과 같다.\n"
-            + Script.GetWorldDetail()
+            + "\n현재 플레이중인 게임은 " + script.GetTimeBackground() + ", "
+            + script.GetSpaceBackground() + "(을)를 배경으로 하는 "
+            + script.GetGenre() + " 장르의 게임이며 세계관은 다음과 같다.\n"
+            + script.GetWorldDetail()
             + "\n 또한 이 게임의 최종 목표는 다음과 같다."
             + ScriptManager.script_manager.GetFinalGoal()
             + "\n플레이어는 게임의 마지막 관문인 이 목표 통과하지 못했다. 이에 따른 게임의 에필로그를 출력하라."
