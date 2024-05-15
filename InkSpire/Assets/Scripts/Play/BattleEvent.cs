@@ -445,7 +445,7 @@ public class BattleEvent : MonoBehaviour
         InventoryManager.i_manager.is_battle = false;
         string result_str;
         if(result==0){
-            result_str = "WIN";
+            result_str = "WIN\n";
             
             Item map_item = ScriptManager.script_manager.GetCurrItem();
             Debug.Log("맵 아이템 이름:"+map_item.name);
@@ -453,15 +453,16 @@ public class BattleEvent : MonoBehaviour
             ScriptManager.script_manager.SetPlaceClear(true);
             
             if(bType == BType.BOSS){    // 목표 전투였을 경우 다음 챕터 셋팅
+                Debug.Log("보스 전투 승리");
                 ScriptManager.script_manager.SetNextChapter();
             }
             
         }
         else if(result==1){
-            result_str = "LOSE";
+            result_str = "LOSE\n";
         }
         else{
-            result_str = "RUN";
+            result_str = "RUN\n";
             // 도망 전용 스크립트 출력
         }
 

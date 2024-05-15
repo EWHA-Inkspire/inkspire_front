@@ -33,6 +33,7 @@ public class CharacterListModal : MonoBehaviour
         }
 
         foreach(int chapter_num in response.data.chapters){
+            ScriptManager.script_manager.SetCurrChap(Mathf.Max(ScriptManager.script_manager.GetCurrChap(),chapter_num-1));
             switch(chapter_num){
                 case 1:
                     chapter_1.SetActive(true);
@@ -49,6 +50,7 @@ public class CharacterListModal : MonoBehaviour
                 case 5:
                     chapter_5.SetActive(true);
                     break;
+                
             }
         }
     }

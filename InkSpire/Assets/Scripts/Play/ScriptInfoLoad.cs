@@ -41,7 +41,7 @@ public class ScriptInfoLoad : MonoBehaviour
         StartCoroutine(APIManager.api.GetRequest<GetEventList>("/events/" + script_id, ProcessEventList));
 
         // 현재 챕터 정보 업데이트
-        ScriptManager.script_manager.SetCurrChap(chapter_num);
+        ScriptManager.script_manager.SetViewChap(chapter_num);
         ScriptManager.script_manager.SetCharName(PlayerPrefs.GetString("character_name"));
     }
 

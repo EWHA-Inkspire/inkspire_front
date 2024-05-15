@@ -14,6 +14,7 @@ public class Play : MonoBehaviour
     [SerializeField] public TextScrollUI text_scroll;
     [SerializeField] private Button send_button;
     [SerializeField] private GameObject map_modal;
+    
 
     private List<ChatMessage> messages = new();
     private ChatMessage input_msg = new();
@@ -24,7 +25,7 @@ public class Play : MonoBehaviour
     void Awake()
     {
         int script_id = PlayerPrefs.GetInt("script_id");
-        int chapter_num = ScriptManager.script_manager.GetCurrChap() + 1;
+        int chapter_num = ScriptManager.script_manager.GetViewChap() + 1;
 
         // 스크립트 대화 내용 조회
         StartCoroutine(APIManager.api.GetRequest<ChatList>("/chat/" + script_id + "/" + chapter_num, ProcessChatList));
@@ -207,6 +208,11 @@ Narrator (내레이터):
 
         // 현재 플레이 장소 업데이트 API 호출
         PlayAPI.play_api.UpdateCurrPlace(ScriptManager.script_manager.GetCurrPlace().id);
+    }
+
+    public void MoveToChap(int idx){
+        //현재 챕터 채팅 저장
+
     }
 
     // API 호출 - 채팅 리스트 저장
