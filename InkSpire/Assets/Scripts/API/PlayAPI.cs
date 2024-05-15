@@ -1,10 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using OpenAI;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayAPI : MonoBehaviour
 {
     public static PlayAPI play_api;
+    private int save_idx = 0;
+    private readonly int SAVING_INTERVAL = 1;
 
     private void Awake()
     {
@@ -18,6 +23,67 @@ public class PlayAPI : MonoBehaviour
             Destroy(this);
             return;
         }
+    }
+
+    public void GetChatList(Play play)
+    {
+        int script_id = PlayerPrefs.GetInt("script_id");
+        int chapter_num = ScriptManager.script_manager.GetViewChap() + 1;
+
+        // 스크립트 대화 내용 조회
+        StartCoroutine(APIManager.api.GetRequest<ChatList>("/chat/" + script_id + "/" + chapter_num, (response) => {
+            if (!response.success || response.data == null || response.data.chats == null)
+            {
+                return;
+            }
+
+            List<ChatMessage> messages = new();
+
+            foreach (var chat in response.data.chats)
+            {
+                var newMessage = new ChatMessage()
+                {
+                    Role = chat.role,
+                    Content = chat.content
+                };
+                messages.Add(newMessage);
+            }
+            save_idx = Mathf.Max(messages.Count, 0); // 프롬프팅 인덱싱 추가
+            play.InitMessages(messages);
+            play.text_scroll.InitStoryObj(messages);
+        }));
+    }
+
+    // API 호출 - 채팅 리스트 저장
+    public void PostChatList(List<ChatMessage> messages)
+    {
+        if (messages.Count - save_idx < SAVING_INTERVAL)
+        {
+            return;
+        }
+
+        var chatList = new ChatList()
+        {
+            chats = messages.GetRange(save_idx, messages.Count - save_idx)
+                .Select(msg => new ChatInfo()
+                {
+                    scriptId = PlayerPrefs.GetInt("script_id"),
+                    role = msg.Role,
+                    content = msg.Content,
+                    chapter = ScriptManager.script_manager.GetCurrChap() + 1
+                }).ToList()
+        };
+
+        string chats = JsonUtility.ToJson(chatList);
+
+        StartCoroutine(APIManager.api.PostRequest<ChatList>("/chat", chats, response =>
+        {
+            if (!response.success)
+            {
+                return;
+            }
+            save_idx = messages.Count;
+        }));
     }
 
     public void UpdateCharacterStat(Stats stats)
@@ -51,6 +117,28 @@ public class PlayAPI : MonoBehaviour
         }));
     }
 
+    public void GetInventory()
+    {
+        int character_id = PlayerPrefs.GetInt("character_id");
+        StartCoroutine(APIManager.api.GetRequest<GetInventory>("/inventory/" + character_id, (response) => {
+            if (!response.success || response.data == null)
+            {
+                return;
+            }
+
+            List<Item> inventories = new();
+
+            foreach (var item in response.data.items)
+            {
+                List<Item> items = ScriptManager.script_manager.GetItems();
+                int idx = items.FindIndex(x => x.id == item.itemId);
+                inventories.Add(items[idx]);
+            }
+
+            InventoryManager.i_manager.SetInventory(inventories);
+        }));
+    }
+
     public void PostInventory(int item_id)
     {
         PostInventory postInventory = new PostInventory
@@ -76,5 +164,10 @@ public class PlayAPI : MonoBehaviour
                 Debug.Log("Item Deleted");
             }
         }));
+    }
+
+    public void InitSaveIdx()
+    {
+        save_idx = 0;
     }
 }

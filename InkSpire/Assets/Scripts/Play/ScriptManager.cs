@@ -328,7 +328,7 @@ public class ScriptManager : MonoBehaviour
             }
             else
             {
-                epilogue.FailOutroGPT(pro_npc, anta_npc, script);
+                await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
                 // 에필로그 씬 로드
                 SceneManager.LoadScene("6_Epilogue");
 
@@ -336,19 +336,19 @@ public class ScriptManager : MonoBehaviour
         }
     }
 
-    public void SetEpilogue()
+    public async void SetEpilogue()
     {
         if (curr_place_idx == 7)
         {
             if (goals[2].GetClear() == true)
             {
-                epilogue.SuccessOutroGPT(pro_npc, anta_npc, script);
+                await epilogue.SuccessOutroGPT(pro_npc, anta_npc, script);
                 // 에필로그 씬 로드
                 SceneManager.LoadScene("6_Epilogue");
             }
             else
             {
-                epilogue.FailOutroGPT(pro_npc, anta_npc, script);
+                await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
                 // 에필로그 씬 로드
                 SceneManager.LoadScene("6_Epilogue");
             }

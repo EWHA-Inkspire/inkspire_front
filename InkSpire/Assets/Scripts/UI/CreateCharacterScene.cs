@@ -12,6 +12,12 @@ public class CreateCharacterScene : MonoBehaviour
 
     [SerializeField] ToggleGroup genregroup;
 
+    void Awake()
+    {
+        PlayerPrefs.DeleteKey("script_id");
+        PlayerPrefs.DeleteKey("character_id");
+    }
+
     public string GetGenre()
     {
         string[] strlist = genregroup.ActiveToggles().FirstOrDefault().GetComponentInChildren<Text>().text.Split("#");

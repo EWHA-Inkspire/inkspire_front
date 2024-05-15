@@ -519,19 +519,21 @@ public class BattleEvent : MonoBehaviour
             InventoryManager.i_manager.AddItem(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
 
-            if (ScriptManager.script_manager.GetCurrChap() == 3)
-            {
-                ScriptManager.script_manager.SetFinalPlace();
-            }
-
-            if (ScriptManager.script_manager.GetCurrChap() == 4)
-            {
-                ScriptManager.script_manager.SetEpilogue();
-            }
 
             if (bType == BType.BOSS)
-            {    // 목표 전투였을 경우 다음 챕터 셋팅
-                ScriptManager.script_manager.SetNextChapter();
+            {
+                if (ScriptManager.script_manager.GetCurrChap() == 3)
+                {
+                    ScriptManager.script_manager.SetFinalPlace();
+                }
+                else if (ScriptManager.script_manager.GetCurrChap() == 4)
+                {
+                    ScriptManager.script_manager.SetEpilogue();
+                }
+                else
+                {   // 목표 전투였을 경우 다음 챕터 셋팅
+                    ScriptManager.script_manager.SetNextChapter();
+                }
             }
 
         }

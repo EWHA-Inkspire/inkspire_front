@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using OpenAI;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -6,6 +8,7 @@ using UnityEngine.UI;
 public class PlayScene : MonoBehaviour
 {
     public static PlayScene play_scene;
+    [SerializeField] private Play play;
     [SerializeField] TextMeshProUGUI header_name;
     [SerializeField] TextMeshProUGUI header_HP;
     [SerializeField] TextMeshProUGUI title_chapnum;
@@ -111,11 +114,12 @@ public class PlayScene : MonoBehaviour
                 }
             }
         }
-        // 텍스트박스 셋팅
-            //API로 대화내용 가져옴
-            // for문으로 돌며 TextScrollUI.AppendMsg()
+        play.InitMessages(new List<ChatMessage>());
+        play.text_scroll.InitStoryObj(new List<ChatMessage>());
+        PlayAPI.play_api.InitSaveIdx();
+        PlayAPI.play_api.GetChatList(play);
+        
         is_loading = false;
-
     }
 
     public void ViewPrevChapButton(){
@@ -124,7 +128,6 @@ public class PlayScene : MonoBehaviour
         }
         LoadNextChapUI();
         LoadChapter(view_idx-1);
-
     }
 
     public void ViewNextChapButton(){
