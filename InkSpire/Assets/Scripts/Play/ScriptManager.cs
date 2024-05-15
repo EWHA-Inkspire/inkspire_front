@@ -10,7 +10,7 @@ public class ScriptManager : MonoBehaviour
     private int curr_place_idx = 0;
 
     private Script script;
-    private Goal[] goals = new Goal[5];
+    private Goal[] goals = new Goal[3];
     private List<Place> map = new();
     private List<Item> items = new();
     private List<Event> game_events = new();
@@ -44,7 +44,7 @@ public class ScriptManager : MonoBehaviour
             goals[i] = new Goal();
         }
 
-        for (int i = 0; i < 14; i++)
+        for (int i = 0; i < 8; i++)
         {
             map.Add(new Place());
             items.Add(new Item());
@@ -66,9 +66,9 @@ public class ScriptManager : MonoBehaviour
         ScriptAPI.script_api.PostScenarioInfo(script, char_name);
 
         // 목표 생성
-        await goals[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
-        await goals[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[4]);
-        ScriptAPI.script_api.PostGoalInfo(goals[4], 5);
+        await goals[2].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
+        await goals[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[2]);
+        ScriptAPI.script_api.PostGoalInfo(goals[2], 3); // PostGoalInfo(goal, chapter_num)
         ScriptAPI.script_api.PostGoalInfo(goals[0], curr_chapter + 1);
 
         // npc 정보 생성
@@ -112,7 +112,7 @@ public class ScriptManager : MonoBehaviour
     private void ChooseEventType()
     {
         int i = 1;
-        while (i < 13)
+        while (i < 7)
         {
             int flag = Random.Range(0, 3);
             if (flag == 0)
@@ -148,7 +148,7 @@ public class ScriptManager : MonoBehaviour
             }
         }
         //최종 목표 장소
-        if (i == 13)
+        if (i == 7)
         {
             game_events[i].type = 1;
             map[i].ANPC_exist = 0;
@@ -166,7 +166,7 @@ public class ScriptManager : MonoBehaviour
 
         curr_chapter++;
         int place_base = curr_chapter * 3 + 1;
-        await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[4]);
+        await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[2]);
         ScriptAPI.script_api.PostGoalInfo(goals[curr_chapter], curr_chapter + 1);
         for (int i = 0; i < 3; i++)
         {
@@ -306,18 +306,18 @@ public class ScriptManager : MonoBehaviour
 
     public async void SetFinalPlace()
     {
-        if (curr_place_idx == 12)
+        if (curr_place_idx == 6)
         {
             if (CheckGoalCleared() == true)
             {
                 // 최종 장소 목표 정보 전달
-                await items[13].InitItem(script, goals[4], game_events[13].type);
-                await map[13].InitPlace(4, script, items[13], game_events[13].type, place_names);
-                place_names[13] = map[13].place_name;
+                await items[7].InitItem(script, goals[2], game_events[7].type);
+                await map[7].InitPlace(2, script, items[7], game_events[7].type, place_names);
+                place_names[7] = map[7].place_name;
 
-                if (items[13].type != ItemType.Monster)
+                if (items[7].type != ItemType.Monster)
                 {
-                    await game_events[13].CreateEventTrigger(script.GetWorldDetail(), goals[4].GetDetail(), place_names[13], items[13].name);
+                    await game_events[7].CreateEventTrigger(script.GetWorldDetail(), goals[2].GetDetail(), place_names[7], items[7].name);
                 }
             }
             else
@@ -332,9 +332,9 @@ public class ScriptManager : MonoBehaviour
 
     public void SetEpilogue()
     {
-        if (curr_place_idx == 13)
+        if (curr_place_idx == 7)
         {
-            if (goals[4].GetClear() == true)
+            if (goals[2].GetClear() == true)
             {
                 epilogue.SuccessOutroGPT(pro_npc, anta_npc, script);
                 // 에필로그 씬 로드
@@ -352,7 +352,7 @@ public class ScriptManager : MonoBehaviour
     private bool CheckGoalCleared()
     {
         int i = 0;
-        while (i < 4)
+        while (i < 2)
         {
             if (!goals[i].GetClear())
             {
@@ -418,9 +418,9 @@ public class ScriptManager : MonoBehaviour
     {
         int start; int end;
         // 최종 장소일 경우
-        if (curr_chapter == 4)
+        if (curr_chapter == 2)
         {
-            start = 13; end = 13;
+            start = 7; end = 7;
             return items.GetRange(start, end - start + 1);
         }
 
