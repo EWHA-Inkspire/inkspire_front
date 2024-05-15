@@ -73,7 +73,7 @@ public class PlayScene : MonoBehaviour
 
     public void LoadChapter(int idx, bool is_new){
         // 이전 챕터 대화내역 저장
-        play.SaveMessages(idx);
+        // play.SaveMessages(idx);
 
         view_idx = idx;
         ScriptManager.script_manager.SetViewChap(view_idx);

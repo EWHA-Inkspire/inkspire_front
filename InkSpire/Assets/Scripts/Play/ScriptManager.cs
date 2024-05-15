@@ -310,46 +310,39 @@ public class ScriptManager : MonoBehaviour
 
     public async void SetFinalPlace()
     {
-        if (curr_place_idx == 6)
+        if (CheckGoalCleared() == true)
         {
-            if (CheckGoalCleared() == true)
-            {
-                // 최종 장소 목표 정보 전달
-                await items[7].InitItem(script, goals[2], game_events[7].type);
-                await map[7].InitPlace(2, script, items[7], game_events[7].type, place_names);
-                place_names[7] = map[7].place_name;
+            // 최종 장소 목표 정보 전달
+            await items[7].InitItem(script, goals[2], game_events[7].type);
+            await map[7].InitPlace(2, script, items[7], game_events[7].type, place_names);
+            place_names[7] = map[7].place_name;
 
-                if (items[7].type != ItemType.Monster)
-                {
-                    await game_events[7].CreateEventTrigger(script.GetWorldDetail(), goals[2].GetDetail(), place_names[7], items[7].name);
-                }
-            }
-            else
+            if (items[7].type != ItemType.Monster)
             {
-                await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
-                // 에필로그 씬 로드
-                SceneManager.LoadScene("6_Epilogue");
-
+                await game_events[7].CreateEventTrigger(script.GetWorldDetail(), goals[2].GetDetail(), place_names[7], items[7].name);
             }
+        }
+        else
+        {
+            await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
+            // 에필로그 씬 로드
+            SceneManager.LoadScene("6_Epilogue");
         }
     }
 
     public async void SetEpilogue()
     {
-        if (curr_place_idx == 7)
+        if (goals[2].GetClear() == true)
         {
-            if (goals[2].GetClear() == true)
-            {
-                await epilogue.SuccessOutroGPT(pro_npc, anta_npc, script);
-                // 에필로그 씬 로드
-                SceneManager.LoadScene("6_Epilogue");
-            }
-            else
-            {
-                await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
-                // 에필로그 씬 로드
-                SceneManager.LoadScene("6_Epilogue");
-            }
+            await epilogue.SuccessOutroGPT(pro_npc, anta_npc, script);
+            // 에필로그 씬 로드
+            SceneManager.LoadScene("6_Epilogue");
+        }
+        else
+        {
+            await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
+            // 에필로그 씬 로드
+            SceneManager.LoadScene("6_Epilogue");
         }
     }
 

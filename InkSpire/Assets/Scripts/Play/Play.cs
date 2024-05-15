@@ -29,7 +29,7 @@ public class Play : MonoBehaviour
         // 인벤토리 조회
         PlayAPI.play_api.GetInventory();
 
-        InvokeRepeating("SaveMessages", SAVING_INTERVAL, SAVING_INTERVAL);
+        // InvokeRepeating("SaveMessages", SAVING_INTERVAL, SAVING_INTERVAL);
     }
 
     void Start()

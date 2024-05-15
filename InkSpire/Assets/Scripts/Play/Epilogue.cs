@@ -53,11 +53,12 @@ public class Epilogue
         var response = await GptManager.gpt.CallGpt(gpt_messages);
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
-        text_scroll.AppendMsg(newMessage);
+        text_scroll.AppendMsg(response);
     }
 
     public async Task FailOutroGPT(Npc pro_npc, Npc anta_npc, Script script)
     {
+        Debug.Log("FailOutroGPT");
         gpt_messages.Clear();
 
         var newMessage = new ChatMessage()
@@ -104,6 +105,6 @@ public class Epilogue
         var response = await GptManager.gpt.CallGpt(gpt_messages);
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
-        text_scroll.AppendMsg(newMessage);
+        text_scroll.AppendMsg(response);
     }
 }

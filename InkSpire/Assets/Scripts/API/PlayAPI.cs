@@ -9,7 +9,7 @@ public class PlayAPI : MonoBehaviour
 {
     public static PlayAPI play_api;
     private int save_idx = 0;
-    private readonly int SAVING_INTERVAL = 1;
+    private readonly int SAVING_INTERVAL = 2;
 
     private void Awake()
     {
