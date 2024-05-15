@@ -391,7 +391,7 @@ public class ScriptManager : MonoBehaviour
 
     public Goal GetFinalGoal()
     {
-        return goals[4];
+        return goals[2];
     }
 
     public List<Place> GetMap()
