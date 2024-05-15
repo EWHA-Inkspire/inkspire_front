@@ -17,23 +17,24 @@ public class Goal
     public async Task InitGoal(string time_background, string space_background, string world_detail, string genre)
     {
         // 최종 목표 생성자(챕터4)
-        await FinalObjectiveGPT(time_background,space_background,world_detail,genre);
+        await FinalObjectiveGPT(time_background, space_background, world_detail, genre);
     }
 
     public async Task InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj)
     {
         // 챕터 목표 생성자(챕터0)
         Goal tmp = new();
-        await ChapterObjectiveGPT(time_background,space_background,world_detail,genre,0,final_obj,tmp);
+        await ChapterObjectiveGPT(time_background, space_background, world_detail, genre, 0, final_obj, tmp);
     }
 
-    public async void InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj, Goal prev_obj){
+    public async void InitGoal(string time_background, string space_background, string world_detail, string genre, Goal final_obj, Goal prev_obj)
+    {
         // 챕터 목표 생성자(챕터1~3)
-        await ChapterObjectiveGPT(time_background,space_background,world_detail,genre,1,final_obj,prev_obj);
+        await ChapterObjectiveGPT(time_background, space_background, world_detail, genre, 1, final_obj, prev_obj);
     }
 
 
-// 최종목표 생성 함수
+    // 최종목표 생성 함수
     private async Task FinalObjectiveGPT(string time_background, string space_background, string world_detail, string genre)
     {
         gpt_messages.Clear();
@@ -53,7 +54,7 @@ public class Goal
 - 최종목표 유형3 : 어떤 큰 사건의 진상이나 마을에 숨겨진 비밀을 알아낸다
 비고:*얻어야 할 정보의 진상을 한문장으로 출력*
 
-다음은 게임의 배경인 "+time_background+"시대 "+space_background+"를 배경으로 하는 세계관에 대한 설명이다.\n"+world_detail+
+다음은 게임의 배경인 " + time_background + "시대 " + space_background + "를 배경으로 하는 세계관에 대한 설명이다.\n" + world_detail +
 @"아래와 같은 양식으로 게임의 목표를 설정한다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
 
 최종목표유형: *위의 유형 1~3 중 하나를 숫자만 출력*
@@ -101,19 +102,19 @@ public class Goal
 
         };
         gpt_messages.Add(prompt_msg);
-        
+
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "진행될 게임의 "+genre+"장르에 어울리는 최종 목표 생성"
+            Content = "진행될 게임의 " + genre + "장르에 어울리는 최종 목표 생성"
         };
         gpt_messages.Add(query_msg);
 
-        StringToObjective("출력 "+await GptManager.gpt.CallGpt(gpt_messages));
-        
+        StringToObjective("출력 " + await GptManager.gpt.CallGpt(gpt_messages));
+
     }
 
-// 챕터 목표 생성 함수
+    // 챕터 목표 생성 함수
     private async Task ChapterObjectiveGPT(string time_background, string space_background, string world_detail, string genre, int chapter_num, Goal final_obj, Goal prev_obj)
     {
         gpt_messages.Clear();
@@ -133,15 +134,16 @@ public class Goal
 - 챕터목표 유형 3: 스토리 진행에 중요한 정보 *얻어야 할 정보 제목* 습득
 비고:*얻어야 할 정보의 진상을 한문장으로 출력*
 
-다음은 게임의 배경인 "+time_background+"시대 "+space_background+"를 배경으로 하는 세계관에 대한 설명이다.\n"+world_detail+
-            "게임의 최종 목표는 다음과 같다.\n"+final_obj.GetTitle()+"\n"+final_obj.GetDetail()
+다음은 게임의 배경인 " + time_background + "시대 " + space_background + "를 배경으로 하는 세계관에 대한 설명이다.\n" + world_detail +
+            "게임의 최종 목표는 다음과 같다.\n" + final_obj.GetTitle() + "\n" + final_obj.GetDetail()
 
         };
-        if(chapter_num!=0){
-            prompt_msg.Content+="다음은 이전 챕터의 챕터 목표이다. 생성되는 챕터 목표는 이전 챕터의 진행과 자연스럽게 이어져야 한다."+prev_obj.GetTitle()+"\n"+prev_obj.GetDetail();
+        if (chapter_num != 0)
+        {
+            prompt_msg.Content += "다음은 이전 챕터의 챕터 목표이다. 생성되는 챕터 목표는 이전 챕터의 진행과 자연스럽게 이어져야 한다." + prev_obj.GetTitle() + "\n" + prev_obj.GetDetail();
         }
 
-        prompt_msg.Content+=@"아래와 같은 양식으로 게임의 목표를 설정한다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
+        prompt_msg.Content += @"아래와 같은 양식으로 게임의 목표를 설정한다. 각 줄의 요소는 반드시 모두 포함되어야 하며, 답변할 때 줄바꿈을 절대 하지 않는다. ** 이 표시 안의 내용은 문맥에 맞게 채운다.
 
 챕터목표유형: *위의 유형 1~3 중 하나를 숫자만 출력*
 챕터목표: *챕터 목표의 제목 출력*
@@ -190,26 +192,26 @@ public class Goal
         var query_msg = new ChatMessage()
         {
             Role = "user",
-            Content = "진행중인 게임의 "+genre+"장르에 어울리는 챕터 목표 생성"
+            Content = "진행중인 게임의 " + genre + "장르에 어울리는 챕터 목표 생성"
         };
         gpt_messages.Add(query_msg);
 
-        StringToObjective("출력 "+await GptManager.gpt.CallGpt(gpt_messages));
+        StringToObjective("출력 " + await GptManager.gpt.CallGpt(gpt_messages));
     }
     private void StringToObjective(string obj_string)
     {
         clear = false;
 
         string[] obj_arr;
-        obj_string = obj_string.Replace("최종목표유형: ","#");
-        obj_string = obj_string.Replace("최종목표: ","#");
-        obj_string = obj_string.Replace("최종목표 설명: ","#");
-        obj_string = obj_string.Replace("비고: ","#");
+        obj_string = obj_string.Replace("최종목표유형: ", "#");
+        obj_string = obj_string.Replace("최종목표: ", "#");
+        obj_string = obj_string.Replace("최종목표 설명: ", "#");
+        obj_string = obj_string.Replace("비고: ", "#");
 
 
-        obj_string = obj_string.Replace("챕터목표유형: ","#");
-        obj_string = obj_string.Replace("챕터목표: ","#");
-        obj_string = obj_string.Replace("챕터목표 설명: ","#");
+        obj_string = obj_string.Replace("챕터목표유형: ", "#");
+        obj_string = obj_string.Replace("챕터목표: ", "#");
+        obj_string = obj_string.Replace("챕터목표 설명: ", "#");
 
         Debug.Log(">>목표 생성 결과\n" + obj_string);
 

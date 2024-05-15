@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ScriptManager : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class ScriptManager : MonoBehaviour
     private int curr_place_idx = 0;
 
     private Script script;
-    private Goal[] goals = new Goal[5];
+    private Goal[] goals = new Goal[3];
     private List<Place> map = new();
     private List<Item> items = new();
     private List<Event> game_events = new();
@@ -19,15 +20,20 @@ public class ScriptManager : MonoBehaviour
     private Npc anta_npc;
     private string achivement;
 
+    Epilogue epilogue = new Epilogue();
+
     private bool init_script = false;
 
     // 일반함수
     private void Awake()
     {
-        if (script_manager == null) {
+        if (script_manager == null)
+        {
             script_manager = this;
             DontDestroyOnLoad(script_manager);
-        } else if (script_manager != this) {
+        }
+        else if (script_manager != this)
+        {
             Destroy(this);
             return;
         }
@@ -39,7 +45,7 @@ public class ScriptManager : MonoBehaviour
             goals[i] = new Goal();
         }
 
-        for (int i = 0; i < 14; i++)
+        for (int i = 0; i < 8; i++)
         {
             map.Add(new Place());
             items.Add(new Item());
@@ -61,10 +67,10 @@ public class ScriptManager : MonoBehaviour
         ScriptAPI.script_api.PostScenarioInfo(script, char_name);
 
         // 목표 생성
-        await goals[4].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
-        await goals[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[4]);
-        ScriptAPI.script_api.PostGoalInfo(goals[4], 5);
-        ScriptAPI.script_api.PostGoalInfo(goals[0], curr_chapter+1);
+        await goals[2].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
+        await goals[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[2]);
+        ScriptAPI.script_api.PostGoalInfo(goals[2], 3); // PostGoalInfo(goal, chapter_num)
+        ScriptAPI.script_api.PostGoalInfo(goals[0], curr_chapter + 1);
 
         // npc 정보 생성
         await pro_npc.InitNpc("P", script.GetWorldDetail(), genre, char_name);
@@ -77,10 +83,11 @@ public class ScriptManager : MonoBehaviour
         // PNPC 장소 초기화
         map[0].ANPC_exist = 0;
         await map[0].CreatePnpcPlace(script, pro_npc);
-        ScriptAPI.script_api.PostMapInfo(map[0], items[0], game_events[0], 0, curr_chapter+1);
-        
+        ScriptAPI.script_api.PostMapInfo(map[0], items[0], game_events[0], 0, curr_chapter + 1);
+
         // 일반 장소 초기화
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 4; i++)
+        {
             // 목표 정보 전달
             await items[i].InitItem(script, goals[curr_chapter], game_events[i].type);
             await map[i].InitPlace(i, script, items[i], game_events[i].type, place_names);
@@ -91,12 +98,12 @@ public class ScriptManager : MonoBehaviour
             {
                 await game_events[i].CreateEventTrigger(script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[i], items[i].name);
             }
-            
-            ScriptAPI.script_api.PostMapInfo(map[i], items[i], game_events[i], i, curr_chapter+1);
+
+            ScriptAPI.script_api.PostMapInfo(map[i], items[i], game_events[i], i, curr_chapter + 1);
         }
 
         achivement = await script.AchivementGPT();
-        Debug.Log("업적명:"+achivement);
+        Debug.Log("업적명:" + achivement);
         await script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
         ScriptAPI.script_api.PutIntroInfo(script);
         init_script = true;
@@ -106,17 +113,20 @@ public class ScriptManager : MonoBehaviour
     private void ChooseEventType()
     {
         int i = 1;
-        while (i < 13)
+        while (i < 7)
         {
             int flag = Random.Range(0, 3);
-            if (flag == 0) {
+            if (flag == 0)
+            {
                 game_events[i].type = 1;
             }
-            else {
+            else
+            {
                 game_events[i].type = 0;
             }
 
-            if (game_events[i].type == 1) {
+            if (game_events[i].type == 1)
+            {
                 //100
                 game_events[i + 1].type = 0;
                 game_events[i + 2].type = 0;
@@ -127,23 +137,27 @@ public class ScriptManager : MonoBehaviour
             {
                 i++;
                 game_events[i].type = UnityEngine.Random.Range(0, 2);
-                if (game_events[i].type == 1){
+                if (game_events[i].type == 1)
+                {
                     game_events[i + 1].type = 0; //010
                 }
-                else {
+                else
+                {
                     game_events[i + 1].type = 1; //001
                 }
                 i += 2;
             }
         }
-        //최종 에필로그
-        if (i == 13) {
+        //최종 목표 장소
+        if (i == 7)
+        {
             game_events[i].type = 1;
             map[i].ANPC_exist = 0;
         }
     }
 
-    public async void SetNextChapter(){
+    public async void SetNextChapter()
+    {
         string genre = script.GetGenre();
         string time_background = script.GetTimeBackground();
         string space_background = script.GetSpaceBackground();
@@ -154,22 +168,23 @@ public class ScriptManager : MonoBehaviour
         PlayScene.play_scene.LoadNextChapUI();
 
         curr_chapter++;
-        int place_base = curr_chapter*3+1;
-        await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[4]);
-        ScriptAPI.script_api.PostGoalInfo(goals[curr_chapter], curr_chapter+1);
-        for(int i = 0; i<3;i++){
+        int place_base = curr_chapter * 3 + 1;
+        await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[2]);
+        ScriptAPI.script_api.PostGoalInfo(goals[curr_chapter], curr_chapter + 1);
+        for (int i = 0; i < 3; i++)
+        {
             // 목표 정보 전달
-            await items[place_base+i].InitItem(script, goals[curr_chapter], game_events[place_base+i].type);
-            await map[place_base+i].InitPlace(place_base+i, script, items[place_base+i], game_events[place_base+i].type, place_names);
-            place_names[place_base+i] = map[place_base+i].place_name;
+            await items[place_base + i].InitItem(script, goals[curr_chapter], game_events[place_base + i].type);
+            await map[place_base + i].InitPlace(place_base + i, script, items[place_base + i], game_events[place_base + i].type, place_names);
+            place_names[place_base + i] = map[place_base + i].place_name;
 
             // 전투 이벤트(잡몹, 적 처치) 혹은 item_type이 null일 경우에는 이벤트 트리거 생성하지 않음
-            if (items[place_base+i].type != ItemType.Mob && items[place_base+i].type != ItemType.Monster && items[place_base+i].type != ItemType.Null)
+            if (items[place_base + i].type != ItemType.Mob && items[place_base + i].type != ItemType.Monster && items[place_base + i].type != ItemType.Null)
             {
-                await game_events[place_base+i].CreateEventTrigger(script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[place_base+i], items[place_base+i].name);
+                await game_events[place_base + i].CreateEventTrigger(script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[place_base + i], items[place_base + i].name);
             }
-            
-            ScriptAPI.script_api.PostMapInfo(map[place_base+i], items[place_base+i], game_events[place_base+i], place_base+i, curr_chapter+1);
+
+            ScriptAPI.script_api.PostMapInfo(map[place_base + i], items[place_base + i], game_events[place_base + i], place_base + i, curr_chapter + 1);
         }
         PlayScene.play_scene.LoadChapter(curr_chapter);
     }
@@ -212,7 +227,7 @@ public class ScriptManager : MonoBehaviour
 
     public void SetGoalId(int id, int chapter)
     {
-        this.goals[chapter-1].SetGoalId(id);
+        this.goals[chapter - 1].SetGoalId(id);
     }
 
     public void SetGoalList(GetGoalList goal_list)
@@ -220,13 +235,13 @@ public class ScriptManager : MonoBehaviour
         for (int i = 0; i < goal_list.goals.Count; i++)
         {
             int chapter_num = goal_list.goals[i].chapter;
-            this.goals[chapter_num-1].SetGoalInfo(goal_list.goals[i]);
+            this.goals[chapter_num - 1].SetGoalInfo(goal_list.goals[i]);
         }
     }
 
     public void SetNpcId(int id, bool pnpc)
     {
-        if(pnpc)
+        if (pnpc)
             pro_npc.SetNpcId(id);
         else
             anta_npc.SetNpcId(id);
@@ -236,7 +251,7 @@ public class ScriptManager : MonoBehaviour
     {
         foreach (GetNpcInfo npc in npc_list.npcs)
         {
-            if(npc.pnpc)
+            if (npc.pnpc)
                 pro_npc.SetNpcInfo(npc);
             else
                 anta_npc.SetNpcInfo(npc);
@@ -251,7 +266,8 @@ public class ScriptManager : MonoBehaviour
             this.map[idx].SetMapInfo(map);
             this.place_names[idx] = map.name;
 
-            if(map.lastVisited) {
+            if (map.lastVisited)
+            {
                 curr_place_idx = idx;
             }
         }
@@ -294,6 +310,65 @@ public class ScriptManager : MonoBehaviour
         }
     }
 
+    public async void SetFinalPlace()
+    {
+        if (curr_place_idx == 6)
+        {
+            if (CheckGoalCleared() == true)
+            {
+                // 최종 장소 목표 정보 전달
+                await items[7].InitItem(script, goals[2], game_events[7].type);
+                await map[7].InitPlace(2, script, items[7], game_events[7].type, place_names);
+                place_names[7] = map[7].place_name;
+
+                if (items[7].type != ItemType.Monster)
+                {
+                    await game_events[7].CreateEventTrigger(script.GetWorldDetail(), goals[2].GetDetail(), place_names[7], items[7].name);
+                }
+            }
+            else
+            {
+                epilogue.FailOutroGPT(pro_npc, anta_npc, script);
+                // 에필로그 씬 로드
+                SceneManager.LoadScene("6_Epilogue");
+
+            }
+        }
+    }
+
+    public void SetEpilogue()
+    {
+        if (curr_place_idx == 7)
+        {
+            if (goals[2].GetClear() == true)
+            {
+                epilogue.SuccessOutroGPT(pro_npc, anta_npc, script);
+                // 에필로그 씬 로드
+                SceneManager.LoadScene("6_Epilogue");
+            }
+            else
+            {
+                epilogue.FailOutroGPT(pro_npc, anta_npc, script);
+                // 에필로그 씬 로드
+                SceneManager.LoadScene("6_Epilogue");
+            }
+        }
+    }
+
+    private bool CheckGoalCleared()
+    {
+        int i = 0;
+        while (i < 2)
+        {
+            if (!goals[i].GetClear())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // Getter
     public string GetCharName()
     {
@@ -315,15 +390,18 @@ public class ScriptManager : MonoBehaviour
         return script;
     }
 
-    public Goal GetCurrGoal(){
+    public Goal GetCurrGoal()
+    {
         return goals[curr_chapter];
     }
 
-    public Goal GetFinalGoal(){
-        return goals[4];
+    public Goal GetFinalGoal()
+    {
+        return goals[2];
     }
 
-    public List<Place> GetMap(){
+    public List<Place> GetMap()
+    {
         return map;
     }
 
@@ -337,37 +415,43 @@ public class ScriptManager : MonoBehaviour
         return map[curr_place_idx];
     }
 
-    public List<Item> GetItems(){
+    public List<Item> GetItems()
+    {
         return items;
     }
 
-    public List<Item> GetCurrItems(){
-        int start;  int end;
+    public List<Item> GetCurrItems()
+    {
+        int start; int end;
         // 최종 장소일 경우
-        if (curr_chapter == 4)
+        if (curr_chapter == 2)
         {
-            start = 13; end = 13;
+            start = 7; end = 7;
             return items.GetRange(start, end - start + 1);
         }
 
         // 나머지의 경우
-        start = 1 + curr_chapter*3; end = start + 2;
+        start = 1 + curr_chapter * 3; end = start + 2;
         return items.GetRange(start, end - start + 1);
     }
 
-    public Item GetItem(int idx){
+    public Item GetItem(int idx)
+    {
         return items[idx];
     }
 
-    public Item GetCurrItem(){
+    public Item GetCurrItem()
+    {
         return items[curr_place_idx];
     }
 
-    public Event GetCurrEvent(){
+    public Event GetCurrEvent()
+    {
         return game_events[curr_place_idx];
     }
 
-    public Event GetEvent(int idx){
+    public Event GetEvent(int idx)
+    {
         return game_events[idx];
     }
 
