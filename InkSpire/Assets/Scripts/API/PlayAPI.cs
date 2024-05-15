@@ -57,6 +57,11 @@ public class PlayAPI : MonoBehaviour
     // API 호출 - 채팅 리스트 저장
     public void PostChatList(List<ChatMessage> messages)
     {
+        PostChatList(messages, ScriptManager.script_manager.GetCurrChap() + 1);
+    }
+
+    public void PostChatList(List<ChatMessage> messages, int chapter_num)
+    {
         if (messages.Count - save_idx < SAVING_INTERVAL)
         {
             return;
@@ -70,7 +75,7 @@ public class PlayAPI : MonoBehaviour
                     scriptId = PlayerPrefs.GetInt("script_id"),
                     role = msg.Role,
                     content = msg.Content,
-                    chapter = ScriptManager.script_manager.GetCurrChap() + 1
+                    chapter = chapter_num
                 }).ToList()
         };
 

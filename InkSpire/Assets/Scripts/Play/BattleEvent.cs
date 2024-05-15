@@ -24,6 +24,7 @@ public class BattleEvent : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI story_object;  // 게임 플레이 텍스트 영역
     [SerializeField] private ScrollRect scroll; // 스크롤 영역
+    [SerializeField] private GameObject EndChapterModal;
 
     BType bType;    // 전투 타입 구분 -> 보스, 일반
     Turn curr_turn; //현재 공격 턴인 쪽을 의미
@@ -511,6 +512,7 @@ public class BattleEvent : MonoBehaviour
     {
         InventoryManager.i_manager.is_battle = false;
         string result_str;
+        bool flag = false; // 목표 관련 이벤트인지 체크
 
         if(result==0){
             result_str = "WIN\n";
@@ -519,44 +521,27 @@ public class BattleEvent : MonoBehaviour
             InventoryManager.i_manager.AddItem(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
 
-
             if (bType == BType.BOSS)
             {
-                if (ScriptManager.script_manager.GetCurrChap() == 3)
-                {
-                    ScriptManager.script_manager.SetFinalPlace();
-                }
-                else if (ScriptManager.script_manager.GetCurrChap() == 4)
-                {
-                    ScriptManager.script_manager.SetEpilogue();
-                }
-                else
-                {   // 목표 전투였을 경우 다음 챕터 셋팅
-                    ScriptManager.script_manager.SetNextChapter();
-                }
+                ScriptManager.script_manager.SetCurrGoalClear(true);
+                flag = true;
             }
 
         }
         else if (result == 1)
         {
             result_str = "LOSE\n";
-            if (ScriptManager.script_manager.GetCurrChap() == 3 || ScriptManager.script_manager.GetCurrChap() == 4)
-            {
-                ScriptManager.script_manager.SetEpilogue();
-            }
+            flag = bType == BType.BOSS;
         }
         else
         {
             result_str = "RUN\n";
-            // 도망 전용 스크립트 출력
         }
 
         Debug.Log(">>Battle " + result_str);
 
         // 텍스트박스쪽에 전투 결과 메시지 append
         AppendMsg("\n<b>:: 전투 종료 ::</b>\nRESULT>> " + result_str);
-        // gpt에게 전투 결과 전달
-
 
         bdice_window.SetActive(true);
         mobgroup.gameObject.SetActive(true);
@@ -573,14 +558,15 @@ public class BattleEvent : MonoBehaviour
 
         PlayerStatManager.playerstat.wheapone = 0;
 
-        //enm_stat.Clear();
-        //is_dead.Clear();
         m_num = 0;
         atk_window.SetActive(false);
         def_window.SetActive(false);
         inventory_window.SetActive(false);
         battle_window.SetActive(false);
 
+        if(flag){
+            EndChapterModal.SetActive(true);
+        }
     }
 
     string GetMobName(int idx){

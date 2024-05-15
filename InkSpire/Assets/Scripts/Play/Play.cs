@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using OpenAI;
+using System.Threading.Tasks;
 
 public class Play : MonoBehaviour
 {
@@ -53,12 +54,17 @@ public class Play : MonoBehaviour
         }
         
         // 일정 시간 간격으로 대화 저장
-        InvokeRepeating("SaveMessages", 0f, SAVING_INTERVAL);
+        // InvokeRepeating("SaveMessages", 0f, SAVING_INTERVAL);
     }
 
     public void SaveMessages()
     {
         PlayAPI.play_api.PostChatList(messages);
+    }
+
+    public void SaveMessages(int chapter)
+    {
+        PlayAPI.play_api.PostChatList(messages, chapter);
     }
 
     private void SetSystemPrompt()
@@ -141,6 +147,7 @@ Narrator (내레이터):
         {
             SendReply();
         }
+        SaveMessages();
     }
 
     private async void SendReply()
@@ -208,11 +215,6 @@ Narrator (내레이터):
         PlayAPI.play_api.UpdateCurrPlace(ScriptManager.script_manager.GetCurrPlace().id);
     }
 
-    public void MoveToChap(int idx){
-        //현재 챕터 채팅 저장
-
-    }
-
     // 조사 선택 함수
     static string EorGa(string noun)
     {
@@ -241,7 +243,6 @@ Narrator (내레이터):
         return hasJongsung ? "을" : "를";
     }
 
-
     // Setter
     public void AddToMessagesGPT(ChatMessage msg)
     {
@@ -253,7 +254,7 @@ Narrator (내레이터):
         messages.AddRange(msgs);
     }
 
-    internal void InitMessages(List<ChatMessage> messages)
+    public void InitMessages(List<ChatMessage> messages)
     {
         this.messages.Clear();
         SetSystemPrompt();

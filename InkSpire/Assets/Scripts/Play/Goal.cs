@@ -207,11 +207,18 @@ public class Goal
         obj_string = obj_string.Replace("최종목표: ", "#");
         obj_string = obj_string.Replace("최종목표 설명: ", "#");
         obj_string = obj_string.Replace("비고: ", "#");
+        obj_string = obj_string.Replace("최종목표유형:", "#");
+        obj_string = obj_string.Replace("최종목표:", "#");
+        obj_string = obj_string.Replace("최종목표 설명:", "#");
+        obj_string = obj_string.Replace("비고:", "#");
 
 
         obj_string = obj_string.Replace("챕터목표유형: ", "#");
         obj_string = obj_string.Replace("챕터목표: ", "#");
         obj_string = obj_string.Replace("챕터목표 설명: ", "#");
+        obj_string = obj_string.Replace("챕터목표유형:", "#");
+        obj_string = obj_string.Replace("챕터목표:", "#");
+        obj_string = obj_string.Replace("챕터목표 설명:", "#");
 
         Debug.Log(">>목표 생성 결과\n" + obj_string);
 

@@ -72,6 +72,9 @@ public class PlayScene : MonoBehaviour
     }
 
     public void LoadChapter(int idx){
+        // 이전 챕터 대화내역 저장
+        play.SaveMessages(idx);
+
         view_idx = idx;
         ScriptManager.script_manager.SetViewChap(view_idx);
         Changechap(idx);
@@ -116,7 +119,6 @@ public class PlayScene : MonoBehaviour
         }
         play.InitMessages(new List<ChatMessage>());
         play.text_scroll.InitStoryObj(new List<ChatMessage>());
-        PlayAPI.play_api.InitSaveIdx();
         PlayAPI.play_api.GetChatList(play);
         
         is_loading = false;

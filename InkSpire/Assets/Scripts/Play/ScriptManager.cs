@@ -19,6 +19,7 @@ public class ScriptManager : MonoBehaviour
     private Npc pro_npc;
     private Npc anta_npc;
     private string achivement;
+    private bool curr_goal_clear = false;
 
     Epilogue epilogue = new Epilogue();
 
@@ -161,9 +162,6 @@ public class ScriptManager : MonoBehaviour
         string genre = script.GetGenre();
         string time_background = script.GetTimeBackground();
         string space_background = script.GetSpaceBackground();
-
-        // 챕터 목표 달성 API 호출
-        PlayAPI.play_api.UpdateGoalSuccess(goals[curr_chapter].GetId());
 
         PlayScene.play_scene.LoadNextChapUI();
 
@@ -355,6 +353,13 @@ public class ScriptManager : MonoBehaviour
         }
     }
 
+    public void SetCurrGoalClear(bool clr)
+    {
+        curr_goal_clear = clr;
+        int goal_idx = goals[curr_chapter].GetId();
+        PlayAPI.play_api.UpdateGoalSuccess(goal_idx);
+    }
+
     private bool CheckGoalCleared()
     {
         int i = 0;
@@ -473,5 +478,10 @@ public class ScriptManager : MonoBehaviour
     public int GetViewChap()
     {
         return view_chapter;
+    }
+
+    public bool GetCurrGoalClear()
+    {
+        return curr_goal_clear;
     }
 }

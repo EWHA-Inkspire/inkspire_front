@@ -16,6 +16,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
     [SerializeField] TextMeshProUGUI ones_dice;
 
     [SerializeField] Play play_manager;
+    [SerializeField] GameObject EndChapterModal;
 
     int req_value = 0;
     bool result = false;
@@ -63,6 +64,8 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
     {
         resultwindow.SetActive(true);
         result_calc.text = pl_value.ToString() + " + " + luk_value.ToString() + "(Bonus)\n";
+        Item map_item = ScriptManager.script_manager.GetCurrItem();
+
         ChatMessage result_msg = new()
         {
             Role = "user",
@@ -72,25 +75,15 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
         {
             result_txt.text = "<color=#074AB0>Success</color>";
             result_msg.Content += "성공";
-            Item map_item = ScriptManager.script_manager.GetCurrItem();
             Debug.Log("맵 아이템 이름:" + map_item.name);
             InventoryManager.i_manager.AddItem(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
             play_manager.AddToMessagesGPT(result_msg);
             result_msg.Content = ScriptManager.script_manager.GetCurrEvent().succ.Replace(".", ".\n");
-            if (ScriptManager.script_manager.GetCurrChap() == 3)
-            {
-                ScriptManager.script_manager.SetFinalPlace();
-            }
 
-            if (ScriptManager.script_manager.GetCurrChap() == 4)
+            if(map_item.type == ItemType.Item || map_item.type == ItemType.Report)
             {
-                ScriptManager.script_manager.SetEpilogue();
-            }
-
-            if (map_item.type == ItemType.Item || map_item.type == ItemType.Monster || map_item.type == ItemType.Report)
-            {
-                ScriptManager.script_manager.SetNextChapter();
+                ScriptManager.script_manager.SetCurrGoalClear(true);
             }
         }
         else
@@ -99,13 +92,14 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
             result_msg.Content += "실패";
             play_manager.AddToMessagesGPT(result_msg);
             result_msg.Content = ScriptManager.script_manager.GetCurrEvent().fail.Replace(".", ".\n");
-            if (ScriptManager.script_manager.GetCurrChap() == 3 || ScriptManager.script_manager.GetCurrChap() == 4)
-            {
-                ScriptManager.script_manager.SetEpilogue();
-            }
         }
         result_msg.Role = "assistant";
         play_manager.AddToMessagesGPT(result_msg);
         play_manager.text_scroll.AppendMsg(result_msg);
+
+        if (map_item.type == ItemType.Item || map_item.type == ItemType.Report)
+        {
+            EndChapterModal.SetActive(true);
+        }
     }
 }
