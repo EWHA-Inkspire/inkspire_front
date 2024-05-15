@@ -8,6 +8,7 @@ public class TextScrollUI : MonoBehaviour
 {
     [SerializeField] private ScrollRect scroll;
     [SerializeField] private TextMeshProUGUI story_object;
+    [SerializeField] private Play play;
 
     void Awake()
     {

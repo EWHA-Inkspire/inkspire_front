@@ -10,11 +10,11 @@ public class EndChapterModal : MonoBehaviour
         // 목표 달성
         if(ScriptManager.script_manager.GetCurrGoalClear())
         {
-            if (ScriptManager.script_manager.GetCurrChap() == 3)
+            if (ScriptManager.script_manager.GetCurrChap() == 1)
             {
                 ScriptManager.script_manager.SetFinalPlace();
             }
-            else if (ScriptManager.script_manager.GetCurrChap() == 4)
+            else if (ScriptManager.script_manager.GetCurrChap() == 2)
             {
                 ScriptManager.script_manager.SetEpilogue();
             }
@@ -25,7 +25,7 @@ public class EndChapterModal : MonoBehaviour
         }
         else
         {
-            if (ScriptManager.script_manager.GetCurrChap() == 3 || ScriptManager.script_manager.GetCurrChap() == 4)
+            if (ScriptManager.script_manager.GetCurrChap() == 1 || ScriptManager.script_manager.GetCurrChap() == 2)
             {
                 ScriptManager.script_manager.SetEpilogue();
             }

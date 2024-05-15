@@ -68,10 +68,10 @@ public class PlayScene : MonoBehaviour
         statmodal_title.text = s_manager.GetCharName()+"'s Stats";
         header_HP.text = PlayerStatManager.playerstat.GetStatAmount(StatType.Hp).ToString()+" / "+PlayerStatManager.playerstat.GetStatAmount(StatType.MaxHP).ToString();
         battle_stat.text = "공격: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Attack).ToString()+" | 방어: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Defence).ToString()+" | 민첩: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Dexterity).ToString()+" | 행운: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Luck).ToString();   
-        LoadChapter(view_idx);
+        LoadChapter(view_idx, true);
     }
 
-    public void LoadChapter(int idx){
+    public void LoadChapter(int idx, bool is_new){
         // 이전 챕터 대화내역 저장
         play.SaveMessages(idx);
 
@@ -81,20 +81,31 @@ public class PlayScene : MonoBehaviour
         // 장소 모달 버튼 셋팅
         place_list.transform.GetChild(12).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+s_manager.GetPlace(0).place_name;
         for (int i = 0; i<14; i++){
-            if(i==12&&ScriptManager.script_manager.GetCurrChap()!=4){
+            if(ScriptManager.script_manager.GetCurrChap() == 2 && i == 13)
+            {
+                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(7).place_name;
+            }
+            else if(i == 12)
+            {
                 continue;
             }
-            if(i/3 == idx){
+            else if(i >= 8)
+            {
+                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
+            }
+            else if(i/3 == idx)
+            {
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(i+1).place_name;
                 if(idx!=ScriptManager.script_manager.GetCurrChap()){
                     place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
                 }
             }
-            else{
+            else
+            {
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
                 place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
             }
-            
         }
         // 텍스트박스 및 버튼 비활성화
         if(idx != ScriptManager.script_manager.GetCurrChap()){
@@ -117,10 +128,12 @@ public class PlayScene : MonoBehaviour
                 }
             }
         }
-        play.InitMessages(new List<ChatMessage>());
-        play.text_scroll.InitStoryObj(new List<ChatMessage>());
-        PlayAPI.play_api.GetChatList(play);
-        
+        if(!is_new)
+        {
+            play.InitMessages(new List<ChatMessage>());
+            play.text_scroll.InitStoryObj(new List<ChatMessage>());
+            PlayAPI.play_api.GetChatList(play);
+        }
         is_loading = false;
     }
 
@@ -129,7 +142,7 @@ public class PlayScene : MonoBehaviour
             return;
         }
         LoadNextChapUI();
-        LoadChapter(view_idx-1);
+        LoadChapter(view_idx-1, false);
     }
 
     public void ViewNextChapButton(){
@@ -137,7 +150,7 @@ public class PlayScene : MonoBehaviour
             return;
         }
         LoadNextChapUI();
-        LoadChapter(view_idx+1);
+        LoadChapter(view_idx+1, false);
     }
 
     void Update(){

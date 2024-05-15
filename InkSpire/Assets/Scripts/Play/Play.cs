@@ -19,7 +19,7 @@ public class Play : MonoBehaviour
     private List<ChatMessage> messages = new();
     private ChatMessage input_msg = new();
     private string system_prompt = "";
-    private readonly int SAVING_INTERVAL = 60; // 1분마다 저장
+    private readonly int SAVING_INTERVAL = 30; // 30초마다 저장
 
     void Awake()
     {
@@ -28,6 +28,8 @@ public class Play : MonoBehaviour
 
         // 인벤토리 조회
         PlayAPI.play_api.GetInventory();
+
+        InvokeRepeating("SaveMessages", SAVING_INTERVAL, SAVING_INTERVAL);
     }
 
     void Start()
@@ -52,9 +54,6 @@ public class Play : MonoBehaviour
             messages.Add(introMessage);
             text_scroll.AppendMsg(introMessage);
         }
-        
-        // 일정 시간 간격으로 대화 저장
-        // InvokeRepeating("SaveMessages", 0f, SAVING_INTERVAL);
     }
 
     public void SaveMessages()
@@ -147,7 +146,6 @@ Narrator (내레이터):
         {
             SendReply();
         }
-        SaveMessages();
     }
 
     private async void SendReply()

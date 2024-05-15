@@ -127,6 +127,8 @@ ex)
         string[] place_arr;
         place_string = place_string.Replace("장소명: ", "#");
         place_string = place_string.Replace("장소설명: ", "#");
+        place_string = place_string.Replace("장소명:", "#");
+        place_string = place_string.Replace("장소설명:", "#");
 
         place_arr = place_string.Split('#');
         place_name = regex.Replace(place_arr[1].Trim('\n'), "");
