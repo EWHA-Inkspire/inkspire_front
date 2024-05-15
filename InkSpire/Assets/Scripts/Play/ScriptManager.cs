@@ -7,6 +7,7 @@ public class ScriptManager : MonoBehaviour
     public static ScriptManager script_manager;
     private string char_name;
     private int curr_chapter = 0;
+    private int view_chapter = 0;
     private int curr_place_idx = 0;
 
     private Script script;
@@ -164,6 +165,8 @@ public class ScriptManager : MonoBehaviour
         // 챕터 목표 달성 API 호출
         PlayAPI.play_api.UpdateGoalSuccess(goals[curr_chapter].GetId());
 
+        PlayScene.play_scene.LoadNextChapUI();
+
         curr_chapter++;
         int place_base = curr_chapter * 3 + 1;
         await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[2]);
@@ -183,8 +186,7 @@ public class ScriptManager : MonoBehaviour
 
             ScriptAPI.script_api.PostMapInfo(map[place_base + i], items[place_base + i], game_events[place_base + i], place_base + i, curr_chapter + 1);
         }
-
-        PlayScene.play_scene.LoadPlayScene();
+        PlayScene.play_scene.LoadChapter(curr_chapter);
     }
 
     // Settter
@@ -286,6 +288,10 @@ public class ScriptManager : MonoBehaviour
             int idx = map.FindIndex(x => x.id == mapId);
             items[idx].SetItemInfo(item);
         }
+    }
+
+    public void SetViewChap(int num){
+        view_chapter = num;
     }
 
     public void SetEventId(int id, int map_id)
@@ -462,5 +468,10 @@ public class ScriptManager : MonoBehaviour
     public bool GetInitScript()
     {
         return init_script;
+    }
+
+    public int GetViewChap()
+    {
+        return view_chapter;
     }
 }
