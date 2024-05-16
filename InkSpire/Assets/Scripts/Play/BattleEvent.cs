@@ -79,7 +79,7 @@ public class BattleEvent : MonoBehaviour
         if (bType == BType.BOSS)
         {
             boss_name = ScriptManager.script_manager.GetCurrGoal().GetEtc();
-            // mobgroup.gameObject.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = boss_name;
+            mobgroup.gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<Text>().text = boss_name;
             //보스몬스터 스탯 셋팅
             for (int j = 0; j < 5; j++)
             {
