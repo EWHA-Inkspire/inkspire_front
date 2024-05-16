@@ -327,19 +327,6 @@ public class ScriptManager : MonoBehaviour
         {
             // 에필로그 씬 로드
             SceneManager.LoadScene("6_Epilogue");
-            // await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
-        }
-    }
-
-    public async void SetEpilogue()
-    {
-        if (goals[2].GetClear() == true)
-        {
-            await epilogue.SuccessOutroGPT(pro_npc, anta_npc, script);
-        }
-        else
-        {
-            await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
         }
     }
 
