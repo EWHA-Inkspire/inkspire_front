@@ -327,7 +327,7 @@ public class ScriptManager : MonoBehaviour
         {
             // 에필로그 씬 로드
             SceneManager.LoadScene("6_Epilogue");
-            await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
+            // await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
         }
     }
 
@@ -350,7 +350,7 @@ public class ScriptManager : MonoBehaviour
         PlayAPI.play_api.UpdateGoalSuccess(goal_idx);
     }
 
-    private bool CheckGoalCleared()
+    public bool CheckGoalCleared()
     {
         int i = 0;
         while (i < 2)

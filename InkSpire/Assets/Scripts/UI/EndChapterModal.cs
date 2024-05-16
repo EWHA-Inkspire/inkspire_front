@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class EndChapterModal : MonoBehaviour
 {
-    public void OnClickNextChapter()
+    public void OnClickNextChapter(Play play)
     {
+        play.SaveMessages();
         this.gameObject.SetActive(false);
         // 목표 달성
         if (ScriptManager.script_manager.GetCurrGoalClear())
@@ -19,7 +20,7 @@ public class EndChapterModal : MonoBehaviour
             {
                 // 에필로그 씬 로드 
                 SceneManager.LoadScene("6_Epilogue");
-                ScriptManager.script_manager.SetEpilogue();
+                // ScriptManager.script_manager.SetEpilogue();
             }
             else
             {
@@ -32,7 +33,7 @@ public class EndChapterModal : MonoBehaviour
             {
                 // 에필로그 씬 로드
                 SceneManager.LoadScene("6_Epilogue");
-                ScriptManager.script_manager.SetEpilogue();
+                // ScriptManager.script_manager.SetEpilogue();
             }
             else
             {

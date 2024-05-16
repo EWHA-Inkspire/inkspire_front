@@ -7,8 +7,56 @@ using System.Threading.Tasks;
 public class Epilogue : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI epilogue_txt;
+    [SerializeField] GameObject loading_win;
+    [SerializeField] TextMeshProUGUI loading_text;
+
     private List<ChatMessage> gpt_messages = new();
     private readonly string GPT_ERROR = "No text was generated from this prompt.";
+    private bool is_loading = false;
+
+    void Awake()
+    {
+        epilogue_txt.text = "";
+        is_loading = true;
+        loading_win.gameObject.SetActive(true);
+        loading_text.text = "에필로그를 생성중입니다";
+        WaitForGPT();
+
+        ProcessEpilogue();
+    }
+
+    private async void ProcessEpilogue()
+    {
+        if(ScriptManager.script_manager.CheckGoalCleared())
+        {
+            await SuccessOutroGPT(ScriptManager.script_manager.GetPnpc(), ScriptManager.script_manager.GetAnpc(), ScriptManager.script_manager.GetScript());
+        }
+        else
+        {
+            await FailOutroGPT(ScriptManager.script_manager.GetPnpc(), ScriptManager.script_manager.GetAnpc(), ScriptManager.script_manager.GetScript());
+        }
+
+        is_loading = false;
+    }
+
+    void WaitForGPT()
+    {
+        if (loading_text.text == "에필로그를 생성중입니다 . . .")
+        {
+            loading_text.text = "에필로그를 생성중입니다";
+        }
+        else
+        {
+            loading_text.text += " .";
+        }
+        if (is_loading)
+        {
+            Invoke(nameof(WaitForGPT), 1f);
+        }
+        else{
+            loading_win.gameObject.SetActive(false);
+        }
+    }
 
     public async Task SuccessOutroGPT(Npc pro_npc, Npc anta_npc, Script script)
     {
