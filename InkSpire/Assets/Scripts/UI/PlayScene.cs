@@ -86,7 +86,7 @@ public class PlayScene : MonoBehaviour
             {
                 continue;
             }
-            else if(i >= 8)
+            else if(i >= 6)
             {
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
                 place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;

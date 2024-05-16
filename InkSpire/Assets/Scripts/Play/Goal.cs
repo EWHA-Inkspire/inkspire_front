@@ -267,11 +267,17 @@ public class Goal
         title = goal_info.title;
         detail = goal_info.detail;
         etc = goal_info.etc;
+        clear = goal_info.success;
     }
 
     public void SetGoalId(int id)
     {
         this.id = id;
+    }
+
+    public void SetClear(bool clear)
+    {
+        this.clear = clear;
     }
 
     private int ConvertToType(string type)

@@ -187,6 +187,27 @@ public class ScriptManager : MonoBehaviour
         PlayScene.play_scene.LoadChapter(curr_chapter, false);
     }
 
+    public async void SetFinalPlace()
+    {
+        PlayScene.play_scene.LoadNextChapUI();
+        
+        curr_chapter++;
+        int place_base = curr_chapter * 3 + 1;
+
+        // 최종 장소 목표 정보 전달
+        await items[place_base].InitItem(script, goals[curr_chapter], game_events[place_base].type);
+        await map[place_base].InitPlace(curr_chapter, script, items[place_base], game_events[place_base].type, place_names);
+        place_names[place_base] = map[place_base].place_name;
+
+        if (items[place_base].type != ItemType.Monster)
+        {
+            await game_events[place_base].CreateEventTrigger(script.GetWorldDetail(), goals[curr_chapter].GetDetail(), place_names[place_base], items[place_base].name);
+        }
+
+        ScriptAPI.script_api.PostMapInfo(map[place_base], items[place_base], game_events[place_base], place_base, curr_chapter + 1);
+        PlayScene.play_scene.LoadChapter(curr_chapter, false);
+    }
+
     // Settter
     public void SetCurrChap(int chap)
     {
@@ -309,30 +330,12 @@ public class ScriptManager : MonoBehaviour
         }
     }
 
-    public async void SetFinalPlace()
-    {
-        if (CheckGoalCleared() == true)
-        {
-            // 최종 장소 목표 정보 전달
-            await items[7].InitItem(script, goals[2], game_events[7].type);
-            await map[7].InitPlace(2, script, items[7], game_events[7].type, place_names);
-            place_names[7] = map[7].place_name;
-
-            if (items[7].type != ItemType.Monster)
-            {
-                await game_events[7].CreateEventTrigger(script.GetWorldDetail(), goals[2].GetDetail(), place_names[7], items[7].name);
-            }
-        }
-        else
-        {
-            // 에필로그 씬 로드
-            SceneManager.LoadScene("6_Epilogue");
-        }
-    }
-
     public void SetCurrGoalClear(bool clr)
     {
         curr_goal_clear = clr;
+        goals[curr_chapter].SetClear(clr);
+
+        // API 저장용
         int goal_idx = goals[curr_chapter].GetId();
         PlayAPI.play_api.UpdateGoalSuccess(goal_idx);
     }
@@ -346,6 +349,7 @@ public class ScriptManager : MonoBehaviour
             {
                 return false;
             }
+            i++;
         }
 
         return true;

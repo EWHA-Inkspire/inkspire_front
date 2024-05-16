@@ -16,6 +16,7 @@ public class GetGoalInfo
     public string title;
     public string detail;
     public string etc;
+    public bool success;
 }
 
 [Serializable]

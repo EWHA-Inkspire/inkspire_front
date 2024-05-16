@@ -181,6 +181,11 @@ Narrator (내레이터):
 
     public void PlaceButton(int place_idx)
     {
+        if(ScriptManager.script_manager.GetCurrPlace().place_name == "" || ScriptManager.script_manager.GetCurrPlace().place_name == null)
+        {
+            return;
+        }
+        
         ScriptManager.script_manager.SetCurrPlace(place_idx);
         map_modal.SetActive(false);
 

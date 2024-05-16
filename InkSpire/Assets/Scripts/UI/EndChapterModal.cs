@@ -9,36 +9,30 @@ public class EndChapterModal : MonoBehaviour
     {
         play.SaveMessages();
         this.gameObject.SetActive(false);
-        // 목표 달성
-        if (ScriptManager.script_manager.GetCurrGoalClear())
+
+        if(ScriptManager.script_manager.GetCurrChap() == 0)
         {
-            if (ScriptManager.script_manager.GetCurrChap() == 1)
-            {
-                ScriptManager.script_manager.SetFinalPlace();
-            }
-            else if (ScriptManager.script_manager.GetCurrChap() == 2)
-            {
-                // 에필로그 씬 로드 
-                SceneManager.LoadScene("6_Epilogue");
-                // ScriptManager.script_manager.SetEpilogue();
-            }
-            else
-            {
-                ScriptManager.script_manager.SetNextChapter();
-            }
+            ScriptManager.script_manager.SetNextChapter();
+            return;
+        }
+
+        if(ScriptManager.script_manager.GetCurrChap() == 2)
+        {
+            // 에필로그 씬 로드 
+            SceneManager.LoadScene("6_Epilogue");
+            return;
+        }
+
+        // 목표 달성
+        if (ScriptManager.script_manager.CheckGoalCleared())
+        {
+            ScriptManager.script_manager.SetFinalPlace();
+            return;
         }
         else
         {
-            if (ScriptManager.script_manager.GetCurrChap() == 1 || ScriptManager.script_manager.GetCurrChap() == 2)
-            {
-                // 에필로그 씬 로드
-                SceneManager.LoadScene("6_Epilogue");
-                // ScriptManager.script_manager.SetEpilogue();
-            }
-            else
-            {
-                ScriptManager.script_manager.SetNextChapter();
-            }
+            // 에필로그 씬 로드 
+            SceneManager.LoadScene("6_Epilogue");
         }
     }
 
