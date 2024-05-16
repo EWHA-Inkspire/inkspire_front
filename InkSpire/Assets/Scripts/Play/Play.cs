@@ -23,7 +23,6 @@ public class Play : MonoBehaviour
 
     void Awake()
     {
-        messages.Clear();
         PlayAPI.play_api.GetChatList(this);
 
         // 인벤토리 조회
@@ -185,7 +184,7 @@ Narrator (내레이터):
         {
             return;
         }
-        
+
         ScriptManager.script_manager.SetCurrPlace(place_idx);
         map_modal.SetActive(false);
 
