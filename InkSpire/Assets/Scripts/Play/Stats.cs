@@ -48,7 +48,8 @@ public class Stats
 
     public void SetStatAmount(StatType type, int amount)
     {
-        switch(type) {
+        switch (type)
+        {
             case StatType.Luck:
                 luk = Mathf.Clamp(amount, STAT_MIN, STAT_MAX);
                 break;
@@ -100,5 +101,5 @@ public class Stats
             _ => 0f,
         };
     }
-    
+
 }

@@ -9,6 +9,7 @@ public class CreateStatScene : MonoBehaviour
 {
     [SerializeField] GameObject LoadingPannel;
     [SerializeField] TextMeshProUGUI LoadingText;
+    [SerializeField] TextMeshProUGUI warning;
     [SerializeField] StatModalButton testObj;
     [SerializeField] TMP_InputField atk;
     [SerializeField] TMP_InputField def;
@@ -55,9 +56,17 @@ public class CreateStatScene : MonoBehaviour
 
     public void GameStartButton()
     {
-        SetCharacterStat();
-        LoadingText.text = "게임을 생성중입니다";
-        WaitForGPT();
+        if (int.Parse(luk.text) + int.Parse(def.text) + int.Parse(intl.text) + int.Parse(dex.text) + int.Parse(atk.text) > 400)
+        {
+            warning.text = "Stat의 총합은 400을 넘을 수 없습니다!";
+        }
+        else
+        {
+            warning.text = "";
+            SetCharacterStat();
+            LoadingText.text = "게임을 생성중입니다";
+            WaitForGPT();
+        }
     }
 
     void WaitForGPT()
