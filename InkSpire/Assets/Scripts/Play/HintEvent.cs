@@ -7,8 +7,8 @@ using OpenAI;
 
 public class HintEvent : MonoBehaviour
 {
-    [SerializeField] private readonly TMP_InputField player_input;
-    [SerializeField] private readonly Button send_button;
+    [SerializeField] private TMP_InputField player_input;
+    [SerializeField] private Button send_button;
     [SerializeField] readonly Play play_manager;
     private ScriptManager s_manager;
     private List<ChatMessage> pnpc_messages = new();
