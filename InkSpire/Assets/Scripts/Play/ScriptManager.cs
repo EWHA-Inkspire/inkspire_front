@@ -288,7 +288,8 @@ public class ScriptManager : MonoBehaviour
         }
     }
 
-    public void SetViewChap(int num){
+    public void SetViewChap(int num)
+    {
         view_chapter = num;
     }
 
@@ -324,9 +325,9 @@ public class ScriptManager : MonoBehaviour
         }
         else
         {
-            await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
             // 에필로그 씬 로드
             SceneManager.LoadScene("6_Epilogue");
+            await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
         }
     }
 
@@ -335,14 +336,10 @@ public class ScriptManager : MonoBehaviour
         if (goals[2].GetClear() == true)
         {
             await epilogue.SuccessOutroGPT(pro_npc, anta_npc, script);
-            // 에필로그 씬 로드
-            SceneManager.LoadScene("6_Epilogue");
         }
         else
         {
             await epilogue.FailOutroGPT(pro_npc, anta_npc, script);
-            // 에필로그 씬 로드
-            SceneManager.LoadScene("6_Epilogue");
         }
     }
 

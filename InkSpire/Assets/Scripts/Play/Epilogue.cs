@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using OpenAI;
+using TMPro;
 using System.Threading.Tasks;
 
-public class Epilogue
+public class Epilogue : MonoBehaviour
 {
-    [SerializeField] public TextScrollUI text_scroll;
+    [SerializeField] private TextMeshProUGUI epilogue_txt;
     private List<ChatMessage> gpt_messages = new();
     private readonly string GPT_ERROR = "No text was generated from this prompt.";
 
@@ -53,7 +54,7 @@ public class Epilogue
         var response = await GptManager.gpt.CallGpt(gpt_messages);
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
-        text_scroll.AppendMsg(response);
+        epilogue_txt.text = response;
     }
 
     public async Task FailOutroGPT(Npc pro_npc, Npc anta_npc, Script script)
@@ -105,6 +106,6 @@ public class Epilogue
         var response = await GptManager.gpt.CallGpt(gpt_messages);
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
-        text_scroll.AppendMsg(response);
+        epilogue_txt.text = response;
     }
 }
