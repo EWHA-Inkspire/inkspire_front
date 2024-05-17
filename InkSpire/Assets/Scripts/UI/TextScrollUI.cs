@@ -11,15 +11,20 @@ public class TextScrollUI : MonoBehaviour
     [SerializeField] private GameObject assi_chat;
     [SerializeField] private GameObject user_chat;
     [SerializeField] private Play play;
+    private readonly float TYPING_SPEED = 0.03f;
 
-    public void AppendMsg(ChatMessage msg)
+    public void AppendMsg(ChatMessage msg, bool isTyping)
     {
         if (msg.Role == "system" || msg.Content == "게임을 시작하고 게임의 인트로를 보여줘")
         {
             return;
         }
 
-        if (msg.Role == "assistant")
+        if (msg.Role == "assistant" && isTyping)
+        {
+            StartCoroutine(TypeMessage(msg.Content));
+        }
+        else if (msg.Role == "assistant")
         {
             // msg.Content를 \n\n으로 나눠서 각각 생성
             string[] split_msg = msg.Content.Split(new[] { "\n\n" }, System.StringSplitOptions.None);
@@ -35,21 +40,41 @@ public class TextScrollUI : MonoBehaviour
             new_chat.GetComponentInChildren<TextMeshProUGUI>().text = msg.Content;
         }
 
-        // 레이아웃을 즉시 재구성하고 스크롤 위치 업데이트
+        // 스크롤 위치 업데이트
         LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
         StartCoroutine(UpdateScrollPosition());
     }
 
+    private IEnumerator TypeMessage(string message)
+    {
+        string[] splitMessages = message.Split("\n\n");
+
+        foreach (string splitMessage in splitMessages)
+        {
+            TextMeshProUGUI textComponent = Instantiate(assi_chat, scroll.content).GetComponentInChildren<TextMeshProUGUI>();
+            textComponent.text = "";
+
+            foreach (char letter in splitMessage.ToCharArray())
+            {
+                textComponent.text += letter;
+                yield return new WaitForSeconds(TYPING_SPEED);
+                scroll.verticalNormalizedPosition = 0f;
+            }
+
+            yield return new WaitForSeconds(TYPING_SPEED); // 각 메시지의 끝에 추가 딜레이
+        }
+    }
+
     private IEnumerator UpdateScrollPosition()
     {
-        // 레이아웃이 업데이트되기 위해 한 프레임을 기다림
+        // 레이아웃 업데이트 대기
         yield return null;
         scroll.verticalNormalizedPosition = 0f;
     }
 
-    public void AppendMsg(string msg)
+    public void AppendMsg(string msg, bool isTyping)
     {
-        AppendMsg(new ChatMessage() { Role = "assistant", Content = msg });
+        AppendMsg(new ChatMessage() { Role = "assistant", Content = msg }, isTyping);
     }
 
     internal void InitStoryObj(List<ChatMessage> messages)
@@ -62,7 +87,7 @@ public class TextScrollUI : MonoBehaviour
 
         foreach (var msg in messages)
         {
-            AppendMsg(msg);
+            AppendMsg(msg, false);
         }
     }
 }
