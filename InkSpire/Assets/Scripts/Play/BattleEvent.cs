@@ -20,10 +20,11 @@ public class BattleEvent : MonoBehaviour
     [SerializeField] TextMeshProUGUI ones_dice; // 일의 자리 텍스트
     [SerializeField] TextMeshProUGUI bonus_dice; // 행운 보정치 텍스트
 
+    [SerializeField] Button scene_inven_button; // 씬 상단 인벤토리 버튼
+
     [SerializeField] ToggleGroup mobgroup;  // 공격 타겟 선택용 토글그룹
 
-    [SerializeField] private TextMeshProUGUI story_object;  // 게임 플레이 텍스트 영역
-    [SerializeField] private ScrollRect scroll; // 스크롤 영역
+    [SerializeField] private TextScrollUI text_scroll;  // 게임 플레이 텍스트 영역
     [SerializeField] private GameObject EndChapterModal;
 
     BType bType;    // 전투 타입 구분 -> 보스, 일반
@@ -57,6 +58,7 @@ public class BattleEvent : MonoBehaviour
     public void SetBattle(BType battle_type, int mob_num)
     {
         battle_window.SetActive(true);
+        scene_inven_button.interactable = false;
         bType = battle_type;
         m_num = mob_num;
         int[] tmp_stat = new int[5];
@@ -543,10 +545,11 @@ public class BattleEvent : MonoBehaviour
         // 텍스트박스쪽에 전투 결과 메시지 append
         AppendMsg("\n<b>:: 전투 종료 ::</b>\nRESULT>> " + result_str);
 
+        scene_inven_button.interactable = true;
         bdice_window.SetActive(true);
         mobgroup.gameObject.SetActive(true);
         if(bType  == BType.BOSS){
-            // mobgroup.gameObject.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = "Enemy1";
+            mobgroup.gameObject.transform.GetChild(0).GetComponentInChildren<Text>().text = "Enemy1";
         }
         for (int k = 0; k < 5; k++)
         {
@@ -582,9 +585,6 @@ public class BattleEvent : MonoBehaviour
 
     public void AppendMsg(string msg)
     {
-        story_object.text += "\n" + msg;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
-        scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scroll.content.sizeDelta.y);
-        scroll.verticalNormalizedPosition = 0f;
+        text_scroll.AppendMsg(msg,false);
     }
 }

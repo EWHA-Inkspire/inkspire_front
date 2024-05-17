@@ -57,9 +57,9 @@ public class CreateStatScene : MonoBehaviour
 
     public void GameStartButton()
     {
-        if (int.Parse(luk.text) + int.Parse(def.text) + int.Parse(intl.text) + int.Parse(dex.text) + int.Parse(atk.text) > 400)
+        if (int.Parse(luk.text) + int.Parse(def.text) + int.Parse(intl.text) + int.Parse(dex.text) + int.Parse(atk.text) > 300)
         {
-            warning.text = "Stat의 총합은 400을 넘을 수 없습니다!";
+            warning.text = "Stat의 총합은 300을 넘을 수 없습니다!";
         }
         else
         {
