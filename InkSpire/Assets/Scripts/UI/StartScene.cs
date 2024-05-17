@@ -36,6 +36,17 @@ public class StartScene : MonoBehaviour
             SetButtonsForLoggedOutUser();
         }
     }
+    
+    void Update()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                Application.Quit();  // 종료
+            }
+        }
+    }
 
     private void ProcessProfile(Response<ProfileInfo> response){
         if(response == null || response.data == null) {

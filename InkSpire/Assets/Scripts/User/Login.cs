@@ -8,6 +8,17 @@ public class Login : MonoBehaviour
     [SerializeField] TMP_InputField input_pw;
     [SerializeField] TextMeshProUGUI wrong_pw;
 
+    void Update()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                SceneManager.LoadScene("1_Start");
+            }
+        }
+    }
+
     public void LoginButton(){
         string user_email = input_email.text;
         string user_pw = input_pw.text;
@@ -48,5 +59,9 @@ public class Login : MonoBehaviour
 
     public void GoToSignUp(){
         SceneManager.LoadScene("Signup");
+    }
+
+    public void OnClickBack(){
+        SceneManager.LoadScene("1_Start");
     }
 }

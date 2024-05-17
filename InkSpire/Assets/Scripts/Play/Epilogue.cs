@@ -3,6 +3,7 @@ using UnityEngine;
 using OpenAI;
 using TMPro;
 using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 public class Epilogue : MonoBehaviour
 {
@@ -23,6 +24,17 @@ public class Epilogue : MonoBehaviour
         WaitForGPT();
 
         ProcessEpilogue();
+    }
+
+    void Update()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                SceneManager.LoadScene("2_CharacterList");
+            }
+        }
     }
 
     private async void ProcessEpilogue()
@@ -155,5 +167,10 @@ public class Epilogue : MonoBehaviour
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
         epilogue_txt.text = response;
+    }
+
+    public void OnClickBack()
+    {
+        SceneManager.LoadScene("2_CharacterList");
     }
 }
