@@ -18,6 +18,17 @@ public class CreateCharacterScene : MonoBehaviour
         PlayerPrefs.DeleteKey("character_id");
     }
 
+    void Update()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                Application.Quit();  // 씬 종료
+            }
+        }
+    }
+
     public string GetGenre()
     {
         string[] strlist = genregroup.ActiveToggles().FirstOrDefault().GetComponentInChildren<Text>().text.Split("#");
@@ -29,5 +40,10 @@ public class CreateCharacterScene : MonoBehaviour
         ScriptManager.script_manager.SetScriptInfo(charname.text, GetGenre(), timebackground.text, spacebackground.text);
         ScriptManager.script_manager.SetCurrChap(0);
         SceneManager.LoadScene("4_CreateStat");
+    }
+
+    public void OnClickBack()
+    {
+        SceneManager.LoadScene("2_CharacterList");
     }
 }

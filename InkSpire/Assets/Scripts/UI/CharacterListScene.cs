@@ -22,6 +22,17 @@ public class CharacterListScene : MonoBehaviour
         StartCoroutine(APIManager.api.GetRequest<CharacterList>("/users/" + user_id + "/characterList", ProcessCharacterList));    
     }
 
+    void Update()
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                SceneManager.LoadScene("1_Start");
+            }
+        }
+    }
+
     private void ProcessCharacterList(Response<CharacterList> response){
         if(!response.success || response.data == null){
             return;
@@ -49,5 +60,9 @@ public class CharacterListScene : MonoBehaviour
 
     public void OnClickCreateCharacter(){
         SceneManager.LoadScene("3_CreateCharacter");
+    }
+
+    public void OnClickBack(){
+        SceneManager.LoadScene("1_Start");
     }
 }
