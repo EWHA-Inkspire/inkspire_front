@@ -1,10 +1,13 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CharacterListScene : MonoBehaviour
 {
     [SerializeField] CharacterButton character_prefab;
     [SerializeField] GameObject chapter_list;
+    [SerializeField] ScrollRect scroll_rect;
     
     void Start()
     {
@@ -28,7 +31,20 @@ public class CharacterListScene : MonoBehaviour
             CharacterButton new_prefab = Instantiate(character_prefab);
             new_prefab.SetCharacter(character, chapter_list);
             new_prefab.transform.SetParent(GameObject.Find("CharacterList").transform);
+            new_prefab.transform.localScale = Vector3.one;
+            
+            // 스크롤 뷰의 커서 이동
+            StartCoroutine(ScrollToBottom());
         }
+    }
+
+    private IEnumerator ScrollToBottom()
+    {
+        // 다음 프레임까지 대기
+        yield return null;
+
+        // 스크롤을 맨 아래로 설정
+        scroll_rect.verticalNormalizedPosition = 0f;
     }
 
     public void OnClickCreateCharacter(){

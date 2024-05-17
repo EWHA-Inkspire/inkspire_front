@@ -19,7 +19,7 @@ public class Play : MonoBehaviour
     private List<ChatMessage> messages = new();
     private ChatMessage input_msg = new();
     private string system_prompt = "";
-    private readonly int SAVING_INTERVAL = 10; // 10초마다 저장
+    private readonly int SAVING_INTERVAL = 5; // 5초마다 저장
 
     void Awake()
     {
@@ -112,6 +112,7 @@ Narrator (내레이터):
 
     public async void SendButton()
     {
+        PlayScene.play_scene.GenerateGPT();
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
 
@@ -122,6 +123,7 @@ Narrator (내레이터):
         {
             if (!ScriptManager.script_manager.GetCurrPlace().clear && await EventChecker.eventChecker.EventCheckerGPT(input_msg.Content, ScriptManager.script_manager.GetCurrEvent()))
             {
+                PlayScene.play_scene.SetIsLoading(false);
                 // 이벤트 트리거 도입 스크립트 출력
                 text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
                 ChatMessage event_msg = new()
@@ -155,12 +157,9 @@ Narrator (내레이터):
     }
 
     private async void SendReply()
-    {
+    {   
         messages.Add(input_msg);
-
-        send_button.enabled = false;
         player_input.text = "";
-        player_input.enabled = false;
 
         var message = await GptManager.gpt.CallGpt(messages);
         var newMessage = new ChatMessage()
@@ -170,10 +169,9 @@ Narrator (내레이터):
         };
         messages.Add(newMessage);
 
+        send_button.OnDeselect(null);
+        PlayScene.play_scene.SetIsLoading(false);
         text_scroll.AppendMsg(newMessage);
-
-        send_button.enabled = true;
-        player_input.enabled = true;
 
         PlayAPI.play_api.PostChatList(messages);
     }

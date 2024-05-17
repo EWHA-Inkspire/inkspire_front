@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using OpenAI;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections;
 
 public class TextScrollUI : MonoBehaviour
 {
@@ -14,12 +14,7 @@ public class TextScrollUI : MonoBehaviour
 
     public void AppendMsg(ChatMessage msg)
     {
-        if (msg.Role == "system")
-        {
-            return;
-        }
-
-        if (msg.Content == "게임을 시작하고 게임의 인트로를 보여줘")
+        if (msg.Role == "system" || msg.Content == "게임을 시작하고 게임의 인트로를 보여줘")
         {
             return;
         }
@@ -27,7 +22,7 @@ public class TextScrollUI : MonoBehaviour
         if (msg.Role == "assistant")
         {
             // msg.Content를 \n\n으로 나눠서 각각 생성
-            string[] split_msg = msg.Content.Split("\n\n");
+            string[] split_msg = msg.Content.Split(new[] { "\n\n" }, System.StringSplitOptions.None);
             foreach (var split in split_msg)
             {
                 GameObject new_chat = Instantiate(assi_chat, scroll.content);
@@ -40,8 +35,15 @@ public class TextScrollUI : MonoBehaviour
             new_chat.GetComponentInChildren<TextMeshProUGUI>().text = msg.Content;
         }
 
+        // 레이아웃을 즉시 재구성하고 스크롤 위치 업데이트
         LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
-        scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scroll.content.sizeDelta.y);
+        StartCoroutine(UpdateScrollPosition());
+    }
+
+    private IEnumerator UpdateScrollPosition()
+    {
+        // 레이아웃이 업데이트되기 위해 한 프레임을 기다림
+        yield return null;
         scroll.verticalNormalizedPosition = 0f;
     }
 

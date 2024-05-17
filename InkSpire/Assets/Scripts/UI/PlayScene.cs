@@ -1,7 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using OpenAI;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +18,8 @@ public class PlayScene : MonoBehaviour
     [SerializeField] Slider slider_HP;
     [SerializeField] GameObject loading_win;
     [SerializeField] TextMeshProUGUI loading_text;
+    [SerializeField] GameObject generating_win;
+    [SerializeField] TextMeshProUGUI generating_text;
 
     [SerializeField] GameObject[]   disable_set;
 
@@ -38,27 +40,31 @@ public class PlayScene : MonoBehaviour
     public void LoadNextChapUI(){
         is_loading = true;
         loading_win.gameObject.SetActive(true);
-        loading_text.text = "챕터를 생성중입니다";
-        WaitForGPT();
+        StartCoroutine(WaitForGPT(loading_win, loading_text, "챕터를 생성중입니다"));
     }
 
-    void WaitForGPT()
+    public void GenerateGPT(){
+        is_loading = true;
+        generating_win.gameObject.SetActive(true);
+        StartCoroutine(WaitForGPT(generating_win, generating_text, "대화를 생성중입니다"));
+    }
+
+    IEnumerator WaitForGPT(GameObject win, TextMeshProUGUI win_text, string origin_text)
     {
-        if (loading_text.text == "챕터를 생성중입니다 . . .")
+        win_text.text = origin_text;
+        while (is_loading)
         {
-            loading_text.text = "챕터를 생성중입니다";
+            if (win_text.text == origin_text + " . . .")
+            {
+                win_text.text = origin_text;
+            }
+            else
+            {
+                win_text.text += " .";
+            }
+            yield return new WaitForSeconds(1f);
         }
-        else
-        {
-            loading_text.text += " .";
-        }
-        if (is_loading)
-        {
-            Invoke(nameof(WaitForGPT), 1f);
-        }
-        else{
-            loading_win.gameObject.SetActive(false);
-        }
+        win.gameObject.SetActive(false);
     }
 
     public void LoadPlayScene(){
@@ -166,6 +172,10 @@ public class PlayScene : MonoBehaviour
             _ => "NULL",
         };
         title_chapnum.text = "Chapter "+rome_chapnum;
+    }
+
+    public void SetIsLoading(bool is_loading){
+        this.is_loading = is_loading;
     }
 
 }
