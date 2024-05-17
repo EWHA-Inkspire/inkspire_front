@@ -81,6 +81,7 @@ public class PlayScene : MonoBehaviour
         view_idx = idx;
         ScriptManager.script_manager.SetViewChap(view_idx);
         Changechap(idx);
+    
         // 장소 모달 버튼 셋팅
         place_list.transform.GetChild(12).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+s_manager.GetPlace(0).place_name;
         for (int i = 0; i<14; i++){
@@ -101,6 +102,7 @@ public class PlayScene : MonoBehaviour
             {
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(i+1).place_name;
                 if(idx!=ScriptManager.script_manager.GetCurrChap()){
+                    Debug.Log(place_list.transform.GetChild(i).GetComponent<Button>()==null);
                     place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
                 }
             }
@@ -108,6 +110,7 @@ public class PlayScene : MonoBehaviour
             {
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
                 place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
+                
             }
         }
         // 텍스트박스 및 버튼 비활성화
@@ -123,7 +126,7 @@ public class PlayScene : MonoBehaviour
         }
         else{
             for(int i = 0; i<disable_set.Length;i++){
-                if(disable_set[i].GetComponent<Button>()!=null){
+                if(disable_set[i].GetComponent<Button>()!=null&&(i/3==idx||i>13)){
                     disable_set[i].GetComponent<Button>().interactable = true;
                 }
                 else if(disable_set[i].GetComponent<TMP_InputField>()!=null){
