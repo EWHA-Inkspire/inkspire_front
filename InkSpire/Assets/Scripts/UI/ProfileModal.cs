@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProfileModal : MonoBehaviour
 {
@@ -6,6 +8,7 @@ public class ProfileModal : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI nickname;
     [SerializeField] TMPro.TextMeshProUGUI email;
     [SerializeField] GameObject start_scene;
+    [SerializeField] GameObject book;
     public GameObject characterName;
 
     public void Awake()
@@ -16,28 +19,27 @@ public class ProfileModal : MonoBehaviour
 
         int user_id = PlayerPrefs.GetInt("user_id");
         SetProfile();
-        // 캐릭터 리스트 요청
-        StartCoroutine(APIManager.api.GetRequest<CharacterList>("/users/" + user_id + "/characterList", ProcessCharacterList));
+
+        // 업적 정보 요청
+        StartCoroutine(APIManager.api.GetRequest<AchieveList>("/users/" + user_id + "/achievements", ProcessAchieveList));
+    }
+
+    private void ProcessAchieveList(Response<AchieveList> response)
+    {
+        if(!response.success || response.data == null){
+            return;
+        }
+
+        foreach(Achieve acheive in response.data.achievements){
+            GameObject new_prefab = Instantiate(Resources.Load<GameObject>("Prefabs/Book"), GameObject.Find("AchieveList").transform);
+            new_prefab.GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>(acheive.genre) ?? Resources.Load<Sprite>("추리");
+            new_prefab.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = acheive.title;
+        }
     }
 
     private void SetProfile() {
         title.text = StartScene.title;
         nickname.text = StartScene.nickname;
         email.text = StartScene.email;
-    }
-
-    private void ProcessCharacterList(Response<CharacterList> response){
-        if(response == null || !response.success || response.data == null) {
-            return;
-        }
-
-        if(response.success && response.data != null){
-            foreach(Character character in response.data.characters){
-                // 캐릭터 이름 표시 게임 오브젝트 새로 생성
-                GameObject new_character = Instantiate(characterName);
-                new_character.GetComponent<TMPro.TextMeshProUGUI>().text = character.name;
-                new_character.transform.SetParent(GameObject.Find("CharacterList").transform);
-            }
-        }
     }
 }

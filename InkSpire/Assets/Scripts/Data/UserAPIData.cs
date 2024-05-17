@@ -46,3 +46,21 @@ public class Character {
         return "id: " + id + "\nname: " + name + "\nsuccess: " + success + "\nfail: " + fail;
     }
 }
+
+[Serializable]
+// 업적 리스트 응답 API (GET)
+public class AchieveList {
+    public List<Achieve> achievements = new();
+}
+
+[Serializable]
+// 업적 정보 응답 API (GET)
+public class Achieve {
+    public string title;
+    public string genre;
+
+    public override string ToString()
+    {
+        return "title: " + title + "\ngenre: " + genre;
+    }
+}
