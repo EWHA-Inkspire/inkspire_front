@@ -7,8 +7,6 @@ public class ProfileModal : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI title;
     [SerializeField] TMPro.TextMeshProUGUI nickname;
     [SerializeField] TMPro.TextMeshProUGUI email;
-    [SerializeField] GameObject start_scene;
-    [SerializeField] GameObject book;
     public GameObject characterName;
 
     public void Awake()
