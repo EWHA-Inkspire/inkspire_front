@@ -46,7 +46,7 @@ public class Play : MonoBehaviour
             var introMessage = new ChatMessage()
             {
                 Role = "assistant",
-                Content = ScriptManager.script_manager.GetScript().GetIntro() + "\n\nNarrator:\n" + ScriptManager.script_manager.GetCharName() + "님, 처음으로 조사할 장소를 선택해주십시오.\n"
+                Content = ScriptManager.script_manager.GetScript().GetIntro() + "\n\nNarrator:\n" + ScriptManager.script_manager.GetCharName() + "님, 처음으로 조사할 장소를 선택해주십시오."
                 + "Map 창의 " + ScriptManager.script_manager.GetPlace(0).place_name + EulorReul(ScriptManager.script_manager.GetPlace(0).place_name) + " 선택할 시, "
                 + ScriptManager.script_manager.GetPnpc().GetName() + EorGa(ScriptManager.script_manager.GetPnpc().GetName()) + " 당신을 반겨줄 것입니다."
             };

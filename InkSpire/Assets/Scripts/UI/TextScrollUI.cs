@@ -3,17 +3,14 @@ using UnityEngine.UI;
 using TMPro;
 using OpenAI;
 using System.Collections.Generic;
+using System.Linq;
 
 public class TextScrollUI : MonoBehaviour
 {
     [SerializeField] private ScrollRect scroll;
-    [SerializeField] private TextMeshProUGUI story_object;
+    [SerializeField] private GameObject assi_chat;
+    [SerializeField] private GameObject user_chat;
     [SerializeField] private Play play;
-
-    void Awake()
-    {
-        story_object.text = "";
-    }
 
     public void AppendMsg(ChatMessage msg)
     {
@@ -27,15 +24,22 @@ public class TextScrollUI : MonoBehaviour
             return;
         }
 
-        string add_text = "";
-        if (msg.Role == "user")
+        if (msg.Role == "assistant")
         {
-            add_text += ScriptManager.script_manager.GetCharName() + "> ";
+            // msg.Content를 \n\n으로 나눠서 각각 생성
+            string[] split_msg = msg.Content.Split("\n\n");
+            foreach (var split in split_msg)
+            {
+                GameObject new_chat = Instantiate(assi_chat, scroll.content);
+                new_chat.GetComponentInChildren<TextMeshProUGUI>().text = split;
+            }
+        }
+        else if (msg.Role == "user")
+        {
+            GameObject new_chat = Instantiate(user_chat, scroll.content);
+            new_chat.GetComponentInChildren<TextMeshProUGUI>().text = msg.Content;
         }
 
-        add_text += msg.Content;
-
-        story_object.text += add_text + "\n\n";
         LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
         scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scroll.content.sizeDelta.y);
         scroll.verticalNormalizedPosition = 0f;
@@ -48,7 +52,12 @@ public class TextScrollUI : MonoBehaviour
 
     internal void InitStoryObj(List<ChatMessage> messages)
     {
-        story_object.text = "";
+        // scroll.content 아래 게임 오브젝트 파괴
+        foreach (Transform child in scroll.content)
+        {
+            Destroy(child.gameObject);
+        }
+
         foreach (var msg in messages)
         {
             AppendMsg(msg);
