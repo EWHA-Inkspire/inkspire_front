@@ -21,8 +21,6 @@ public class ScriptManager : MonoBehaviour
     private string achivement;
     private bool curr_goal_clear = false;
 
-    Epilogue epilogue = new Epilogue();
-
     private bool init_script = false;
 
     // 일반함수

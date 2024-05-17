@@ -92,7 +92,7 @@ public class InventoryManager : MonoBehaviour
                 // Mob 사용시 스탯 늘려줌??
                 break;
             case ItemType.Report:
-                battle.AppendMsg(">> 보고서 아이템은 사용할 수 없습니다.");
+                battle.AppendMsg(">> 보고서 아이템은 사용할 수 없습니다.\n");
                 return;
             case ItemType.Weapon:
                 PlayerStatManager.playerstat.wheapone = item.stat;
