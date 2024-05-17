@@ -95,7 +95,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
         }
         result_msg.Role = "assistant";
         play_manager.AddToMessagesGPT(result_msg);
-        play_manager.text_scroll.AppendMsg(result_msg);
+        play_manager.text_scroll.AppendMsg(result_msg, true);
 
         if (map_item.type == ItemType.Item || map_item.type == ItemType.Report)
         {

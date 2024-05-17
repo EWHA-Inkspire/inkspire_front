@@ -38,13 +38,13 @@ public class HintEvent : MonoBehaviour
         
         // 목표 이벤트에 해당하는 아이템이 없는 경우
         if (idx == -1) {
-            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + "자유롭게 모든 장소들을 탐방해보세요!");
+            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + "자유롭게 모든 장소들을 탐방해보세요!", true);
             return;
         }
 
         idx += 1 + s_manager.GetCurrChap()*3; // 장소 인덱스 보정
         Place place = s_manager.GetPlace(idx);
-        text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + place.place_name + Play.EulorReul(place.place_name) + " 살펴보는 건 어떨까요? 재밌는 사건이 기다리고 있을지도 몰라요!");
+        text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + place.place_name + Play.EulorReul(place.place_name) + " 살펴보는 건 어떨까요? 재밌는 사건이 기다리고 있을지도 몰라요!", true);
     }
 
     public void GoalHint()
@@ -53,17 +53,17 @@ public class HintEvent : MonoBehaviour
 
         // 적 처치 목표일 경우
         if (chapter_obj.GetGoalType() == 1) {
-            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + "때때로 존재를 감추기 위해 수상한 생명체가 그림자 속에 숨어있을 때가 있어요. 지나가는 때를 노려서 공격해 올 수도 있으니, 조심하세요.");
+            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + "때때로 존재를 감추기 위해 수상한 생명체가 그림자 속에 숨어있을 때가 있어요. 지나가는 때를 노려서 공격해 올 수도 있으니, 조심하세요.", true);
         }
 
         // 아이템 획득이 목표일 경우
         if (chapter_obj.GetGoalType() == 2) {
-            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + "가끔은 뜻밖의 아이템을 발견할 수 있는 곳이 있어요. 눈에 띄는 것은 없지만, 주변을 조심스럽게 살펴보면 무언가를 발견할지도 모르겠죠.");
+            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + "가끔은 뜻밖의 아이템을 발견할 수 있는 곳이 있어요. 눈에 띄는 것은 없지만, 주변을 조심스럽게 살펴보면 무언가를 발견할지도 모르겠죠.", true);
         }
 
         // 사건의 진상 조사가 목표일 경우
         if (chapter_obj.GetGoalType() == 3) {
-            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + "가끔은 이야기의 전체 그림을 완성하기 위해 숨은 단서들을 찾아야 할 때가 있어요. 주변을 주의 깊게 살펴보고, 이상한 점을 발견하면 기록해두세요.");
+            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + "가끔은 이야기의 전체 그림을 완성하기 위해 숨은 단서들을 찾아야 할 때가 있어요. 주변을 주의 깊게 살펴보고, 이상한 점을 발견하면 기록해두세요.", true);
         }
     }
 
@@ -72,16 +72,16 @@ public class HintEvent : MonoBehaviour
         List<Item> items = s_manager.GetCurrItems();
 
         if(!items.Exists(item => item.type == ItemType.Monster || item.type == ItemType.Mob)) {
-            text_scroll.AppendMsg(pro_npc.GetName() + ":\n당분간은 hp를 사용하지 않아도 플레이가 가능해요.");
+            text_scroll.AppendMsg(pro_npc.GetName() + ":\n당분간은 hp를 사용하지 않아도 플레이가 가능해요.", true);
             return;
         }
 
         int hp = PlayerStatManager.playerstat.GetStatAmount(StatType.Hp);
         if (hp < 100) {
-            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + (500 - hp) + "hp를 회복했어요. 다음에는 꼭 전투에서 승리하시길 기원합니다!");
+            text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + (500 - hp) + "hp를 회복했어요. 다음에는 꼭 전투에서 승리하시길 기원합니다!", true);
             PlayerStatManager.playerstat.SetStatAmount(StatType.Hp, 500);
         } else {
-            text_scroll.AppendMsg(pro_npc.GetName() + ":\n아직 최소 체력에 도달하지 않았어요. 체력 회복은 hp가 100 이하일 경우에만 가능하니 다음에 찾아와주세요!");
+            text_scroll.AppendMsg(pro_npc.GetName() + ":\n아직 최소 체력에 도달하지 않았어요. 체력 회복은 hp가 100 이하일 경우에만 가능하니 다음에 찾아와주세요!", true);
         }
     }
 
@@ -108,7 +108,7 @@ public class HintEvent : MonoBehaviour
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
 
-        text_scroll.AppendMsg(input_msg);
+        text_scroll.AppendMsg(input_msg, true);
         pnpc_messages.Add(input_msg);
 
         send_button.enabled = false;
@@ -125,7 +125,7 @@ public class HintEvent : MonoBehaviour
             Content = pro_npc.GetName() + ":\n" + message
         };
         pnpc_messages.Add(newMessage);
-        text_scroll.AppendMsg(newMessage);
+        text_scroll.AppendMsg(newMessage, true);
 
         send_button.enabled = true;
         player_input.enabled = true;

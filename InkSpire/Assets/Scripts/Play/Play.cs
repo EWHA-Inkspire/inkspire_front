@@ -54,7 +54,7 @@ public class Play : MonoBehaviour
             {
                 messages.Add(introMessage);
             }
-            text_scroll.AppendMsg(introMessage);
+            text_scroll.AppendMsg(introMessage, true);
         }
     }
 
@@ -116,7 +116,7 @@ Narrator (내레이터):
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
 
-        text_scroll.AppendMsg(input_msg);
+        text_scroll.AppendMsg(input_msg, true);
 
         var item_type = ScriptManager.script_manager.GetCurrItem().type;
         if (item_type == ItemType.Recover || item_type == ItemType.Weapon || item_type == ItemType.Item || item_type == ItemType.Report)
@@ -125,7 +125,7 @@ Narrator (내레이터):
             {
                 PlayScene.play_scene.SetIsLoading(false);
                 // 이벤트 트리거 도입 스크립트 출력
-                text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n");
+                text_scroll.AppendMsg("\n<b>:: 판정 이벤트 발생 ::</b>\n", false);
                 ChatMessage event_msg = new()
                 {
                     Role = "user",
@@ -139,7 +139,7 @@ Narrator (내레이터):
 
                 event_msg.Content = event_title + "\n" + event_intro + "\n\n";
                 messages.Add(event_msg);
-                text_scroll.AppendMsg(event_msg.Content);
+                text_scroll.AppendMsg(event_msg.Content, true);
 
                 dice_event.SetDiceEvent(50 + (int)Mathf.Pow(-1, Random.Range(0, 2)) * Random.Range(0, 30));
 
@@ -171,7 +171,7 @@ Narrator (내레이터):
 
         send_button.OnDeselect(null);
         PlayScene.play_scene.SetIsLoading(false);
-        text_scroll.AppendMsg(newMessage);
+        text_scroll.AppendMsg(newMessage, true);
 
         PlayAPI.play_api.PostChatList(messages);
     }
@@ -205,7 +205,7 @@ Narrator (내레이터):
             newMessage.Content += "이곳에서는 NPC " + ScriptManager.script_manager.GetPnpc().GetName() + EulorReul(ScriptManager.script_manager.GetPnpc().GetName()) + " 만날 수 있습니다.";
         }
         messages.Add(newMessage);
-        text_scroll.AppendMsg(newMessage);
+        text_scroll.AppendMsg(newMessage, true);
 
         // 장소의 아이템 유형이 Mob이거나 Monster일 경우 전투 이벤트 발동
         var item_type = ScriptManager.script_manager.GetCurrItem().type;
