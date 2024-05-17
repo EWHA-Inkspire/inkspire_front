@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections;
 
 public class CreateStatScene : MonoBehaviour
 {
@@ -65,40 +66,39 @@ public class CreateStatScene : MonoBehaviour
             warning.text = "";
             SetCharacterStat();
             LoadingText.text = "게임을 생성중입니다";
-            WaitForGPT();
+            StartCoroutine(WaitForGPT());
         }
     }
 
-    void WaitForGPT()
+    IEnumerator WaitForGPT()
     {
         if (!LoadingPannel.activeSelf)
         {
             LoadingPannel.SetActive(true);
         }
-        if (LoadingText.text == "게임을 생성중입니다 . . .")
-        {
-            LoadingText.text = "게임을 생성중입니다";
-        }
-        else
-        {
-            LoadingText.text += " .";
-        }
-        if (!ScriptManager.script_manager.GetInitScript())
-        {
-            Invoke(nameof(WaitForGPT), 1f);
-        }
-        else
-        {
-            PlayAPI.play_api.UpdateCharacterStat(stat_manager.GetStats());
 
-            // API 호출 - PNPC, ANPC 정보 저장
-            List<Place> map = ScriptManager.script_manager.GetMap();
-            Npc pro_npc = ScriptManager.script_manager.GetPnpc();
-            Npc anta_npc = ScriptManager.script_manager.GetAnpc();
-            ScriptAPI.script_api.PostNpcInfo(map, pro_npc, anta_npc);
-
-            LoadingPannel.SetActive(false);
-            SceneManager.LoadScene("5_Play");
+        while (!ScriptManager.script_manager.GetInitScript())
+        {
+            if (LoadingText.text == "게임을 생성중입니다 . . .")
+            {
+                LoadingText.text = "게임을 생성중입니다";
+            }
+            else
+            {
+                LoadingText.text += " .";
+            }
+            yield return new WaitForSeconds(1f);
         }
+
+        PlayAPI.play_api.UpdateCharacterStat(stat_manager.GetStats());
+
+        // API 호출 - PNPC, ANPC 정보 저장
+        List<Place> map = ScriptManager.script_manager.GetMap();
+        Npc pro_npc = ScriptManager.script_manager.GetPnpc();
+        Npc anta_npc = ScriptManager.script_manager.GetAnpc();
+        ScriptAPI.script_api.PostNpcInfo(map, pro_npc, anta_npc);
+
+        LoadingPannel.SetActive(false);
+        SceneManager.LoadScene("5_Play");
     }
 }

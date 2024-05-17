@@ -21,7 +21,7 @@ public class CreateCharacterScene : MonoBehaviour
     public string GetGenre()
     {
         string[] strlist = genregroup.ActiveToggles().FirstOrDefault().GetComponentInChildren<Text>().text.Split("#");
-        return (strlist[1]);
+        return strlist[1];
     }
 
     public void SetCharacterInfo()
