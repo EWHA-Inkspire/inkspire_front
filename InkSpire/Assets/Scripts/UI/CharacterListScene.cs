@@ -7,7 +7,6 @@ public class CharacterListScene : MonoBehaviour
 {
     [SerializeField] CharacterButton character_prefab;
     [SerializeField] GameObject chapter_list;
-    [SerializeField] ScrollRect scroll_rect;
     
     void Start()
     {
