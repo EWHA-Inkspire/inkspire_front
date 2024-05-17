@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using OpenAI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayScene : MonoBehaviour
@@ -162,6 +163,14 @@ public class PlayScene : MonoBehaviour
     void Update(){
         slider_HP.value=(float)PlayerStatManager.playerstat.GetStatAmountNormalized(StatType.Hp);
         header_HP.text = PlayerStatManager.playerstat.GetStatAmount(StatType.Hp).ToString()+" / "+PlayerStatManager.playerstat.GetStatAmount(StatType.MaxHP).ToString();
+        
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                SceneManager.LoadScene("2_CharacterList");
+            }
+        }
     }
 
     public void Changechap(int int_chapnum){
