@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ScriptManager : MonoBehaviour
 {
@@ -11,7 +10,7 @@ public class ScriptManager : MonoBehaviour
     private int curr_place_idx = 0;
 
     private Script script;
-    private Goal[] goals = new Goal[3];
+    private List<Goal> goals = new();
     private List<Place> map = new();
     private List<Item> items = new();
     private List<Event> game_events = new();
@@ -39,12 +38,12 @@ public class ScriptManager : MonoBehaviour
 
         // 필드 초기화
         script = new Script();
-        for (int i = 0; i < goals.Length; i++)
+        for (int i = 0; i < Const.CHAPTER; i++)
         {
-            goals[i] = new Goal();
+            goals.Add(new Goal());
         }
 
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < Const.PLACE_COUNT; i++)
         {
             map.Add(new Place());
             items.Add(new Item());
@@ -66,9 +65,9 @@ public class ScriptManager : MonoBehaviour
         ScriptAPI.script_api.PostScenarioInfo(script, char_name);
 
         // 목표 생성
-        await goals[2].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
-        await goals[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[2]);
-        ScriptAPI.script_api.PostGoalInfo(goals[2], 3); // PostGoalInfo(goal, chapter_num)
+        await goals[Const.CHAPTER-1].InitGoal(time_background, space_background, script.GetWorldDetail(), genre);
+        await goals[0].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[Const.CHAPTER-1]);
+        ScriptAPI.script_api.PostGoalInfo(goals[Const.CHAPTER-1], Const.CHAPTER);
         ScriptAPI.script_api.PostGoalInfo(goals[0], curr_chapter + 1);
 
         // npc 정보 생성
@@ -112,7 +111,7 @@ public class ScriptManager : MonoBehaviour
     private void ChooseEventType()
     {
         int i = 1;
-        while (i < 7)
+        while (i < Const.PLACE_COUNT-1)
         {
             int flag = Random.Range(0, 3);
             if (flag == 0)
@@ -148,7 +147,7 @@ public class ScriptManager : MonoBehaviour
             }
         }
         //최종 목표 장소
-        if (i == 7)
+        if (i == Const.PLACE_COUNT-1)
         {
             game_events[i].type = 1;
             map[i].ANPC_exist = 0;
@@ -165,7 +164,7 @@ public class ScriptManager : MonoBehaviour
 
         curr_chapter++;
         int place_base = curr_chapter * 3 + 1;
-        await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[2]);
+        await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[Const.CHAPTER-1]);
         ScriptAPI.script_api.PostGoalInfo(goals[curr_chapter], curr_chapter + 1);
         for (int i = 0; i < 3; i++)
         {
@@ -341,7 +340,7 @@ public class ScriptManager : MonoBehaviour
     public bool CheckGoalCleared()
     {
         int i = 0;
-        while (i < 2)
+        while (i <= curr_chapter)
         {
             if (!goals[i].GetClear())
             {
@@ -381,7 +380,7 @@ public class ScriptManager : MonoBehaviour
 
     public Goal GetFinalGoal()
     {
-        return goals[2];
+        return goals[Const.CHAPTER-1];
     }
 
     public List<Place> GetMap()
@@ -408,9 +407,9 @@ public class ScriptManager : MonoBehaviour
     {
         int start; int end;
         // 최종 장소일 경우
-        if (curr_chapter == 2)
+        if (curr_chapter == Const.CHAPTER-1)
         {
-            start = 7; end = 7;
+            start = Const.PLACE_COUNT-1; end = Const.PLACE_COUNT-1;
             return items.GetRange(start, end - start + 1);
         }
 

@@ -84,17 +84,16 @@ public class PlayScene : MonoBehaviour
         Changechap(idx);
     
         // 장소 모달 버튼 셋팅
-        place_list.transform.GetChild(12).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+s_manager.GetPlace(0).place_name;
-        for (int i = 0; i<14; i++){
-            if(ScriptManager.script_manager.GetCurrChap() == 2 && i == 13)
+        for (int i = 0; i < Const.PLACE_COUNT; i++){
+            if(ScriptManager.script_manager.GetCurrChap() == Const.CHAPTER-1 && i == 13)
             {
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(7).place_name;
             }
             else if(i == 12)
             {
-                continue;
+                place_list.transform.GetChild(12).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+s_manager.GetPlace(0).place_name;
             }
-            else if(i >= 6)
+            else if(i >= Const.PLACE_COUNT-2)
             {
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
                 place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;

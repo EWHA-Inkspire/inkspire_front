@@ -16,7 +16,7 @@ public class EndChapterModal : MonoBehaviour
             return;
         }
 
-        if(ScriptManager.script_manager.GetCurrChap() == 2)
+        if(ScriptManager.script_manager.GetCurrChap() == Const.CHAPTER - 1)
         {
             // 에필로그 씬 로드 
             SceneManager.LoadScene("6_Epilogue");
