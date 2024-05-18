@@ -186,8 +186,9 @@ Narrator (내레이터):
         SendReply();
     }
 
-    public void PlaceButton(int place_idx)
+    public void PlaceButton(int idx)
     {
+        int place_idx = ScriptManager.script_manager.GetCurrChap()*3 + idx;
         if (ScriptManager.script_manager.GetCurrPlace().place_name == "" || ScriptManager.script_manager.GetCurrPlace().place_name == null)
         {
             return;
