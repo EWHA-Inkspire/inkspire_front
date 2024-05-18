@@ -79,40 +79,39 @@ public class PlayScene : MonoBehaviour
     }
 
     public void LoadChapter(int idx, bool is_new){
+        Debug.Log("init idx: " + idx);
         view_idx = idx;
         s_manager.SetViewChap(view_idx);
         Changechap(idx);
+
+        for(int j = 0; j<4; j++){
+            place_list.transform.GetChild(j).GetComponent<Button>().interactable = true;
+        }
     
         // 장소 모달 버튼 셋팅
-        for (int i = 0; i < Const.PLACE_COUNT; i++){
-            if(s_manager.GetCurrChap() == Const.CHAPTER-1 && i == 13)
-            {
-                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(7).place_name;
-            }
-            else if(i == 12)
-            {
-                place_list.transform.GetChild(12).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+s_manager.GetPlace(0).place_name;
-            }
-            else if(i >= Const.PLACE_COUNT-2)
-            {
-                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
-            }
-            else if(i/3 == idx)
-            {
-                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(i+1).place_name;
-                if(idx!=s_manager.GetCurrChap()){
-                    Debug.Log(place_list.transform.GetChild(i).GetComponent<Button>()==null);
-                    place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
-                }
-            }
-            else
-            {
-                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
-                
+        if(idx != Const.CHAPTER-1){
+            for(int i = 0; i<3; i++){
+                place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(idx*3+i+1).place_name;
             }
         }
+        else{
+            place_list.transform.GetChild(0).GetComponent<Button>().interactable = false;
+            place_list.transform.GetChild(1).GetComponent<Button>().interactable = false;
+            place_list.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+            place_list.transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+            place_list.transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(idx*3+1).place_name;
+        }
+
+        place_list.transform.GetChild(3).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+s_manager.GetPlace(0).place_name;
+
+        if(idx!=ScriptManager.script_manager.GetCurrChap()){
+            Debug.Log("idx: "+idx+"\tCurrChap: "+ScriptManager.script_manager.GetCurrChap());
+            place_list.transform.GetChild(0).GetComponent<Button>().interactable = false;
+            place_list.transform.GetChild(1).GetComponent<Button>().interactable = false;
+            place_list.transform.GetChild(2).GetComponent<Button>().interactable = false;
+            place_list.transform.GetChild(3).GetComponent<Button>().interactable = false;
+        }
+        
         // 텍스트박스 및 버튼 비활성화
         if(idx != s_manager.GetCurrChap()){
             for(int i = 0; i<disable_set.Length;i++){
@@ -126,7 +125,7 @@ public class PlayScene : MonoBehaviour
         }
         else{
             for(int i = 0; i<disable_set.Length;i++){
-                if(disable_set[i].GetComponent<Button>()!=null&&(i/3==idx||i>13)){
+                if(disable_set[i].GetComponent<Button>()!=null){
                     disable_set[i].GetComponent<Button>().interactable = true;
                 }
                 else if(disable_set[i].GetComponent<TMP_InputField>()!=null){

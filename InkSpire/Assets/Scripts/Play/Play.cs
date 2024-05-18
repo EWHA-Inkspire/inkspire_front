@@ -13,7 +13,7 @@ public class Play : MonoBehaviour
     [SerializeField] public TextScrollUI text_scroll;
     [SerializeField] private Button send_button;
     [SerializeField] private GameObject map_modal;
-    
+
 
     private List<ChatMessage> messages = new();
     private ChatMessage input_msg = new();
@@ -55,7 +55,7 @@ public class Play : MonoBehaviour
                 + "Map 창의 " + ScriptManager.script_manager.GetPlace(0).place_name + EulorReul(ScriptManager.script_manager.GetPlace(0).place_name) + " 선택할 시, "
                 + ScriptManager.script_manager.GetPnpc().GetName() + EorGa(ScriptManager.script_manager.GetPnpc().GetName()) + " 당신을 반겨줄 것입니다."
             };
-            if(!messages.Exists(x => x.Content == introMessage.Content))
+            if (!messages.Exists(x => x.Content == introMessage.Content))
             {
                 messages.Add(introMessage);
             }
@@ -100,7 +100,7 @@ Narrator (내레이터):
 
 *NPC 이름*:
 *npc 대사 내용*";
-        if(messages.Exists(x => x.Role == "system"))
+        if (messages.Exists(x => x.Role == "system"))
         {
             messages[0] = new ChatMessage { Role = "system", Content = system_prompt };
         }
@@ -157,7 +157,7 @@ Narrator (내레이터):
     }
 
     private async void SendReply()
-    {   
+    {
         messages.Add(input_msg);
         player_input.text = "";
 
@@ -174,9 +174,20 @@ Narrator (내레이터):
         text_scroll.AppendMsg(newMessage, true);
     }
 
-    public void PlaceButton(int place_idx)
+    public async void LookAroundButton()
     {
-        if(ScriptManager.script_manager.GetCurrPlace().place_name == "" || ScriptManager.script_manager.GetCurrPlace().place_name == null)
+        PlayScene.play_scene.GenerateGPT();
+        input_msg.Role = "user";
+        input_msg.Content = "주변을 둘러본다.";
+
+        text_scroll.AppendMsg(input_msg, true);
+        SendReply();
+    }
+
+    public void PlaceButton(int idx)
+    {
+        int place_idx = ScriptManager.script_manager.GetCurrChap()*3 + idx;
+        if (ScriptManager.script_manager.GetCurrPlace().place_name == "" || ScriptManager.script_manager.GetCurrPlace().place_name == null)
         {
             return;
         }
@@ -210,10 +221,11 @@ Narrator (내레이터):
         if (item_type == ItemType.Mob)
         {
             // 전투 이벤트
-            battle_event.SetBattle(BattleEvent.BType.MOB, Random.Range(1,6));
+            battle_event.SetBattle(BattleEvent.BType.MOB, Random.Range(1, 6));
         }
-        else if(item_type == ItemType.Monster){
-            battle_event.SetBattle(BattleEvent.BType.BOSS,1);
+        else if (item_type == ItemType.Monster)
+        {
+            battle_event.SetBattle(BattleEvent.BType.BOSS, 1);
         }
 
         // 현재 플레이 장소 업데이트 API 호출
