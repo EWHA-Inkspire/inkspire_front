@@ -18,7 +18,6 @@ public class ScriptManager : MonoBehaviour
     private Npc pro_npc;
     private Npc anta_npc;
     private string achivement;
-    private bool curr_goal_clear = false;
 
     private bool init_script = false;
 
@@ -101,6 +100,7 @@ public class ScriptManager : MonoBehaviour
         }
 
         achivement = await script.AchivementGPT();
+        ScriptAPI.script_api.UpdateAchievement(achivement);
         Debug.Log("업적명:" + achivement);
         await script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
         ScriptAPI.script_api.PutIntroInfo(script);
@@ -329,7 +329,6 @@ public class ScriptManager : MonoBehaviour
 
     public void SetCurrGoalClear(bool clr)
     {
-        curr_goal_clear = clr;
         goals[curr_chapter].SetClear(clr);
 
         // API 저장용
@@ -456,10 +455,5 @@ public class ScriptManager : MonoBehaviour
     public int GetViewChap()
     {
         return view_chapter;
-    }
-
-    public bool GetCurrGoalClear()
-    {
-        return curr_goal_clear;
     }
 }

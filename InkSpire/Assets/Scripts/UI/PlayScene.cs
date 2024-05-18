@@ -34,13 +34,14 @@ public class PlayScene : MonoBehaviour
     }
 
     void Start(){
-        view_idx = ScriptManager.script_manager.GetViewChap();
+        view_idx = s_manager.GetViewChap();
         LoadPlayScene();
     }
 
     public void LoadNextChapUI(){
         is_loading = true;
         loading_win.gameObject.SetActive(true);
+        play.InitMessages(new List<ChatMessage>());
         StartCoroutine(WaitForGPT(loading_win, loading_text, "챕터를 생성중입니다"));
     }
 
@@ -69,7 +70,6 @@ public class PlayScene : MonoBehaviour
     }
 
     public void LoadPlayScene(){
-        s_manager = ScriptManager.script_manager;
         Changechap(view_idx);
         header_name.text = s_manager.GetCharName()+" HP";
         statmodal_title.text = s_manager.GetCharName()+"'s Stats";
@@ -80,12 +80,12 @@ public class PlayScene : MonoBehaviour
 
     public void LoadChapter(int idx, bool is_new){
         view_idx = idx;
-        ScriptManager.script_manager.SetViewChap(view_idx);
+        s_manager.SetViewChap(view_idx);
         Changechap(idx);
     
         // 장소 모달 버튼 셋팅
         for (int i = 0; i < Const.PLACE_COUNT; i++){
-            if(ScriptManager.script_manager.GetCurrChap() == Const.CHAPTER-1 && i == 13)
+            if(s_manager.GetCurrChap() == Const.CHAPTER-1 && i == 13)
             {
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(7).place_name;
             }
@@ -101,7 +101,7 @@ public class PlayScene : MonoBehaviour
             else if(i/3 == idx)
             {
                 place_list.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = s_manager.GetPlace(i+1).place_name;
-                if(idx!=ScriptManager.script_manager.GetCurrChap()){
+                if(idx!=s_manager.GetCurrChap()){
                     Debug.Log(place_list.transform.GetChild(i).GetComponent<Button>()==null);
                     place_list.transform.GetChild(i).GetComponent<Button>().interactable = false;
                 }
@@ -114,7 +114,7 @@ public class PlayScene : MonoBehaviour
             }
         }
         // 텍스트박스 및 버튼 비활성화
-        if(idx != ScriptManager.script_manager.GetCurrChap()){
+        if(idx != s_manager.GetCurrChap()){
             for(int i = 0; i<disable_set.Length;i++){
                 if(disable_set[i].GetComponent<Button>()!=null){
                     disable_set[i].GetComponent<Button>().interactable = false;
@@ -136,8 +136,6 @@ public class PlayScene : MonoBehaviour
         }
         if(!is_new)
         {
-            play.InitMessages(new List<ChatMessage>());
-            play.text_scroll.InitStoryObj(new List<ChatMessage>());
             PlayAPI.play_api.GetChatList(play);
         }
         is_loading = false;
@@ -152,7 +150,7 @@ public class PlayScene : MonoBehaviour
     }
 
     public void ViewNextChapButton(){
-        if(view_idx>=ScriptManager.script_manager.GetCurrChap()){
+        if(view_idx>=s_manager.GetCurrChap()){
             return;
         }
         LoadNextChapUI();

@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using OpenAI;
-using System.Threading.Tasks;
 
 public class Play : MonoBehaviour
 {
@@ -27,6 +26,12 @@ public class Play : MonoBehaviour
 
         // 인벤토리 조회
         PlayAPI.play_api.GetInventory();
+
+        if(ScriptManager.script_manager.GetCurrPlaceIdx() == 0)
+        {
+            hint_event.gameObject.SetActive(true);
+            hint_event.SetHint(text_scroll);
+        }
 
         InvokeRepeating("SaveMessages", SAVING_INTERVAL, SAVING_INTERVAL);
     }
@@ -60,12 +65,7 @@ public class Play : MonoBehaviour
 
     public void SaveMessages()
     {
-        PlayAPI.play_api.PostChatList(messages);
-    }
-
-    public void SaveMessages(int chapter)
-    {
-        PlayAPI.play_api.PostChatList(messages, chapter);
+        PlayAPI.play_api.PostChatList(messages, ScriptManager.script_manager.GetCurrChap() + 1);
     }
 
     private void SetSystemPrompt()
@@ -172,8 +172,6 @@ Narrator (내레이터):
         send_button.OnDeselect(null);
         PlayScene.play_scene.SetIsLoading(false);
         text_scroll.AppendMsg(newMessage, true);
-
-        PlayAPI.play_api.PostChatList(messages);
     }
 
     public void PlaceButton(int place_idx)
@@ -263,8 +261,7 @@ Narrator (내레이터):
 
     public void InitMessages(List<ChatMessage> messages)
     {
-        this.messages.Clear();
-        SetSystemPrompt();
         this.messages = messages;
+        SetSystemPrompt();
     }
 }

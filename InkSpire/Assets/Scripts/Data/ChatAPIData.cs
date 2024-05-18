@@ -15,3 +15,9 @@ public class ChatInfo
     public string content;
     public int chapter;
 }
+
+[Serializable]
+public class Achivement
+{
+    public string achievement;
+}

@@ -190,6 +190,18 @@ public class ScriptAPI : MonoBehaviour
         }));
     }
 
+    // 업적 정보 수정
+    public void UpdateAchievement(string achievement)
+    {
+        string json = JsonUtility.ToJson(new Achivement { achievement = achievement });
+        StartCoroutine(APIManager.api.PutRequest<Null>("/characters/" + PlayerPrefs.GetInt("character_id") + "/achievement", json, (response) => {
+            if (response.success)
+            {
+                Debug.Log("Achievement Updated");
+            }
+        }));
+    }
+
     private string ConvertGoalType(int type)
     {
         return type switch

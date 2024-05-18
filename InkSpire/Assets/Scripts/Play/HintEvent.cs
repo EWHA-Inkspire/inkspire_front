@@ -9,13 +9,14 @@ public class HintEvent : MonoBehaviour
 {
     [SerializeField] private TMP_InputField player_input;
     [SerializeField] private Button send_button;
-    [SerializeField] readonly Play play_manager;
+    [SerializeField] private Play play_manager;
     private ScriptManager s_manager;
     private List<ChatMessage> pnpc_messages = new();
     private ChatMessage input_msg = new();
     private TextScrollUI text_scroll;
     private Npc pro_npc;
-    private int save_idx = 0; // 인덱스 몇번까지 play_manager로 보냈는지 체크
+    private int save_idx = 1; // 프롬프팅 인덱스는 제외시킴
+    private readonly int SAVING_INTERVAL = 5; // 5초마다 저장
 
     public void Start()
     {
@@ -24,6 +25,8 @@ public class HintEvent : MonoBehaviour
         s_manager = ScriptManager.script_manager;
         pro_npc = ScriptManager.script_manager.GetPnpc();
         SetSystemPrompt();
+
+        InvokeRepeating("SaveMessages", SAVING_INTERVAL, SAVING_INTERVAL);
     }
 
     public void SetHint(TextScrollUI text_scroll)
@@ -33,6 +36,7 @@ public class HintEvent : MonoBehaviour
 
     public void PlaceHint()
     {
+        text_scroll.AppendMsg(new ChatMessage() { Role = "user", Content = "어디로 가야하나요?" }, false);
         List<Item> items = s_manager.GetCurrItems();
         int idx = items.FindIndex(item => item.type == ItemType.Monster || item.type == ItemType.Item || item.type == ItemType.Report);
         
@@ -49,6 +53,7 @@ public class HintEvent : MonoBehaviour
 
     public void GoalHint()
     {
+        text_scroll.AppendMsg(new ChatMessage() { Role = "user", Content = "무엇을 해야하나요?" }, false);
         Goal chapter_obj = s_manager.GetCurrGoal();
 
         // 적 처치 목표일 경우
@@ -69,6 +74,7 @@ public class HintEvent : MonoBehaviour
 
     public void RecoverHP()
     {
+        text_scroll.AppendMsg(new ChatMessage() { Role = "user", Content = "HP를 모두 소모했어요" }, false);
         List<Item> items = s_manager.GetCurrItems();
 
         if(!items.Exists(item => item.type == ItemType.Monster || item.type == ItemType.Mob)) {
@@ -105,15 +111,14 @@ public class HintEvent : MonoBehaviour
 
     public async void SendButton()
     {
+        PlayScene.play_scene.GenerateGPT();
         input_msg.Role = "user";
         input_msg.Content = player_input.text;
 
         text_scroll.AppendMsg(input_msg, true);
         pnpc_messages.Add(input_msg);
 
-        send_button.enabled = false;
         player_input.text = "";
-        player_input.enabled = false;
 
         var message = await GptManager.gpt.CallGpt(pnpc_messages);
         message = message.Replace(pro_npc.GetName() + ":\n", "");
@@ -125,18 +130,28 @@ public class HintEvent : MonoBehaviour
             Content = pro_npc.GetName() + ":\n" + message
         };
         pnpc_messages.Add(newMessage);
+        send_button.OnDeselect(null);
+        PlayScene.play_scene.SetIsLoading(false);
         text_scroll.AppendMsg(newMessage, true);
-
-        send_button.enabled = true;
-        player_input.enabled = true;
     }
 
     public void EndChat()
     {
-        if(save_idx == pnpc_messages.Count - 1) {
+        if(pnpc_messages.Count - save_idx <= 0) {
             return;
         }
-        play_manager.AppendToMessageGPT(pnpc_messages.GetRange(save_idx + 1, pnpc_messages.Count - save_idx - 1));
-        save_idx = pnpc_messages.Count - 1;
+        // pnpc 대화 서버에 저장
+        SaveMessages();
+        save_idx = pnpc_messages.Count;
+    }
+
+    public void SaveMessages()
+    {
+        if(pnpc_messages.Count - save_idx <= 0) {
+            return;
+        }
+
+        PlayAPI.play_api.PostChatList(pnpc_messages.GetRange(save_idx, pnpc_messages.Count - save_idx));
+        save_idx = pnpc_messages.Count;
     }
 }

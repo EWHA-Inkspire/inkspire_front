@@ -54,12 +54,6 @@ public class PlayAPI : MonoBehaviour
         }));
     }
 
-    // API 호출 - 채팅 리스트 저장
-    public void PostChatList(List<ChatMessage> messages)
-    {
-        PostChatList(messages, ScriptManager.script_manager.GetCurrChap() + 1);
-    }
-
     public void PostChatList(List<ChatMessage> messages, int chapter_num)
     {
         if (messages.Count - save_idx < SAVING_INTERVAL)
@@ -88,6 +82,30 @@ public class PlayAPI : MonoBehaviour
                 return;
             }
             save_idx = messages.Count;
+        }));
+    }
+
+    public void PostChatList(List<ChatMessage> messages)
+    {
+        var chatList = new ChatList()
+        {
+            chats = messages.Select(msg => new ChatInfo()
+                {
+                    scriptId = PlayerPrefs.GetInt("script_id"),
+                    role = msg.Role,
+                    content = msg.Content,
+                    chapter = ScriptManager.script_manager.GetCurrChap() + 1
+                }).ToList()
+        };
+
+        string chats = JsonUtility.ToJson(chatList);
+
+        StartCoroutine(APIManager.api.PostRequest<ChatList>("/chat", chats, response =>
+        {
+            if (!response.success)
+            {
+                return;
+            }
         }));
     }
 
