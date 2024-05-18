@@ -9,9 +9,12 @@ public class HintEvent : MonoBehaviour
 {
     [SerializeField] private TMP_InputField player_input;
     [SerializeField] private Button send_button;
-    [SerializeField] private Play play_manager;
+    [SerializeField] private Button place_button;
+    [SerializeField] private Button goal_button;
+    [SerializeField] private Button hp_button;
     private ScriptManager s_manager;
     private List<ChatMessage> pnpc_messages = new();
+    private List<ChatMessage> hint_messages = new();
     private ChatMessage input_msg = new();
     private TextScrollUI text_scroll;
     private Npc pro_npc;
@@ -34,9 +37,19 @@ public class HintEvent : MonoBehaviour
         this.text_scroll = text_scroll;
     }
 
-    public void PlaceHint()
+    public async void PlaceHint()
     {
-        text_scroll.AppendMsg(new ChatMessage() { Role = "user", Content = "어디로 가야하나요?" }, false);
+        PlayScene.play_scene.GenerateGPT();
+        hint_messages.Clear();
+        var newMessage = new ChatMessage()
+        {
+            Role = "user",
+            Content = "어디로 가야하나요?"
+        };
+        hint_messages.Add(newMessage);
+        
+        text_scroll.AppendMsg(newMessage, false);
+        place_button.OnDeselect(null);
         List<Item> items = s_manager.GetCurrItems();
         int idx = items.FindIndex(item => item.type == ItemType.Monster || item.type == ItemType.Item || item.type == ItemType.Report);
         
@@ -48,12 +61,21 @@ public class HintEvent : MonoBehaviour
 
         idx += 1 + s_manager.GetCurrChap()*3; // 장소 인덱스 보정
         Place place = s_manager.GetPlace(idx);
-        text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + place.place_name + Play.EulorReul(place.place_name) + " 살펴보는 건 어떨까요? 재밌는 사건이 기다리고 있을지도 몰라요!", true);
+
+        newMessage.Role = "system";
+        newMessage.Content = "당신은 게임 속 조력자 NPC인 \"" + pro_npc.GetName() + "\"이며 한국말을 사용한다. 당신의 직업, 성격, 말투는 다음과 같다. {" + pro_npc.GetDetail() + "}\n"
+        + "당신은 플레이어가 현재 챕터의 목표 장소에 대한 힌트를 요청할 경우 장소에 대한 아주 !!!!간접적인!!!! 힌트를 제공하여야 한다. 현재 챕터의 목표 장소에 대한 설명은 다음과 같다. {" + place.place_info + "}";
+        
+        hint_messages.Insert(0, newMessage);
+        string response = await GptManager.gpt.CallGpt(hint_messages);
+        PlayScene.play_scene.SetIsLoading(false);
+        text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + response, true);
     }
 
     public void GoalHint()
     {
         text_scroll.AppendMsg(new ChatMessage() { Role = "user", Content = "무엇을 해야하나요?" }, false);
+        goal_button.OnDeselect(null);
         Goal chapter_obj = s_manager.GetCurrGoal();
 
         // 적 처치 목표일 경우
@@ -75,6 +97,7 @@ public class HintEvent : MonoBehaviour
     public void RecoverHP()
     {
         text_scroll.AppendMsg(new ChatMessage() { Role = "user", Content = "HP를 모두 소모했어요" }, false);
+        hp_button.OnDeselect(null);
         List<Item> items = s_manager.GetCurrItems();
 
         if(!items.Exists(item => item.type == ItemType.Monster || item.type == ItemType.Mob)) {
