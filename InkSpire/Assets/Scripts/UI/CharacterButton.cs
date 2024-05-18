@@ -1,14 +1,17 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterButton : MonoBehaviour
 {
     [SerializeField] TMPro.TextMeshProUGUI character_name;
+    [SerializeField] Image character_image;
     private GameObject chapter_list;
     private int char_id;
 
     public void SetCharacter(Character character, GameObject chapter_list)
     {
         this.char_id = character.id;
+        this.character_image.sprite = Resources.Load<Sprite>("Yetti_"+character.genre) ?? Resources.Load<Sprite>("Yetti");
         this.character_name.text = character.name;
         this.chapter_list = chapter_list;
     }

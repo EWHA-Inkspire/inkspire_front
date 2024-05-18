@@ -38,12 +38,11 @@ public class CharacterList {
 public class Character {
     public int id;
     public string name;
-    public string success;
-    public string fail;
+    public string genre;
 
     public override string ToString()
     {
-        return "id: " + id + "\nname: " + name + "\nsuccess: " + success + "\nfail: " + fail;
+        return "id: " + id + "\nname: " + name + "\ngenre: " + genre;
     }
 }
 

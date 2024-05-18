@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CharacterListScene : MonoBehaviour
 {
-    [SerializeField] CharacterButton character_prefab;
     [SerializeField] GameObject chapter_list;
     
     void Start()
@@ -36,7 +36,7 @@ public class CharacterListScene : MonoBehaviour
         }
 
         foreach(Character character in response.data.characters){
-            CharacterButton new_prefab = Instantiate(character_prefab, GameObject.Find("CharacterList").transform);
+            CharacterButton new_prefab = Instantiate(Resources.Load<CharacterButton>("Prefabs/Character"), GameObject.Find("CharacterList").transform);
             new_prefab.SetCharacter(character, chapter_list);
         }
     }
