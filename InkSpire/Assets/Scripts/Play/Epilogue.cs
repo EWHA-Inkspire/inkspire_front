@@ -39,7 +39,7 @@ public class Epilogue : MonoBehaviour
 
     private async void ProcessEpilogue()
     {
-        if(ScriptManager.script_manager.CheckGoalCleared())
+        if (ScriptManager.script_manager.CheckGoalCleared())
         {
             await SuccessOutroGPT(ScriptManager.script_manager.GetPnpc(), ScriptManager.script_manager.GetAnpc(), ScriptManager.script_manager.GetScript());
         }
@@ -65,7 +65,8 @@ public class Epilogue : MonoBehaviour
         {
             Invoke(nameof(WaitForGPT), 1f);
         }
-        else{
+        else
+        {
             loading_win.gameObject.SetActive(false);
         }
     }
@@ -78,14 +79,14 @@ public class Epilogue : MonoBehaviour
         {
             Role = "system",
             Content = @"당신은 게임 속 세계관과 지금까지 진행된 게임의 스토리를 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
-게임의 배경과 세계관 설정을 참고하여 게임의 스토리를 마무리하는 에필로그를 아래의 양식대로 출력하되, 직접적으로 게임이라는 언급은 하지 않는다.
+게임의 배경과 세계관 설정을 참고하여 게임의 스토리를 마무리하는 에필로그를 아래의 양식대로 출력하되, 직접적으로 게임이라는 언급은 하지 않는다. 또한 에필로그는 반드시 맞춤법을 준수한 한국어로 출력한다. 
 게임의 주인공인 플레이어는 현재까지 주어진 모든 게임 목표를 성공시키고 마지막 최종 목표였던" + ScriptManager.script_manager.GetFinalGoal() + @"또한 성공시켜 전체 스토리를 성공적으로 마무리하게 되었다.
-조력자 npc의 축하 멘트를 포함하여 아래에 주어지는 게임 정보를 바탕으로 모든 사건이 완벽하게 해결되고, 세계관이 안정을 되찾았다는 사실을 약 500자 내외의 소설체로 묘사한다.
+조력자 npc의 축하 멘트를 포함하여 아래에 주어지는 게임 정보를 바탕으로 모든 사건이 완벽하게 해결되고, 세계관이 안정을 되찾았다는 사실을 약 500자 내외의 소설체로 묘사한다. 내용은 절대 영어로 출력하지 않는다.
 이 게임의 정보는 아래와 같다. 
 조력자 npc : " + pro_npc.GetName() + "(" + pro_npc.GetDetail() + @")
 적대자 NPC : " + anta_npc.GetName() + "(" + anta_npc.GetDetail() + @") 
 게임 장르 : " + script.GetGenre() + @" 게임 배경 : " + script.GetTimeBackground() + "/" + script.GetSpaceBackground() +
-@"** 이 표시 안의 내용은 문맥에 맞게 채운다.
+@"** 이 표시 안의 내용은 문맥에 맞게 힌국어로 채우고, 분량은 500자 내외로 맞춘다. 
 ### 
 
 *조력자 NPC의 성공 축하 멘트*    
@@ -126,15 +127,15 @@ public class Epilogue : MonoBehaviour
         {
             Role = "system",
             Content = @"당신은 게임 속 세계관과 지금까지 진행된 게임의 스토리를 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다.
-게임의 배경과 세계관 설정을 참고하여 게임의 스토리를 마무리하는 에필로그를 아래의 양식대로 출력하되, 직접적으로 게임이라는 언급은 하지 않는다.
+게임의 배경과 세계관 설정을 참고하여 게임의 스토리를 마무리하는 에필로그를 아래의 양식대로 출력하되, 직접적으로 게임이라는 언급은 하지 않는다. 또한 에필로그는 반드시 맞춤법을 준수한 한국어로 출력한다. 
 게임의 주인공인 플레이어는 앞선 게임에서 주어진 게임 목표 중 하나 이상을 성공시키지 못해 마지막 최종 목표였던" + ScriptManager.script_manager.GetFinalGoal() + @"를 수행할 기회조차 얻지 못했다.
 따라서 해당 스크립트의 스토리는 실패로 돌아가게 되었으며 세계관의 안정은 되찾지 못했다. 세계는 여전히 문제 속에 있으며 아무것도 해결된 것이 없다. 
-조력자 npc의 성격에 맞는 격려 멘트를 포함하여 아래에 주어지는 게임 정보를 바탕으로 어딘가 어긋난 부분이 있어 주어진 문제를 해결하지 못했다는 사실을 약 500자 내외의 소설체로 묘사한다.
+조력자 npc의 성격에 맞는 격려 멘트를 포함하여 아래에 주어지는 게임 정보를 바탕으로 어딘가 어긋난 부분이 있어 주어진 문제를 해결하지 못했다는 사실을 약 500자 내외의 소설체로 묘사한다. 내용은 절대 영어로 출력하지 않는다.
 이 게임의 정보는 아래와 같다. 
 조력자 npc : " + pro_npc.GetName() + "(" + pro_npc.GetDetail() + @")
 적대자 NPC : " + anta_npc.GetName() + "(" + anta_npc.GetDetail() + @") 
 게임 장르 : " + script.GetGenre() + @" 게임 배경 : " + script.GetTimeBackground() + "/" + script.GetSpaceBackground() +
-@"** 이 표시 안의 내용은 문맥에 맞게 채운다.
+@"** 이 표시 안의 내용은 문맥에 맞게 한국어로 채우고, 분량은 500자 내외로 맞춘다.
 ###
 
 *조력자 NPC의 실패 격려 멘트*
