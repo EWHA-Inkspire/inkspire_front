@@ -12,6 +12,7 @@ public class Play : MonoBehaviour
     [SerializeField] private TMP_InputField player_input;
     [SerializeField] public TextScrollUI text_scroll;
     [SerializeField] private Button send_button;
+    [SerializeField] private Button look_around_button;
     [SerializeField] private GameObject map_modal;
 
 
@@ -170,11 +171,12 @@ Narrator (내레이터):
         messages.Add(newMessage);
 
         send_button.OnDeselect(null);
+        look_around_button.OnDeselect(null);
         PlayScene.play_scene.SetIsLoading(false);
         text_scroll.AppendMsg(newMessage, true);
     }
 
-    public async void LookAroundButton()
+    public void LookAroundButton()
     {
         PlayScene.play_scene.GenerateGPT();
         input_msg.Role = "user";
