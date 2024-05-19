@@ -205,7 +205,12 @@ public class ScriptAPI : MonoBehaviour
     // 게임 클리어 업데이트
     public void UpdateGameClear()
     {
-        // StartCoroutine(APIManager.api.PutRequest<Null>)
+        StartCoroutine(APIManager.api.PutRequest<Null>("/scripts/"+PlayerPrefs.GetInt("script_id")+"/isEnd", "", (response) => {
+            if (response.success)
+            {
+                Debug.Log("Game Clear Updated");
+            }
+        }));
     }
 
     private string ConvertGoalType(int type)

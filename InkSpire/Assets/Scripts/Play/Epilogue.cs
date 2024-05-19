@@ -74,7 +74,7 @@ public class Epilogue : MonoBehaviour
     public async Task SuccessOutroGPT(Npc pro_npc, Npc anta_npc, Script script)
     {
         gpt_messages.Clear();
-        
+        ScriptAPI.script_api.UpdateGameClear();
 
         var newMessage = new ChatMessage()
         {
