@@ -202,6 +202,12 @@ public class ScriptAPI : MonoBehaviour
         }));
     }
 
+    // 게임 클리어 업데이트
+    public void UpdateGameClear()
+    {
+        // StartCoroutine(APIManager.api.PutRequest<Null>)
+    }
+
     private string ConvertGoalType(int type)
     {
         return type switch

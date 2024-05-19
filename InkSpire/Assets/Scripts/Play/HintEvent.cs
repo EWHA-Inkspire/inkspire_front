@@ -56,6 +56,7 @@ public class HintEvent : MonoBehaviour
         // 목표 이벤트에 해당하는 아이템이 없는 경우
         if (idx == -1) {
             text_scroll.AppendMsg(pro_npc.GetName() + ":\n" + "자유롭게 모든 장소들을 탐방해보세요!", true);
+            PlayScene.play_scene.SetIsLoading(false);
             return;
         }
 

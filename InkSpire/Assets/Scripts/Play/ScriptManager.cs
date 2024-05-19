@@ -404,17 +404,16 @@ public class ScriptManager : MonoBehaviour
 
     public List<Item> GetCurrItems()
     {
-        int start; int end;
+        int start;
         // 최종 장소일 경우
         if (curr_chapter == Const.CHAPTER-1)
         {
-            start = Const.PLACE_COUNT-1; end = Const.PLACE_COUNT-1;
-            return items.GetRange(start, end - start + 1);
+            return items.GetRange(Const.PLACE_COUNT-1, 1);
         }
 
         // 나머지의 경우
-        start = 1 + curr_chapter * 3; end = start + 2;
-        return items.GetRange(start, end - start + 1);
+        start = 1 + curr_chapter * 3;
+        return items.GetRange(start, 3);
     }
 
     public Item GetItem(int idx)
