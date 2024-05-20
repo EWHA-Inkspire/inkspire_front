@@ -6,6 +6,7 @@ public class ScriptInfoLoad : MonoBehaviour
     private int script_id = -1;
     private int chapter_num = 0;
     public void LoadScriptInfo(int chapter_num) {
+        PlayerPrefs.SetInt("Call API", 1);
         int character_id = PlayerPrefs.GetInt("character_id");
         this.chapter_num = chapter_num;
         // 스크립트 정보 조회 api 호출

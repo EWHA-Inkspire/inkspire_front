@@ -100,7 +100,7 @@ public class CreateStatScene : MonoBehaviour
             LoadingPannel.SetActive(true);
         }
 
-        while (!ScriptManager.script_manager.GetInitScript())
+        while (!ScriptManager.script_manager.GetInitScript() || ScriptManager.script_manager.GetScript().GetIntroImage() == null)
         {
             if (LoadingText.text == "게임을 생성중입니다 . . .")
             {

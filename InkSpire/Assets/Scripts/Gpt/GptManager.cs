@@ -71,4 +71,30 @@ public class GptManager : MonoBehaviour
             return "No text was generated from this prompt.";
         }
     }
+
+    public async Task<ImageData?> CallDALLE(string prompt)
+    {
+        // dalle 호출
+        var completionResponse = await openai.CreateImage(new CreateImageRequest()
+        {
+            Prompt = prompt
+        });
+
+        // 응답이 있을 경우 응답 내용 반환
+        if (completionResponse.Data != null)
+        {
+            cnt = 0;
+            return completionResponse.Data[0];
+        }
+        else if(cnt != 3)
+        {
+            cnt++;
+            return await CallDALLE(prompt);
+        }
+        else
+        {
+            cnt = 0;
+            return null;
+        }
+    }
 }

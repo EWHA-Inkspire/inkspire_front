@@ -4,6 +4,7 @@ using TMPro;
 using OpenAI;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.Networking;
 
 public class TextScrollUI : MonoBehaviour
 {
@@ -70,6 +71,19 @@ public class TextScrollUI : MonoBehaviour
         // 레이아웃 업데이트 대기
         yield return null;
         scroll.verticalNormalizedPosition = 0f;
+    }
+
+    public void ApplyTextureToGameObject(Texture2D texture)
+    {
+        GameObject imageObject = new("Intro Image");
+        imageObject.transform.SetParent(scroll.content.transform);
+
+        Image imageComponent = imageObject.AddComponent<Image>();
+        RectTransform rectTransform = imageObject.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(700, 700); // 원하는 크기로 설정
+
+        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        imageComponent.sprite = sprite;
     }
 
     public void AppendMsg(string msg, bool isTyping)

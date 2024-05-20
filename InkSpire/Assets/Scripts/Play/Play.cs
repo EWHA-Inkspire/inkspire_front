@@ -23,15 +23,20 @@ public class Play : MonoBehaviour
 
     void Awake()
     {
-        PlayAPI.play_api.GetChatList(this);
+        text_scroll.ApplyTextureToGameObject(ScriptManager.script_manager.GetScript().GetIntroImage());
 
-        // 인벤토리 조회
-        PlayAPI.play_api.GetInventory();
-
-        if(ScriptManager.script_manager.GetCurrPlaceIdx() == 0)
+        if(PlayerPrefs.GetInt("Call API") == 1)
         {
-            hint_event.gameObject.SetActive(true);
-            hint_event.SetHint(text_scroll);
+            PlayAPI.play_api.GetChatList(this);
+
+            // 인벤토리 조회
+            PlayAPI.play_api.GetInventory();
+
+            if(ScriptManager.script_manager.GetCurrPlaceIdx() == 0)
+            {
+                hint_event.gameObject.SetActive(true);
+                hint_event.SetHint(text_scroll);
+            }
         }
 
         InvokeRepeating("SaveMessages", SAVING_INTERVAL, SAVING_INTERVAL);

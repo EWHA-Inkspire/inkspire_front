@@ -20,6 +20,11 @@ public class ScriptAPI : MonoBehaviour
         }
     }
 
+    public void GetImageTexture(string url, System.Action<Texture2D> callback)
+    {
+        StartCoroutine(APIManager.api.GetTexture(url, callback));
+    }
+
     public void PostScenarioInfo(Script script, string char_name)
     {
         ScenarioInfo scenarioInfo = new()

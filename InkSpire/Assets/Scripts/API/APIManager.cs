@@ -18,6 +18,19 @@ public class APIManager : MonoBehaviour
         }
     }
 
+    public IEnumerator GetTexture(string url, Action<Texture2D> callback)
+    {
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+        yield return www.SendWebRequest();
+
+        if (www != null)
+        {
+            Texture2D texture = DownloadHandlerTexture.GetContent(www);
+            callback(texture);
+        }
+        www.Dispose();
+    }
+
     public IEnumerator GetRequest<T>(string url, Action<Response<T>> callback)
     {
         UnityWebRequest www = UnityWebRequest.Get(Const.BASE_URL + url);

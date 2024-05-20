@@ -80,6 +80,7 @@ public class ScriptManager : MonoBehaviour
         // PNPC 장소 초기화
         map[0].ANPC_exist = 0;
         await map[0].CreatePnpcPlace(script, pro_npc);
+        // script.IntroImageGPT(map[0].place_name, map[0].place_info);
         ScriptAPI.script_api.PostMapInfo(map[0], items[0], game_events[0], 0, curr_chapter + 1);
 
         // 일반 장소 초기화
