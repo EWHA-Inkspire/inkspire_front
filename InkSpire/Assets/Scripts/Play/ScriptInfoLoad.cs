@@ -1,14 +1,18 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ScriptInfoLoad : MonoBehaviour
 {
     private int script_id = -1;
-    private int chapter_num = 0;
+    private int view_chapter = 0;
+    private int curr_chapter = 0;
+
     public void LoadScriptInfo(int chapter_num) {
         PlayerPrefs.SetInt("Call API", 1);
         int character_id = PlayerPrefs.GetInt("character_id");
-        this.chapter_num = chapter_num;
+        this.view_chapter = chapter_num;
         // 스크립트 정보 조회 api 호출
         StartCoroutine(APIManager.api.GetRequest<GetScriptInfo>("/scripts/" + character_id, ProcessScriptInfo));
         // 캐릭터 스탯 조회 api 호출
@@ -22,7 +26,7 @@ public class ScriptInfoLoad : MonoBehaviour
     }
 
     private void WaitForAPI() {
-        if(ScriptManager.script_manager.GetInitScript()){
+        if(ScriptManager.script_manager.GetInitScript() && ScriptManager.script_manager.GetScript().GetIntroImage() != null) {
             SceneManager.LoadScene("5_Play");
         } else {
             Invoke(nameof(WaitForAPI), 1f);
@@ -40,9 +44,14 @@ public class ScriptInfoLoad : MonoBehaviour
         StartCoroutine(APIManager.api.GetRequest<GetItemList>("/inventory/" + script_id + "/items", ProcessItemList));
         // 전체 이벤트 정보 조회 api 호출
         StartCoroutine(APIManager.api.GetRequest<GetEventList>("/events/" + script_id, ProcessEventList));
+        // 챕터 인트로 이미지 조회 api 호출
+        StartCoroutine(APIManager.api.GetRequest<string>("/images/" + script_id + "/" + (view_chapter + 1), ProcessChapterIntroImage));
 
         // 현재 챕터 정보 업데이트
-        ScriptManager.script_manager.SetViewChap(chapter_num);
+        Debug.Log("view_chapter: " + view_chapter);
+        Debug.Log("curr_chapter: " + curr_chapter);
+        ScriptManager.script_manager.SetViewChap(view_chapter);
+        ScriptManager.script_manager.SetCurrChap(curr_chapter);
         ScriptManager.script_manager.SetCharName(PlayerPrefs.GetString("character_name"));
     }
 
@@ -67,6 +76,17 @@ public class ScriptInfoLoad : MonoBehaviour
             return;
         }
         ScriptManager.script_manager.SetGoalList(response.data);
+
+        // 챕터 순으로 정렬
+        response.data.goals.Sort((a, b) => a.chapter.CompareTo(b.chapter));
+
+        // 목표들 중 성공하지 못한 목표가 있는 챕터를 현재 챕터로 설정
+        foreach (var goal in response.data.goals) {
+            if (!goal.success) {
+                curr_chapter = goal.chapter - 1;
+                break;
+            }
+        }
     }
 
     private void ProcessNpcList(Response<GetNpcList> response) {
@@ -96,5 +116,15 @@ public class ScriptInfoLoad : MonoBehaviour
         }
         ScriptManager.script_manager.SetEventList(response.data);
         ScriptManager.script_manager.SetInitScript(true);
+    }
+
+    private void ProcessChapterIntroImage(Response<string> response)
+    {
+        if (!response.success)
+        {
+            return;
+        }
+
+        ScriptManager.script_manager.GetScript().SetIntroImage(response.data);
     }
 }

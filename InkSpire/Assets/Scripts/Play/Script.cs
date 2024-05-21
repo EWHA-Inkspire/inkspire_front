@@ -223,4 +223,11 @@ public class Script
         this.world_detail = script_info.worldDetail;
         this.intro = script_info.intro;
     }
+
+    public void SetIntroImage(string url)
+    {
+        ScriptAPI.script_api.GetImageTexture(url, (texture) => {
+            this.intro_image = texture;
+        });
+    }
 }
