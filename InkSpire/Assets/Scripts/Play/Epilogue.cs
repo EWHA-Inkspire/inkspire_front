@@ -4,7 +4,6 @@ using OpenAI;
 using TMPro;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Epilogue : MonoBehaviour
 {
@@ -13,17 +12,12 @@ public class Epilogue : MonoBehaviour
     [SerializeField] private TextScrollUI text_scroll;
     [SerializeField] GameObject loading_win;
     [SerializeField] TextMeshProUGUI loading_text;
-    [SerializeField] GameObject succ_group;
-    [SerializeField] GameObject fail_group;
-    [SerializeField] GameObject epilogue_modal;
 
     private List<ChatMessage> gpt_messages = new();
     private Texture2D image_texture;
     private readonly string GPT_ERROR = "No text was generated from this prompt.";
     private bool is_loading = false;
     private string epilogue = "";
-
-    private int return_chap = -1;
 
     async void Awake()
     {
@@ -35,8 +29,6 @@ public class Epilogue : MonoBehaviour
 
         await ProcessEpilogue();
         await ImageGPT();
-
-        text_scroll.AppendMsg(new ChatMessage() { Role = "assistant", Content = epilogue }, true);
 
         is_loading = false;
     }
@@ -52,28 +44,6 @@ public class Epilogue : MonoBehaviour
         }
     }
 
-    public void NextButton(){
-        epilogue_modal.gameObject.SetActive(true);
-        if(ScriptManager.script_manager.CheckGoalCleared()){
-            succ_group.gameObject.SetActive(true);
-            fail_group.gameObject.SetActive(false);
-            succ_group.transform.GetChild(4).GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>(ScriptManager.script_manager.GetScript().GetGenre()) ?? Resources.Load<Sprite>("추리");
-            succ_group.transform.GetChild(4).GetComponentInChildren<TMPro.TextMeshProUGUI>().text = ScriptManager.script_manager.GetAchivement();
-        }
-        else{
-            succ_group.gameObject.SetActive(false);
-            fail_group.gameObject.SetActive(true);
-            for(int i = 0; i<5; i++){
-                if(!ScriptManager.script_manager.GetGoal(i).GetClear()){
-                    if(return_chap==-1){
-                        return_chap = i;
-                    }
-                    string tmp_text = fail_group.transform.GetChild(i+3).GetComponent<TextMeshProUGUI>().text;
-                    fail_group.transform.GetChild(i+3).GetComponent<TextMeshProUGUI>().text = "<color=#B40000>"+tmp_text+"</color>";
-                }
-            }
-        }
-    }
     private async Task ProcessEpilogue()
     {
         if (ScriptManager.script_manager.CheckGoalCleared())
@@ -227,9 +197,5 @@ public class Epilogue : MonoBehaviour
     public void OnClickBack()
     {
         SceneManager.LoadScene("2_CharacterList");
-    }
-
-    public void OnClickStart(){
-        SceneManager.LoadScene("1_Start");
     }
 }
