@@ -10,6 +10,7 @@ public class Tutorial : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.DeleteKey(tutorialKey);
         if (PlayerPrefs.GetInt(tutorialKey, 0) == 1)
         {
             gameObject.SetActive(false);
@@ -54,7 +55,6 @@ public class Tutorial : MonoBehaviour
             PlayerPrefs.SetInt(tutorialKey, 1);
             PlayerPrefs.Save();
             gameObject.SetActive(false);
-            //PlayerPrefs.DeleteKey(tutorialKey);
         }
     }
 }
