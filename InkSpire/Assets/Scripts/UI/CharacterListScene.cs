@@ -42,6 +42,10 @@ public class CharacterListScene : MonoBehaviour
     }
 
     public void OnClickCreateCharacter(){
+        PlayerPrefs.DeleteKey("character_id");
+        PlayerPrefs.DeleteKey("script_id");
+        PlayerPrefs.DeleteKey("character_name");
+        PlayerPrefs.DeleteKey("Call API");
         SceneManager.LoadScene("3_CreateCharacter");
     }
 
