@@ -77,52 +77,22 @@ public class Script
 
     public async void IntroImageGPT()
     {
-        string[] world_name = world_detail.Split("'");
-        string prompt = world_name[1] + "의 전경 모습을 배경 소개를 참고하여 " + genre + " 장르에 어울리도록 이미지 생성\n배경 소개: {" + world_detail + "}";
-
         string response = await GptManager.gpt.CallGpt(new List<ChatMessage>(){
             new(){
                 Role = "system",
-                Content = "한글이 들어오면 영어로 번역"
+                Content = "세계관 정보를 바탕으로 " + genre + " 장르에 어울리는 장면의 구체적인 묘사를 한 문장의 영어로 출력한다. 반드시 한 문장의 영어로 출력하여야 한다."
             },
             new(){
                 Role = "user",
-                Content = prompt
+                Content = "세계관 정보: "+world_detail
             }
         });
-        Debug.Log(">>이미지 프롬프팅: "+prompt);
-
-        ImageData image = await GptManager.gpt.CallDALLE(prompt) ?? new ImageData();
-        Debug.Log(">>이미지 url: "+image.Url);
-        Debug.Log(">>이미지 Base64: "+image.B64Json);
-
-        ScriptAPI.script_api.GetImageTexture(image.Url, (texture) => {
-            this.intro_image = texture;
-            Debug.Log(">>이미지 텍스쳐: "+texture);
-        });
-    }
-
-    public async void IntroImageGPT(string place_name, string place_info)
-    {
-        string prompt = place_name + "의 장소 소개를 참고하여 " + genre + " 장르에 어울리도록 이미지 생성\n장소 소개: {" + place_info + "}";
-
-        string response = await GptManager.gpt.CallGpt(new List<ChatMessage>(){
-            new(){
-                Role = "system",
-                Content = "한글이 들어오면 영어로 번역"
-            },
-            new(){
-                Role = "user",
-                Content = prompt
-            }
-        });
-
         ImageData image = await GptManager.gpt.CallDALLE(response) ?? new ImageData();
-        Debug.Log(">>이미지 url: "+image.Url);
+
+        ScriptAPI.script_api.PostImageInfo(1, image.Url);
 
         ScriptAPI.script_api.GetImageTexture(image.Url, (texture) => {
             this.intro_image = texture;
-            Debug.Log(">>이미지 텍스쳐: "+texture);
         });
     }
 

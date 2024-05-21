@@ -80,7 +80,6 @@ public class ScriptManager : MonoBehaviour
         // PNPC 장소 초기화
         map[0].ANPC_exist = 0;
         await map[0].CreatePnpcPlace(script, pro_npc);
-        // script.IntroImageGPT(map[0].place_name, map[0].place_info);
         ScriptAPI.script_api.PostMapInfo(map[0], items[0], game_events[0], 0, curr_chapter + 1);
 
         // 일반 장소 초기화
@@ -170,6 +169,7 @@ public class ScriptManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             // 목표 정보 전달
+            Debug.Log("장소 idx: "+(place_base + i));
             await items[place_base + i].InitItem(script, goals[curr_chapter], game_events[place_base + i].type);
             await map[place_base + i].InitPlace(place_base + i, script, items[place_base + i], game_events[place_base + i].type, place_names);
             place_names[place_base + i] = map[place_base + i].place_name;

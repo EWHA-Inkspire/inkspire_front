@@ -52,3 +52,11 @@ public class IntroInfo
     public int scriptId;
     public string intro;
 }
+
+[Serializable]
+public class PostImageInfo
+{
+    public int scriptId;
+    public int chapter;
+    public string url;
+}

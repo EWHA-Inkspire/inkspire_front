@@ -207,6 +207,21 @@ public class ScriptAPI : MonoBehaviour
         }));
     }
 
+    // 챕터별 이미지 정보 저장
+    public void PostImageInfo(int chapter, string url)
+    {
+        PostImageInfo imageInfo = new()
+        {
+            scriptId = PlayerPrefs.GetInt("script_id"),
+            chapter = chapter,
+            url = url
+        };
+
+        string json = JsonUtility.ToJson(imageInfo);
+
+        StartCoroutine(APIManager.api.PostRequest<Null>("/images", json, (response) => { }));
+    }
+
     // 게임 클리어 업데이트
     public void UpdateGameClear()
     {
