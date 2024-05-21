@@ -297,6 +297,7 @@ Narrator (내레이터):
     public void SetChapterIntro()
     {
         messages.Clear();
+        PlayAPI.play_api.InitSaveIdx();
         SetSystemPrompt();
 
         var newMessage = new ChatMessage()

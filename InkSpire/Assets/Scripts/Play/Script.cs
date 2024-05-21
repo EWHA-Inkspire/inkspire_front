@@ -193,6 +193,8 @@ public class Script
 
     public async void ChapterIntroGPT(string prev_goal, string prev_result, int chapter)
     {
+        intro_image = null;
+        
         var newMessage = new ChatMessage()
         {
             Role = "system",

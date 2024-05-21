@@ -147,8 +147,8 @@ public class PlayScene : MonoBehaviour
         }
         else if (is_new && idx != 0)
         {
-            play.SetIntroImage();
             play.SetChapterIntro();
+            play.SetIntroImage();
         }
         else
         {
