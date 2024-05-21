@@ -74,8 +74,16 @@ public class PlayScene : MonoBehaviour
         header_name.text = s_manager.GetCharName()+" HP";
         statmodal_title.text = s_manager.GetCharName()+"'s Stats";
         header_HP.text = PlayerStatManager.playerstat.GetStatAmount(StatType.Hp).ToString()+" / "+PlayerStatManager.playerstat.GetStatAmount(StatType.MaxHP).ToString();
-        battle_stat.text = "공격: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Attack).ToString()+" | 방어: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Defence).ToString()+" | 민첩: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Dexterity).ToString()+" | 행운: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Luck).ToString();   
-        LoadChapter(view_idx, true);
+        battle_stat.text = "공격: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Attack).ToString()+" | 방어: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Defence).ToString()+" | 민첩: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Dexterity).ToString()+" | 행운: "+PlayerStatManager.playerstat.GetStatAmount(StatType.Luck).ToString(); 
+
+        if(PlayerPrefs.GetInt("Call API")==1)
+        {
+            LoadChapter(s_manager.GetCurrChap(), false);
+        }
+        else
+        {
+            LoadChapter(view_idx, true);
+        }
     }
 
     public void LoadChapter(int idx, bool is_new){

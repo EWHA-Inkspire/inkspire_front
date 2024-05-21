@@ -306,5 +306,7 @@ Narrator (내레이터):
         };
         messages.Add(newMessage);
         text_scroll.InitStoryObj(messages);
+
+        map_modal.SetActive(true);
     }
 }

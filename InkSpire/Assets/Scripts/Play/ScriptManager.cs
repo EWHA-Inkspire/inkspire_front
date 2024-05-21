@@ -340,6 +340,7 @@ public class ScriptManager : MonoBehaviour
 
     public void SetMapList(GetMapList map_list)
     {
+        map_list.maps.Sort((a, b) => a.idx.CompareTo(b.idx));
         foreach (GetMapInfo map in map_list.maps)
         {
             int idx = map.idx;
@@ -351,6 +352,9 @@ public class ScriptManager : MonoBehaviour
                 curr_place_idx = idx;
             }
         }
+
+        curr_chapter = map_list.maps[^1].chapter - 1;
+        Debug.Log("현재 챕터: "+curr_chapter);
     }
 
     public void SetItemId(int id, int map_id)

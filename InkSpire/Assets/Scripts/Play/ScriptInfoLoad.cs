@@ -67,9 +67,7 @@ public class ScriptInfoLoad : MonoBehaviour
 
         // 현재 챕터 정보 업데이트
         Debug.Log("view_chapter: " + view_chapter);
-        Debug.Log("curr_chapter: " + curr_chapter);
         ScriptManager.script_manager.SetViewChap(view_chapter);
-        ScriptManager.script_manager.SetCurrChap(curr_chapter);
         ScriptManager.script_manager.SetCharName(PlayerPrefs.GetString("character_name"));
     }
 
