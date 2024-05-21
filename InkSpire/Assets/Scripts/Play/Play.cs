@@ -196,7 +196,7 @@ Narrator (내레이터):
     public void PlaceButton(int idx)
     {
         int place_idx;
-        if(idx == 3){
+        if(idx == 0){
             place_idx = 0;
         }
         else{
