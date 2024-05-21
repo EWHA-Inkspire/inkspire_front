@@ -251,6 +251,11 @@ public class ScriptManager : MonoBehaviour
     public async void SetFinalPlace()
     {
         PlayScene.play_scene.LoadNextChapUI();
+
+        // 이전 챕터 결과 요약
+        string prev_result = GetPrevResult(curr_chapter);
+
+        script.ChapterIntroGPT(goals[curr_chapter].GetDetail(), prev_result, curr_chapter + 1);
         
         curr_chapter++;
         int place_base = curr_chapter * 3 + 1;
@@ -266,7 +271,15 @@ public class ScriptManager : MonoBehaviour
         }
 
         ScriptAPI.script_api.PostMapInfo(map[place_base], items[place_base], game_events[place_base], place_base, curr_chapter + 1);
-        PlayScene.play_scene.LoadChapter(curr_chapter, true);
+
+        if(script.GetIntroImage() == null)
+        {
+            StartCoroutine(DelayLoadChapter());
+        }
+        else
+        {
+            PlayScene.play_scene.LoadChapter(curr_chapter, true);
+        }
     }
 
     // Settter
