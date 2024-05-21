@@ -1,10 +1,13 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ScriptInfoLoad : MonoBehaviour
 {
+    [SerializeField] GameObject LoadingPannel;
+    [SerializeField] TextMeshProUGUI LoadingText;
     private int script_id = -1;
     private int view_chapter = 0;
     private int curr_chapter = 0;
@@ -21,16 +24,31 @@ public class ScriptInfoLoad : MonoBehaviour
         if (script_id == -1) {
             Invoke(nameof(LoadEtcInfo), 1f);
         }
-
-        WaitForAPI();
+        LoadingText.text = "게임을 불러오는 중입니다";
+        StartCoroutine(WaitForAPI());
     }
 
-    private void WaitForAPI() {
-        if(ScriptManager.script_manager.GetInitScript() && ScriptManager.script_manager.GetScript().GetIntroImage() != null) {
-            SceneManager.LoadScene("5_Play");
-        } else {
-            Invoke(nameof(WaitForAPI), 1f);
+    IEnumerator WaitForAPI()
+    {
+        if (!LoadingPannel.activeSelf)
+        {
+            LoadingPannel.SetActive(true);
         }
+
+        while (!ScriptManager.script_manager.GetInitScript() || ScriptManager.script_manager.GetScript().GetIntroImage() == null)
+        {
+            if (LoadingText.text == "게임을 불러오는 중입니다 . . .")
+            {
+                LoadingText.text = "게임을 불러오는 중입니다";
+            }
+            else
+            {
+                LoadingText.text += " .";
+            }
+            yield return new WaitForSeconds(1f);
+        }
+
+        SceneManager.LoadScene("5_Play");
     }
 
     private void LoadEtcInfo() {
