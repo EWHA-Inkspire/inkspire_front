@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class EndChapterModal : MonoBehaviour
 {
+    [SerializeField] private GameObject end_button;
     public void OnClickNextChapter(Play play)
     {
+        end_button.SetActive(false);
         play.SaveMessages();
         this.gameObject.SetActive(false);
 
@@ -38,6 +40,7 @@ public class EndChapterModal : MonoBehaviour
 
     public void OnClickCurrChapter()
     {
+        end_button.SetActive(true);
         this.gameObject.SetActive(false);
     }
 }
