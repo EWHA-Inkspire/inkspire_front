@@ -10,7 +10,7 @@ public class EndChapterModal : MonoBehaviour
         play.SaveMessages();
         this.gameObject.SetActive(false);
 
-        if(ScriptManager.script_manager.GetCurrChap() == 0)
+        if(ScriptManager.script_manager.GetCurrChap() < Const.CHAPTER - 2)
         {
             ScriptManager.script_manager.SetNextChapter();
             return;

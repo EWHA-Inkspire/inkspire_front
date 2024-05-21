@@ -117,11 +117,8 @@ public class Script
             }
         });
 
-        Debug.Log(">>이미지 프롬프팅: "+response);
-
         ImageData image = await GptManager.gpt.CallDALLE(response) ?? new ImageData();
         Debug.Log(">>이미지 url: "+image.Url);
-        Debug.Log(">>이미지 Base64: "+image.B64Json);
 
         ScriptAPI.script_api.GetImageTexture(image.Url, (texture) => {
             this.intro_image = texture;

@@ -4,14 +4,12 @@ using TMPro;
 using OpenAI;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.Networking;
 
 public class TextScrollUI : MonoBehaviour
 {
     [SerializeField] private ScrollRect scroll;
     [SerializeField] private GameObject assi_chat;
     [SerializeField] private GameObject user_chat;
-    [SerializeField] private Play play;
     private readonly float TYPING_SPEED = 0.03f;
 
     public void AppendMsg(ChatMessage msg, bool isTyping)
