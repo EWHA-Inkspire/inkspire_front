@@ -23,8 +23,6 @@ public class Play : MonoBehaviour
 
     void Awake()
     {
-        text_scroll.ApplyTextureToGameObject(ScriptManager.script_manager.GetScript().GetIntroImage());
-
         if(PlayerPrefs.GetInt("Call API") == 1)
         {
             PlayAPI.play_api.GetChatList(this);
@@ -37,6 +35,10 @@ public class Play : MonoBehaviour
                 hint_event.gameObject.SetActive(true);
                 hint_event.SetHint(text_scroll);
             }
+        }
+        else
+        {
+            text_scroll.ApplyTextureToGameObject(ScriptManager.script_manager.GetScript().GetIntroImage());
         }
 
         InvokeRepeating("SaveMessages", SAVING_INTERVAL, SAVING_INTERVAL);
