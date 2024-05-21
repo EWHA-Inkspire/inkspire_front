@@ -137,7 +137,12 @@ public class PlayScene : MonoBehaviour
         {
             PlayAPI.play_api.GetChatList(play);
         }
-        else if (is_new)
+        else if (is_new && idx != 0)
+        {
+            play.SetIntroImage();
+            play.SetChapterIntro();
+        }
+        else
         {
             play.SetIntroImage();
         }

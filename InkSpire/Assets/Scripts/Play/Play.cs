@@ -293,4 +293,18 @@ Narrator (내레이터):
         this.messages = messages;
         SetSystemPrompt();
     }
+
+    public void SetChapterIntro()
+    {
+        messages.Clear();
+        SetSystemPrompt();
+
+        var newMessage = new ChatMessage()
+        {
+            Role = "assistant",
+            Content = ScriptManager.script_manager.GetScript().GetIntro()
+        };
+        messages.Add(newMessage);
+        text_scroll.InitStoryObj(messages);
+    }
 }
