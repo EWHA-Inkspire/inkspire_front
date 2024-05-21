@@ -30,8 +30,6 @@ public class Epilogue : MonoBehaviour
         await ProcessEpilogue();
         await ImageGPT();
 
-        text_scroll.AppendMsg(new ChatMessage() { Role = "assistant", Content = epilogue }, true);
-
         is_loading = false;
     }
 
@@ -71,7 +69,7 @@ public class Epilogue : MonoBehaviour
                 Content = "에필로그: " + epilogue
             }
         });
-        
+
         ImageData image = await GptManager.gpt.CallDALLE(response) ?? new ImageData();
         Debug.Log(">>이미지 url: "+image.Url);
 
@@ -80,6 +78,8 @@ public class Epilogue : MonoBehaviour
             text_scroll.ApplyTextureToGameObject(image_texture);
             Debug.Log(">>이미지 텍스쳐: "+texture);
         });
+
+        text_scroll.AppendMsg(new ChatMessage() { Role = "assistant", Content = epilogue }, true);
     }
 
     void WaitForGPT()
