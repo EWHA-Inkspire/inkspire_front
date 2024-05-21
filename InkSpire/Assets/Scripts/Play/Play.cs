@@ -36,10 +36,6 @@ public class Play : MonoBehaviour
                 hint_event.SetHint(text_scroll);
             }
         }
-        else
-        {
-            text_scroll.ApplyTextureToGameObject(ScriptManager.script_manager.GetScript().GetIntroImage());
-        }
 
         InvokeRepeating("SaveMessages", SAVING_INTERVAL, SAVING_INTERVAL);
     }
@@ -69,6 +65,11 @@ public class Play : MonoBehaviour
             }
             text_scroll.AppendMsg(introMessage, true);
         }
+    }
+
+    public void SetIntroImage()
+    {
+        text_scroll.ApplyTextureToGameObject(ScriptManager.script_manager.GetScript().GetIntroImage());
     }
 
     public void SaveMessages()
@@ -224,7 +225,7 @@ Narrator (내레이터):
             Role = "assistant",
             Content = "Narrator: \n이곳은 " + ScriptManager.script_manager.GetCurrPlace().place_name + "입니다.\n" + ScriptManager.script_manager.GetCurrPlace().place_info
         };
-        if (place_idx == 0)
+        if (idx == 0)
         {
             hint_event.SetHint(text_scroll);
             newMessage.Content += "이곳에서는 NPC " + ScriptManager.script_manager.GetPnpc().GetName() + EulorReul(ScriptManager.script_manager.GetPnpc().GetName()) + " 만날 수 있습니다.";

@@ -97,8 +97,6 @@ public class TextScrollUI : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        ApplyTextureToGameObject(ScriptManager.script_manager.GetScript().GetIntroImage());
-
         foreach (var msg in messages)
         {
             AppendMsg(msg, false);

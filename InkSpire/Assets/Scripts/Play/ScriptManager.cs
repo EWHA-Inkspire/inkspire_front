@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ScriptManager : MonoBehaviour
@@ -162,6 +164,11 @@ public class ScriptManager : MonoBehaviour
 
         PlayScene.play_scene.LoadNextChapUI();
 
+        // 이전 챕터 결과 요약
+        string prev_result = GetPrevResult(curr_chapter);
+
+        script.ChapterIntroGPT(goals[curr_chapter].GetDetail(), prev_result, curr_chapter + 1);
+
         curr_chapter++;
         int place_base = curr_chapter * 3 + 1;
         await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[Const.CHAPTER-1]);
@@ -182,7 +189,63 @@ public class ScriptManager : MonoBehaviour
 
             ScriptAPI.script_api.PostMapInfo(map[place_base + i], items[place_base + i], game_events[place_base + i], place_base + i, curr_chapter + 1);
         }
-        PlayScene.play_scene.LoadChapter(curr_chapter, false);
+
+        if(script.GetIntroImage() == null)
+        {
+            StartCoroutine(DelayLoadChapter());
+        }
+        else
+        {
+            PlayScene.play_scene.LoadChapter(curr_chapter, true);
+        }
+    }
+
+    IEnumerator DelayLoadChapter()
+    {
+        while(script.GetIntroImage() == null)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        PlayScene.play_scene.LoadChapter(curr_chapter, true);
+    }
+
+    private string GetPrevResult(int chapter)
+    {
+        int place_base = chapter * 3 + 1;
+
+        if(goals[chapter].GetClear())
+        {
+            if(goals[chapter].GetGoalType() == 1)
+            {
+                return "적을 처치했다.";
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                if (game_events[place_base + i].type == 0)
+                {
+                    continue;
+                }
+                return game_events[place_base + i].succ;
+            }
+
+            return "목표 달성 성공";
+        }
+
+        if(goals[chapter].GetGoalType() == 1)
+        {
+            return "적을 처치하지 못했다.";
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (game_events[place_base + i].type == 0)
+            {
+                continue;
+            }
+            return game_events[place_base + i].fail;
+        }
+
+        return "목표 달성 실패";
     }
 
     public async void SetFinalPlace()
@@ -203,7 +266,7 @@ public class ScriptManager : MonoBehaviour
         }
 
         ScriptAPI.script_api.PostMapInfo(map[place_base], items[place_base], game_events[place_base], place_base, curr_chapter + 1);
-        PlayScene.play_scene.LoadChapter(curr_chapter, false);
+        PlayScene.play_scene.LoadChapter(curr_chapter, true);
     }
 
     // Settter

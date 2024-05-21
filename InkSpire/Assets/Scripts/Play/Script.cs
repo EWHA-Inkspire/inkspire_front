@@ -75,24 +75,30 @@ public class Script
         this.world_detail = response;
     }
 
-    public async void IntroImageGPT()
+    private async void IntroImageGPT()
     {
         string response = await GptManager.gpt.CallGpt(new List<ChatMessage>(){
             new(){
                 Role = "system",
-                Content = "세계관 정보를 바탕으로 " + genre + " 장르에 어울리는 장면의 구체적인 묘사를 한 문장의 영어로 출력한다. 반드시 한 문장의 영어로 출력하여야 한다."
+                Content = "세계관 정보를 바탕으로 " + genre + " 장르, " + time_background + ", " + space_background + "에 어울리는 장면의 구체적인 묘사를 한 문장의 영어로 출력한다. 반드시 한 문장의 영어로 출력하여야 한다."
             },
             new(){
                 Role = "user",
                 Content = "세계관 정보: "+world_detail
             }
         });
-        ImageData image = await GptManager.gpt.CallDALLE(response) ?? new ImageData();
 
-        ScriptAPI.script_api.PostImageInfo(1, image.Url);
+        Debug.Log("IntroImageGPT: " + response);
+
+        IntroImageGPT(response, 1);
+    }
+
+    private async void IntroImageGPT(string prompt, int chapter)
+    {
+        ImageData image = await GptManager.gpt.CallDALLE(prompt) ?? new ImageData();
 
         ScriptAPI.script_api.GetImageTexture(image.Url, (texture) => {
-            this.intro_image = texture;
+            intro_image = texture;
         });
     }
 
@@ -183,6 +189,48 @@ public class Script
         response = response.Replace("###\n", "");
         response = response.Replace("*", "");
         this.intro = response.Replace("###", "");
+    }
+
+    public async void ChapterIntroGPT(string prev_goal, string prev_result, int chapter)
+    {
+        var newMessage = new ChatMessage()
+        {
+            Role = "system",
+            Content = @"당신은 게임 속 세계관을 전부 알고 있는 전능한 존재이자 스토리 게임을 진행하는 Narrator이다."
+            + "\n현재 플레이중인 게임은 " + time_background + ", "
+            + space_background + "(을)를 배경으로 하는 "
+            + genre + " 장르의 게임이며 세계관은 다음과 같다.\n"
+            + world_detail
+            +"\n이전 챕터의 목표 내용과 이전 챕터의 결과를 참고하여 새로운 챕터의 인트로를 출력하되, 직접적으로 게임이라는 언급은 하지 않는다."
+        };
+
+        gpt_messages.Add(newMessage);
+
+        newMessage = new ChatMessage()
+        {
+            Role = "user",
+            Content = "이전 챕터 목표:" + prev_goal 
+            + "\n이전 챕터 결과: " + prev_result
+            + "\n챕터 인트로: "
+        };
+
+        gpt_messages.Add(newMessage);
+
+        intro = await GptManager.gpt.CallGpt(gpt_messages);
+
+
+        string response = await GptManager.gpt.CallGpt(new List<ChatMessage>(){
+            new(){
+                Role = "system",
+                Content = "인트로 정보를 바탕으로 " + genre + " 장르, " + time_background + ", " + space_background + "에 어울리는 장면의 구체적인 묘사를 한 문장의 영어로 출력한다. 반드시 한 문장의 영어로 출력하여야 한다."
+            },
+            new(){
+                Role = "user",
+                Content = "인트로 정보: "+intro
+            }
+        });
+
+        IntroImageGPT(response, chapter);
     }
 
     // Getter

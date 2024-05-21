@@ -35,7 +35,7 @@ public class ScriptInfoLoad : MonoBehaviour
             LoadingPannel.SetActive(true);
         }
 
-        while (!ScriptManager.script_manager.GetInitScript() || ScriptManager.script_manager.GetScript().GetIntroImage() == null)
+        while (!ScriptManager.script_manager.GetInitScript())
         {
             if (LoadingText.text == "게임을 불러오는 중입니다 . . .")
             {
@@ -63,7 +63,7 @@ public class ScriptInfoLoad : MonoBehaviour
         // 전체 이벤트 정보 조회 api 호출
         StartCoroutine(APIManager.api.GetRequest<GetEventList>("/events/" + script_id, ProcessEventList));
         // 챕터 인트로 이미지 조회 api 호출
-        StartCoroutine(APIManager.api.GetRequest<string>("/images/" + script_id + "/" + (view_chapter + 1), ProcessChapterIntroImage));
+        // StartCoroutine(APIManager.api.GetRequest<string>("/images/" + script_id + "/" + (view_chapter + 1), ProcessChapterIntroImage));
 
         // 현재 챕터 정보 업데이트
         Debug.Log("view_chapter: " + view_chapter);

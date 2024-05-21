@@ -208,13 +208,13 @@ public class ScriptAPI : MonoBehaviour
     }
 
     // 챕터별 이미지 정보 저장
-    public void PostImageInfo(int chapter, string url)
+    public void PostImageInfo(int chapter, byte[] url)
     {
         PostImageInfo imageInfo = new()
         {
             scriptId = PlayerPrefs.GetInt("script_id"),
             chapter = chapter,
-            url = url
+            url = url.ToString()
         };
 
         string json = JsonUtility.ToJson(imageInfo);

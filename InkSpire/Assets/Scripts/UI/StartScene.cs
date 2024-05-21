@@ -20,6 +20,7 @@ public class StartScene : MonoBehaviour
 
     void Awake()
     {
+        PlayerPrefs.DeleteKey("Call API");
         int user_id = PlayerPrefs.GetInt("user_id");
         // 유저 정보 요청
         StartCoroutine(APIManager.api.GetRequest<ProfileInfo>("/users/" + user_id + "/profile", ProcessProfile));
