@@ -60,19 +60,18 @@ public class Epilogue : MonoBehaviour
 
     private async Task ImageGPT()
     {
+        Script script = ScriptManager.script_manager.GetScript();
         string response = await GptManager.gpt.CallGpt(new List<ChatMessage>(){
             new(){
                 Role = "system",
-                Content = "한글이 들어오면 요약하여 이미지 생성을 위한 상황 묘사 영어로 번역"
+                Content = "에필로그 정보를 바탕으로 " + script.GetGenre() + " 장르, " + script.GetTimeBackground() + ", " + script.GetSpaceBackground() + "에 어울리는 장면의 구체적인 묘사를 한 문장의 영어로 출력한다. 반드시 한 문장의 영어로 출력하여야 한다."
             },
             new(){
                 Role = "user",
-                Content = epilogue
+                Content = "에필로그: " + epilogue
             }
         });
-
-        response += "\nPlease generate an image that suits the " + ScriptManager.script_manager.GetScript().GetGenre() + " genre.";
-
+        
         ImageData image = await GptManager.gpt.CallDALLE(response) ?? new ImageData();
         Debug.Log(">>이미지 url: "+image.Url);
 
