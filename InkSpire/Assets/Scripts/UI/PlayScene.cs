@@ -169,8 +169,8 @@ public class PlayScene : MonoBehaviour
         if(view_idx>=s_manager.GetCurrChap()){
             return;
         }
-        LoadNextChapUI();
-        LoadChapter(view_idx+1, false);
+            LoadNextChapUI();
+            LoadChapter(view_idx+1, false);
     }
 
     void Update(){
@@ -203,4 +203,8 @@ public class PlayScene : MonoBehaviour
         this.is_loading = is_loading;
     }
 
+    public void BackButton()
+    {
+        SceneManager.LoadScene("2_CharacterList");
+    }
 }
