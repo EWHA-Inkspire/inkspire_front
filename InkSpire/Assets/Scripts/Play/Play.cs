@@ -193,7 +193,14 @@ Narrator (내레이터):
 
     public void PlaceButton(int idx)
     {
-        int place_idx = ScriptManager.script_manager.GetCurrChap()*3 + idx;
+        int place_idx;
+        if(idx == 3){
+            place_idx = 0;
+        }
+        else{
+            place_idx = ScriptManager.script_manager.GetCurrChap()*3 + idx;
+        }
+         
         if (ScriptManager.script_manager.GetCurrPlace().place_name == "" || ScriptManager.script_manager.GetCurrPlace().place_name == null)
         {
             return;
