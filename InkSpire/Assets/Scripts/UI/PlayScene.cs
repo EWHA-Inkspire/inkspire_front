@@ -35,7 +35,7 @@ public class PlayScene : MonoBehaviour
 
     void Start(){
         view_idx = s_manager.GetViewChap();
-        if(PlayerPrefs.GetInt("tutorialKey") == 1)
+        if(PlayerPrefs.GetInt("PlayTutorialDone") == 1)
         {
             LoadPlayScene();
             PrintIntro();
