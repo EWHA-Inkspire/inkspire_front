@@ -40,7 +40,7 @@ public class Play : MonoBehaviour
         InvokeRepeating("SaveMessages", SAVING_INTERVAL, SAVING_INTERVAL);
     }
 
-    void Start()
+    public void SetIntro()
     {
         SetSystemPrompt();
         if (messages.Count == 1 && ScriptManager.script_manager.GetCurrChap() == 0)

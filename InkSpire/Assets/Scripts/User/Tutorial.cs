@@ -5,12 +5,13 @@ using UnityEngine;
 public class Tutorial : MonoBehaviour
 {
     [SerializeField][Header("Tutorial")] GameObject[] items;
+    [SerializeField] PlayScene playScene;
     [SerializeField] string tutorialKey; // 각 씬에 대한 튜토리얼 키
     int itemIdx = 0;
 
     void Start()
     {
-        PlayerPrefs.DeleteKey(tutorialKey);
+        // PlayerPrefs.DeleteKey(tutorialKey);
         if (PlayerPrefs.GetInt(tutorialKey, 0) == 1)
         {
             gameObject.SetActive(false);
@@ -55,6 +56,8 @@ public class Tutorial : MonoBehaviour
             PlayerPrefs.SetInt(tutorialKey, 1);
             PlayerPrefs.Save();
             gameObject.SetActive(false);
+            playScene.LoadPlayScene();
+            playScene.PrintIntro();
         }
     }
 }
