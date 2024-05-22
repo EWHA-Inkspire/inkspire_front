@@ -196,7 +196,7 @@ public class ScriptManager : MonoBehaviour
         }
         else
         {
-            PlayScene.play_scene.LoadChapter(curr_chapter, true);
+            PlayScene.play_scene.LoadChapter(true);
         }
     }
 
@@ -206,7 +206,7 @@ public class ScriptManager : MonoBehaviour
         {
             yield return new WaitForSeconds(0.1f);
         }
-        PlayScene.play_scene.LoadChapter(curr_chapter, true);
+        PlayScene.play_scene.LoadChapter(true);
     }
 
     private string GetPrevResult(int chapter)
@@ -278,7 +278,7 @@ public class ScriptManager : MonoBehaviour
         }
         else
         {
-            PlayScene.play_scene.LoadChapter(curr_chapter, true);
+            PlayScene.play_scene.LoadChapter(true);
         }
     }
 

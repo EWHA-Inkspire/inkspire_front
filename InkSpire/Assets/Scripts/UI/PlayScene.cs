@@ -25,7 +25,6 @@ public class PlayScene : MonoBehaviour
     [SerializeField] GameObject[]   disable_set;
 
     private bool is_loading = false;
-    private int view_idx;
 
     private ScriptManager s_manager = ScriptManager.script_manager;
 
@@ -34,7 +33,6 @@ public class PlayScene : MonoBehaviour
     }
 
     void Start(){
-        view_idx = s_manager.GetViewChap();
         if(PlayerPrefs.GetInt("PlayTutorialDone") == 1)
         {
             LoadPlayScene();
@@ -78,7 +76,6 @@ public class PlayScene : MonoBehaviour
     }
 
     public void LoadPlayScene(){
-        Changechap(view_idx);
         header_name.text = s_manager.GetCharName()+" HP";
         statmodal_title.text = s_manager.GetCharName()+"'s Stats";
         header_HP.text = PlayerStatManager.playerstat.GetStatAmount(StatType.Hp).ToString()+" / "+PlayerStatManager.playerstat.GetStatAmount(StatType.MaxHP).ToString();
@@ -86,18 +83,17 @@ public class PlayScene : MonoBehaviour
 
         if(PlayerPrefs.GetInt("Call API") == 1)
         {
-            LoadChapter(view_idx, false);
+            LoadChapter(false);
         }
         else
         {
-            LoadChapter(view_idx, true);
+            LoadChapter(true);
         }
     }
 
-    public void LoadChapter(int idx, bool is_new){
+    public void LoadChapter(bool is_new){
+        int idx = ScriptManager.script_manager.GetViewChap();
         Debug.Log("init idx: " + idx);
-        view_idx = idx;
-        s_manager.SetViewChap(view_idx);
         Changechap(idx);
 
         for(int j = 0; j<4; j++){
@@ -166,19 +162,23 @@ public class PlayScene : MonoBehaviour
     }
 
     public void ViewPrevChapButton(){
-        if(view_idx<=0){
+        int view_idx = ScriptManager.script_manager.GetViewChap() - 1;
+        if(view_idx < 0){
             return;
         }
+        s_manager.SetViewChap(view_idx);
         LoadNextChapUI();
-        LoadChapter(view_idx-1, false);
+        LoadChapter(false);
     }
 
     public void ViewNextChapButton(){
-        if(view_idx>=s_manager.GetCurrChap()){
+        int view_idx = ScriptManager.script_manager.GetViewChap() + 1;
+        if(ScriptManager.script_manager.GetPlace(view_idx*3+1).place_name == ""){
             return;
         }
-            LoadNextChapUI();
-            LoadChapter(view_idx+1, false);
+        s_manager.SetViewChap(view_idx);
+        LoadNextChapUI();
+        LoadChapter(false);
     }
 
     void Update(){
