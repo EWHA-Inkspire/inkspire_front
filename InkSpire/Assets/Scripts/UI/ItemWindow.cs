@@ -66,6 +66,10 @@ public class ItemWindow : MonoBehaviour
         for (int i = 0; i < items.Count; i++) {
             slots[i].SetItem(items[i]);
         }
+
+        for (int i = items.Count; i < SLOT_SIZE; i++) {
+            slots[i].DelSprites();
+        }
     }
 
     public void UseTargetItem()
@@ -99,6 +103,9 @@ public class ItemWindow : MonoBehaviour
         // 아이템 사용
         InventoryManager.i_manager.UseTargetItem();
 
+        // 업데이트된 인벤토리 정보로 UI 업데이트
+        SetInventorySlot(InventoryManager.i_manager.GetInventory());
+
         if(is_battle){
             inventory_window.SetActive(false);
             battle.SetNextTurn();
@@ -112,6 +119,7 @@ public class ItemWindow : MonoBehaviour
 
         slots[target_idx].DelSprites();
         InventoryManager.i_manager.DeleteTargetItem();
+        SetInventorySlot(InventoryManager.i_manager.GetInventory());
     }
 
     void OpenButton(){
