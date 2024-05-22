@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class PlayScene : MonoBehaviour
 {
     public static PlayScene play_scene;
-    [SerializeField] private Play play;
+    [SerializeField] Play play;
     [SerializeField] TextMeshProUGUI header_name;
     [SerializeField] TextMeshProUGUI header_HP;
     [SerializeField] TextMeshProUGUI title_chapnum;
@@ -35,7 +35,15 @@ public class PlayScene : MonoBehaviour
 
     void Start(){
         view_idx = s_manager.GetViewChap();
-        LoadPlayScene();
+        if(PlayerPrefs.GetInt("PlayTutorialDone") == 1)
+        {
+            LoadPlayScene();
+            PrintIntro();
+        }
+    }
+
+    public void PrintIntro(){
+        play.SetIntro();
     }
 
     public void LoadNextChapUI(){

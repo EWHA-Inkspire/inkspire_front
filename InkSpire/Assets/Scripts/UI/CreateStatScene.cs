@@ -55,17 +55,20 @@ public class CreateStatScene : MonoBehaviour
         stat_manager.SetStats(int.Parse(luk.text), int.Parse(def.text), int.Parse(intl.text), int.Parse(dex.text), int.Parse(atk.text));
     }
 
-    public void SetRandomStat(){
-        int[] tmp_stat = new int [5];
+    public void SetRandomStat()
+    {
+        int[] tmp_stat = new int[5];
         int stat_sum = 400;
-        while(stat_sum>300){
+        while (stat_sum > 300)
+        {
             stat_sum = 0;
-            for(int i = 0; i<5; i++){
-                tmp_stat[i] =  Random.Range(1, 100);
+            for (int i = 0; i < 5; i++)
+            {
+                tmp_stat[i] = Random.Range(1, 100);
                 stat_sum += tmp_stat[i];
             }
         }
-        Debug.Log("stat sum:"+stat_sum);
+        Debug.Log("stat sum:" + stat_sum);
 
         atk.text = tmp_stat[0].ToString();
         luk.text = tmp_stat[1].ToString();
