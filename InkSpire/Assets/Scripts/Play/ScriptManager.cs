@@ -424,6 +424,10 @@ public class ScriptManager : MonoBehaviour
         return goals[curr_chapter];
     }
 
+    public Goal GetGoal(int idx){
+        return goals[idx];
+    }
+
     public Goal GetFinalGoal()
     {
         return goals[Const.CHAPTER-1];
@@ -501,5 +505,10 @@ public class ScriptManager : MonoBehaviour
     public int GetViewChap()
     {
         return view_chapter;
+    }
+
+    public string GetAchivement()
+    {
+        return achivement;
     }
 }
