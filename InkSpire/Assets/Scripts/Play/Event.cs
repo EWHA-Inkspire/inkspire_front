@@ -12,7 +12,12 @@ public class Event
     public string intro; // 이벤트 도입 스크립트
     public string succ; // 이벤트 성공 스크립트
     public string fail; // 이벤트 실패 스크립트
-    public int type; //일반 이벤트 == 0, 목표 이벤트 == 1;
+    public int type = 0; //일반 이벤트 == 0, 목표 이벤트 == 1;
+
+    public Event()
+    {
+        this.type = 0;
+    }
 
     public async Task CreateEventTrigger(string world_detail, string chapter_obj, string place_name, string item_name)
     {

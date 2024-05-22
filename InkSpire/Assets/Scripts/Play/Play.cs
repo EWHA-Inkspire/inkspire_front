@@ -200,8 +200,8 @@ Narrator (내레이터):
         if(idx == 0){
             place_idx = 0;
         }
-        else if(ScriptManager.script_manager.GetCurrChap() == Const.CHAPTER-1 && idx == 2){
-            place_idx = Const.PLACE_COUNT-1;
+        else if(ScriptManager.script_manager.GetCurrChap() == Const.CHAPTER-1){
+            place_idx = (Const.CHAPTER-1)*3 + 1;
         }
         else{
             place_idx = ScriptManager.script_manager.GetCurrChap()*3 + idx;

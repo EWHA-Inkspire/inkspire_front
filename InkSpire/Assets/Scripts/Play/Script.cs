@@ -220,7 +220,6 @@ public class Script
 
         intro = await GptManager.gpt.CallGpt(gpt_messages);
 
-
         string response = await GptManager.gpt.CallGpt(new List<ChatMessage>(){
             new(){
                 Role = "system",

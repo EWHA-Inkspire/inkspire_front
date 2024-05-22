@@ -78,7 +78,7 @@ public class ScriptManager : MonoBehaviour
         map[0].ANPC_exist = 0;
 
         // 맵 정보 생성
-        ChooseEventType(); // 14개의 장소 별 이벤트 타입 생성
+        ChooseEventType(); // 챕터 장소별 이벤트 타입 설정
         // PNPC 장소 초기화
         map[0].ANPC_exist = 0;
         await map[0].CreatePnpcPlace(script, pro_npc);
@@ -112,48 +112,10 @@ public class ScriptManager : MonoBehaviour
     // 장소 별 이벤트 타입 설정 (3개 장소마다 목표 이벤트 출현 장소 정하는 로직)
     private void ChooseEventType()
     {
-        int i = 1;
-        while (i < Const.PLACE_COUNT-1)
-        {
-            int flag = Random.Range(0, 3);
-            if (flag == 0)
-            {
-                game_events[i].type = 1;
-            }
-            else
-            {
-                game_events[i].type = 0;
-            }
-
-            if (game_events[i].type == 1)
-            {
-                //100
-                game_events[i + 1].type = 0;
-                game_events[i + 2].type = 0;
-                i += 3;
-                continue;
-            }
-            else
-            {
-                i++;
-                game_events[i].type = UnityEngine.Random.Range(0, 2);
-                if (game_events[i].type == 1)
-                {
-                    game_events[i + 1].type = 0; //010
-                }
-                else
-                {
-                    game_events[i + 1].type = 1; //001
-                }
-                i += 2;
-            }
-        }
-        //최종 목표 장소
-        if (i == Const.PLACE_COUNT-1)
-        {
-            game_events[i].type = 1;
-            map[i].ANPC_exist = 0;
-        }
+        int place_base = curr_chapter*3 + 1;
+        int flag = Random.Range(0, 3);
+        int[] idxs = { place_base, place_base+1, place_base+2 };
+        game_events[idxs[flag]].type = 1;
     }
 
     public async void SetNextChapter()
@@ -170,7 +132,9 @@ public class ScriptManager : MonoBehaviour
         script.ChapterIntroGPT(goals[curr_chapter].GetDetail(), prev_result, curr_chapter + 1);
 
         curr_chapter++;
+        view_chapter = curr_chapter;
         int place_base = curr_chapter * 3 + 1;
+        ChooseEventType(); // 챕터 장소별 이벤트 타입 설정
         await goals[curr_chapter].InitGoal(time_background, space_background, script.GetWorldDetail(), genre, goals[Const.CHAPTER-1]);
         ScriptAPI.script_api.PostGoalInfo(goals[curr_chapter], curr_chapter + 1);
         for (int i = 0; i < 3; i++)
@@ -209,7 +173,7 @@ public class ScriptManager : MonoBehaviour
         PlayScene.play_scene.LoadChapter(true);
     }
 
-    private string GetPrevResult(int chapter)
+    public string GetPrevResult(int chapter)
     {
         int place_base = chapter * 3 + 1;
 
@@ -257,10 +221,12 @@ public class ScriptManager : MonoBehaviour
 
         script.ChapterIntroGPT(goals[curr_chapter].GetDetail(), prev_result, curr_chapter + 1);
         
-        curr_chapter++;
+        curr_chapter = Const.CHAPTER-1;
+        view_chapter = curr_chapter;
         int place_base = curr_chapter * 3 + 1;
 
         // 최종 장소 목표 정보 전달
+        game_events[place_base].type = 1;
         await items[place_base].InitItem(script, goals[curr_chapter], game_events[place_base].type);
         await map[place_base].InitPlace(curr_chapter, script, items[place_base], game_events[place_base].type, place_names);
         place_names[place_base] = map[place_base].place_name;
