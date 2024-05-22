@@ -120,11 +120,25 @@ public class ScriptManager : MonoBehaviour
 
     public async void SetNextChapter()
     {
+        PlayScene.play_scene.LoadNextChapUI();
+        // 회귀용 다음 챕터 넘기는 기능 
+        if(goals[curr_chapter+1].GetTitle()!=""){
+            for(int i = curr_chapter+1; i<Const.CHAPTER;i++){
+                if(!goals[i].GetClear()){
+                    curr_chapter = i;
+                    break;
+                }
+            }
+            if(goals[curr_chapter].GetTitle()!=""){
+                PlayScene.play_scene.LoadChapter(false);
+                return;
+            }
+        }
+
+
         string genre = script.GetGenre();
         string time_background = script.GetTimeBackground();
         string space_background = script.GetSpaceBackground();
-
-        PlayScene.play_scene.LoadNextChapUI();
 
         // 이전 챕터 결과 요약
         string prev_result = GetPrevResult(curr_chapter);

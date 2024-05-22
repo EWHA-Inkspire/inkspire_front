@@ -15,7 +15,7 @@ public class ScriptInfoLoad : MonoBehaviour
     public void LoadScriptInfo(int chapter_num) {
         PlayerPrefs.SetInt("Call API", 1);
         int character_id = PlayerPrefs.GetInt("character_id");
-        this.view_chapter = chapter_num;
+        ScriptManager.script_manager.SetViewChap(chapter_num);
         // 스크립트 정보 조회 api 호출
         StartCoroutine(APIManager.api.GetRequest<GetScriptInfo>("/scripts/" + character_id, ProcessScriptInfo));
         // 캐릭터 스탯 조회 api 호출

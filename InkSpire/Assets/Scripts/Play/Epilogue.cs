@@ -17,6 +17,7 @@ public class Epilogue : MonoBehaviour
     [SerializeField] GameObject succ_group;
     [SerializeField] GameObject fail_group;
     [SerializeField] GameObject epilogue_modal;
+    [SerializeField] ScriptInfoLoad sc_info_load;
 
     private List<ChatMessage> gpt_messages = new();
     private Texture2D image_texture;
@@ -67,14 +68,17 @@ public class Epilogue : MonoBehaviour
                     if(return_chap==-1){
                         return_chap = i;
                     }
-                    string tmp_text = fail_group.transform.GetChild(i+3).GetComponent<TextMeshProUGUI>().text;
-                    fail_group.transform.GetChild(i+3).GetComponent<TextMeshProUGUI>().text = "<color=#B40000>"+tmp_text+"</color>";
+                    fail_group.transform.GetChild(i+3).GetComponent<TextMeshProUGUI>().text += "\t<color=#B40000>fail</color>";
                 }
             }
         }
     }
 
-
+    public void ReplayButton(){
+        ScriptManager.script_manager.SetCurrChap(return_chap);
+        ScriptManager.script_manager.SetViewChap(return_chap);
+        sc_info_load.LoadScriptInfo(return_chap);
+    }
 
     private async Task ProcessEpilogue()
     {
