@@ -9,8 +9,6 @@ public class ScriptInfoLoad : MonoBehaviour
     [SerializeField] GameObject LoadingPannel;
     [SerializeField] TextMeshProUGUI LoadingText;
     private int script_id = -1;
-    private int view_chapter = 0;
-    private int curr_chapter = 0;
 
     public void LoadScriptInfo(int chapter_num) {
         PlayerPrefs.SetInt("Call API", 1);
@@ -62,12 +60,8 @@ public class ScriptInfoLoad : MonoBehaviour
         StartCoroutine(APIManager.api.GetRequest<GetItemList>("/inventory/" + script_id + "/items", ProcessItemList));
         // 전체 이벤트 정보 조회 api 호출
         StartCoroutine(APIManager.api.GetRequest<GetEventList>("/events/" + script_id, ProcessEventList));
-        // 챕터 인트로 이미지 조회 api 호출
-        // StartCoroutine(APIManager.api.GetRequest<string>("/images/" + script_id + "/" + (view_chapter + 1), ProcessChapterIntroImage));
 
         // 현재 챕터 정보 업데이트
-        Debug.Log("view_chapter: " + view_chapter);
-        ScriptManager.script_manager.SetViewChap(view_chapter);
         ScriptManager.script_manager.SetCharName(PlayerPrefs.GetString("character_name"));
     }
 
@@ -99,7 +93,7 @@ public class ScriptInfoLoad : MonoBehaviour
         // 목표들 중 성공하지 못한 목표가 있는 챕터를 현재 챕터로 설정
         foreach (var goal in response.data.goals) {
             if (!goal.success) {
-                curr_chapter = goal.chapter - 1;
+                ScriptManager.script_manager.SetCurrChap(goal.chapter - 1);
                 break;
             }
         }
@@ -132,15 +126,5 @@ public class ScriptInfoLoad : MonoBehaviour
         }
         ScriptManager.script_manager.SetEventList(response.data);
         ScriptManager.script_manager.SetInitScript(true);
-    }
-
-    private void ProcessChapterIntroImage(Response<string> response)
-    {
-        if (!response.success)
-        {
-            return;
-        }
-
-        ScriptManager.script_manager.GetScript().SetIntroImage(response.data);
     }
 }
