@@ -37,7 +37,7 @@ public class Script
 장르가 '판타지'가 아닌 경우 마법적 요소나 판타지적 요소는 일절 포함하지 않는다. 
 당신은 반드시 게임의 장르와 시간, 공간적 배경에 알맞는 세계관을 생성해야 한다. 
 
-게임의 장르는 "+genre+"이고, 배경은 "+time_background+" 시대"+space_background+@"를 배경으로 한다.
+게임의 장르는 "+genre+"이고, 배경은 "+time_background+", "+space_background+@"를 배경으로 한다.
 
 ---
 다음은 출력 형식 예시이다. 

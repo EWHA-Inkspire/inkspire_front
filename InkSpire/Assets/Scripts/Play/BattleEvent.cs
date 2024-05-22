@@ -26,6 +26,7 @@ public class BattleEvent : MonoBehaviour
 
     [SerializeField] private TextScrollUI text_scroll;  // 게임 플레이 텍스트 영역
     [SerializeField] private GameObject EndChapterModal;
+    [SerializeField] private ItemWindow item_window;
 
     BType bType;    // 전투 타입 구분 -> 보스, 일반
     Turn curr_turn; //현재 공격 턴인 쪽을 의미
@@ -114,7 +115,7 @@ public class BattleEvent : MonoBehaviour
 
         }
 
-        InventoryManager.i_manager.is_battle = true;
+        item_window.is_battle = true;
 
         //민첩스탯이 높은 쪽이 선공
         if (p_manager.GetStatAmount(StatType.Dexterity) > enm_dex)
@@ -512,7 +513,7 @@ public class BattleEvent : MonoBehaviour
 
     void EndBattle(int result)
     {
-        InventoryManager.i_manager.is_battle = false;
+        item_window.is_battle = false;
         string result_str;
         bool flag = false; // 목표 관련 이벤트인지 체크
 
@@ -520,7 +521,7 @@ public class BattleEvent : MonoBehaviour
             result_str = "WIN\n";
             Item map_item = ScriptManager.script_manager.GetCurrItem();
             Debug.Log("맵 아이템 이름:" + map_item.name);
-            InventoryManager.i_manager.AddItem(map_item);
+            item_window.AddSlotPrefab(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
 
             if (bType == BType.BOSS)

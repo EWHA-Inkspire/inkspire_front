@@ -17,6 +17,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
 
     [SerializeField] Play play_manager;
     [SerializeField] GameObject EndChapterModal;
+    [SerializeField] ItemWindow item_window;
 
     int req_value = 0;
     bool result = false;
@@ -76,7 +77,7 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
             result_txt.text = "<color=#074AB0>Success</color>";
             result_msg.Content += "성공";
             Debug.Log("맵 아이템 이름:" + map_item.name);
-            InventoryManager.i_manager.AddItem(map_item);
+            item_window.AddSlotPrefab(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
             play_manager.AddToMessagesGPT(result_msg);
             result_msg.Content = ScriptManager.script_manager.GetCurrEvent().succ.Replace(".", ".\n");
