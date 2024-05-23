@@ -79,6 +79,7 @@ public class TextScrollUI : MonoBehaviour
         Image imageComponent = imageObject.AddComponent<Image>();
         RectTransform rectTransform = imageObject.GetComponent<RectTransform>();
         rectTransform.sizeDelta = new Vector2(700, 700); // 원하는 크기로 설정
+        rectTransform.localScale = new Vector3(1, 1, 1);
 
         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         imageComponent.sprite = sprite;

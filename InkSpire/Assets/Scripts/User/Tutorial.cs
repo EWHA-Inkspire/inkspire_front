@@ -56,8 +56,12 @@ public class Tutorial : MonoBehaviour
             PlayerPrefs.SetInt(tutorialKey, 1);
             PlayerPrefs.Save();
             gameObject.SetActive(false);
-            playScene.LoadPlayScene();
-            playScene.PrintIntro();
+            
+            if(playScene != null)
+            {
+                playScene.LoadPlayScene();
+                playScene.PrintIntro();
+            }
         }
     }
 }

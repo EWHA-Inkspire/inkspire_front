@@ -21,6 +21,12 @@ public class ButtonTextChange : MonoBehaviour
         }
 
         // 초기 버튼의 텍스트 색상 설정
+        InitButtonColor();
+    }
+
+    public void InitButtonColor()
+    {
+        // 초기 버튼의 텍스트 색상 설정
         foreach (TextMeshProUGUI buttonText in buttonTexts)
         {
             buttonText.color = Color.black;
