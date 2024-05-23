@@ -25,6 +25,7 @@ public class ItemWindow : MonoBehaviour
             newSlot.DelSprites();
             newSlot.name = "ItemSlot_"+i;
             newSlot.transform.SetParent(item_list.transform);
+            newSlot.transform.localScale = new Vector3(1, 1, 1);
             slots.Add(newSlot);
         }
 
