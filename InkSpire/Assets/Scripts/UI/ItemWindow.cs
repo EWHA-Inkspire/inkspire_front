@@ -19,17 +19,28 @@ public class ItemWindow : MonoBehaviour
 
     void Awake()
     {
+        InitSlotPrefabs();
+
+        // 인벤토리 매니저로 불러온 인벤토리 아이템을 UI에 표기
+        SetInventorySlot(InventoryManager.i_manager.GetInventory());
+    }
+
+    private void InitSlotPrefabs()
+    {
+        foreach (InventorySlot slot in slots) {
+            Destroy(slot.gameObject);
+        }
+
         // Slot 초기화
+        slots.Clear();
         for (int i = 0; i < SLOT_SIZE; i++) {
             InventorySlot newSlot = Instantiate(slotPrefab);
             newSlot.DelSprites();
             newSlot.name = "ItemSlot_"+i;
             newSlot.transform.SetParent(item_list.transform);
+            newSlot.transform.localScale = new Vector3(1, 1, 1);
             slots.Add(newSlot);
         }
-
-        // 인벤토리 매니저로 불러온 인벤토리 아이템을 UI에 표기
-        SetInventorySlot(InventoryManager.i_manager.GetInventory());
     }
 
     void Update()
@@ -55,6 +66,11 @@ public class ItemWindow : MonoBehaviour
 
     public void AddSlotPrefab(Item item)
     {
+        if(slots.Count == 0)
+        {
+            InitSlotPrefabs();
+        }
+        
         int inventory_size = InventoryManager.i_manager.GetInventorySize();
         int idx = Mathf.Max(0, inventory_size);
         slots[idx].SetItem(item);
