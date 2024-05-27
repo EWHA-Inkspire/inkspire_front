@@ -11,7 +11,7 @@ public class Tutorial : MonoBehaviour
 
     void Start()
     {
-        // PlayerPrefs.DeleteKey(tutorialKey);
+        //PlayerPrefs.DeleteKey(tutorialKey);
         if (PlayerPrefs.GetInt(tutorialKey, 0) == 1)
         {
             gameObject.SetActive(false);
