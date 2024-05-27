@@ -12,7 +12,6 @@ public class EndChapterModal : MonoBehaviour
         end_button.SetActive(false);
         play.SaveMessages();
         this.gameObject.SetActive(false);
-        buttonTextChange.InitButtonColor();
 
         if(ScriptManager.script_manager.GetCurrChap() < Const.CHAPTER - 2)
         {
