@@ -33,7 +33,10 @@ public class PlayScene : MonoBehaviour
     }
 
     void Start(){
-        if(PlayerPrefs.GetInt("PlayTutorialDone") == 1)
+        if(PlayerPrefs.GetInt("PlayTutorialDone") != 0 && PlayerPrefs.GetInt("Call API") == 1)
+        {
+            LoadPlayScene();
+        } else if (PlayerPrefs.GetInt("PlayTutorialDone") != 0)
         {
             LoadPlayScene();
             PrintIntro();
@@ -189,7 +192,7 @@ public class PlayScene : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Escape))
             {
-                SceneManager.LoadScene("2_CharacterList");
+                BackButton();
             }
         }
     }

@@ -24,7 +24,7 @@ public class CreateCharacterScene : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Escape))
             {
-                Application.Quit();  // 씬 종료
+                OnClickBack();
             }
         }
     }
