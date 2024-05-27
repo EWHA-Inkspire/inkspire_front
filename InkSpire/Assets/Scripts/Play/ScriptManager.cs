@@ -296,6 +296,7 @@ public class ScriptManager : MonoBehaviour
     public void SetScriptInfo(GetScriptInfo script_info)
     {
         script.SetScriptInfo(script_info);
+        achivement = script_info.achivement;
     }
 
     public void SetGoalId(int id, int chapter)
