@@ -35,6 +35,7 @@ public class GetScriptInfo
     public string genre;
     public string worldDetail;
     public string intro;
+    public string achievement;
 }
 
 [Serializable]
