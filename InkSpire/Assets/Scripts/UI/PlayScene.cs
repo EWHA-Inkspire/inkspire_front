@@ -33,10 +33,13 @@ public class PlayScene : MonoBehaviour
     }
 
     void Start(){
-        if(PlayerPrefs.GetInt("PlayTutorialDone") == 1)
+        if(PlayerPrefs.GetInt("PlayTutorialDone") != 0 && PlayerPrefs.GetInt("Call API") == 1)
         {
             LoadPlayScene();
             PrintIntro();
+        } else if (PlayerPrefs.GetInt("PlayTutorialDone") != 0)
+        {
+            LoadPlayScene();
         }
     }
 
@@ -189,7 +192,7 @@ public class PlayScene : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Escape))
             {
-                SceneManager.LoadScene("2_CharacterList");
+                BackButton();
             }
         }
     }
@@ -214,5 +217,10 @@ public class PlayScene : MonoBehaviour
     public void BackButton()
     {
         SceneManager.LoadScene("2_CharacterList");
+        PlayerPrefs.DeleteKey("script_id");
+        PlayerPrefs.DeleteKey("character_id");
+        PlayerPrefs.DeleteKey("character_name");
+
+        ScriptManager.script_manager.SetInitScript(false);
     }
 }
