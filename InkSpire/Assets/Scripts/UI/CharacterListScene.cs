@@ -25,7 +25,7 @@ public class CharacterListScene : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Escape))
             {
-                SceneManager.LoadScene("1_Start");
+                OnClickBack();
             }
         }
     }

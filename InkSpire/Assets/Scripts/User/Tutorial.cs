@@ -57,7 +57,11 @@ public class Tutorial : MonoBehaviour
             PlayerPrefs.Save();
             gameObject.SetActive(false);
             
-            if(playScene != null)
+            if(playScene != null && PlayerPrefs.GetInt("Call API") == 1)
+            {
+                playScene.LoadPlayScene();
+            }
+            else if(playScene != null)
             {
                 playScene.LoadPlayScene();
                 playScene.PrintIntro();
