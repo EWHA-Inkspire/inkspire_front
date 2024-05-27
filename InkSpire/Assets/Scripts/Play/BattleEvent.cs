@@ -380,7 +380,7 @@ public class BattleEvent : MonoBehaviour
         {
             int mob_HP = enm_stat[i].GetStatAmount(StatType.Hp);
             hp_sum += mob_HP;
-            if (enm_stat[i].GetStatAmount(StatType.Hp) == 0 && !is_dead[i])
+            if (enm_stat[i].GetStatAmount(StatType.Hp) <= 0 && !is_dead[i])
             {
                 // 적 처치 메시지 출력
                 AppendMsg("DEFEAT>> " + GetMobName(i) + " 처치!!");
@@ -388,13 +388,13 @@ public class BattleEvent : MonoBehaviour
             }
         }
 
-        if (p_manager.GetStatAmount(StatType.Hp) == 0)
+        if (p_manager.GetStatAmount(StatType.Hp) <= 0)
         {
             // 패배
             EndBattle(1);
             return;
         }
-        else if (hp_sum == 0)
+        else if (hp_sum <= 0)
         {
             // 승리
             EndBattle(0);
