@@ -96,7 +96,6 @@ public class PlayScene : MonoBehaviour
 
     public void LoadChapter(bool is_new){
         int idx = ScriptManager.script_manager.GetViewChap();
-        Debug.Log("init idx: " + idx);
         Changechap(idx);
 
         for(int j = 0; j<4; j++){
@@ -120,7 +119,6 @@ public class PlayScene : MonoBehaviour
         place_list.transform.GetChild(3).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start Point\n"+s_manager.GetPlace(0).place_name;
 
         if(idx!=ScriptManager.script_manager.GetCurrChap()){
-            Debug.Log("idx: "+idx+"\tCurrChap: "+ScriptManager.script_manager.GetCurrChap());
             place_list.transform.GetChild(0).GetComponent<Button>().interactable = false;
             place_list.transform.GetChild(1).GetComponent<Button>().interactable = false;
             place_list.transform.GetChild(2).GetComponent<Button>().interactable = false;

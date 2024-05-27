@@ -90,13 +90,8 @@ ex 3)
         event_string = event_string.Replace("도입: ", "#");
         event_string = event_string.Replace("성공: ", "#");
         event_string = event_string.Replace("실패: ", "#");
-        Debug.Log(">>이벤트 생성 결과\n" + event_string);
 
         event_arr = event_string.Split('#');
-        for (int i = 0; i < event_arr.Length; i++)
-        {
-            Debug.Log("event_arr[" + i + "]: " + event_arr[i]);
-        }
         
         title = event_arr[1].Trim('\n');
         intro = event_arr[2].Trim('\n');
