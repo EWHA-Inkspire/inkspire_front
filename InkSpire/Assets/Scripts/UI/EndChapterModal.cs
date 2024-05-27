@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class EndChapterModal : MonoBehaviour
 {
     [SerializeField] private GameObject end_button;
-    [SerializeField] private ButtonTextChange buttonTextChange;
     public void OnClickNextChapter(Play play)
     {
         end_button.SetActive(false);
