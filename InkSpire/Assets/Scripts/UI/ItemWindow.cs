@@ -89,7 +89,10 @@ public class ItemWindow : MonoBehaviour
                 slots[target_idx].DelSprites();
                 break;
             case ItemType.Mob:
-                // Mob 사용시 스탯 늘려줌??
+                battle.AppendMsg(">> 아이템 사용: 행운력 증가(+"+target_item.stat.ToString()+")\n");
+                PlayerStatManager.playerstat
+                .SetStatAmount(StatType.Luck, PlayerStatManager.playerstat.GetStatAmount(StatType.Luck)+target_item.stat);
+                slots[target_idx].DelSprites();
                 break;
             case ItemType.Report:
                 battle.AppendMsg(">> 보고서 아이템은 사용할 수 없습니다.\n");
