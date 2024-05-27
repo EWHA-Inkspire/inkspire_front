@@ -45,5 +45,8 @@ public class CreateCharacterScene : MonoBehaviour
     public void OnClickBack()
     {
         SceneManager.LoadScene("2_CharacterList");
+        PlayerPrefs.DeleteKey("script_id");
+        PlayerPrefs.DeleteKey("character_id");
+        PlayerPrefs.DeleteKey("character_name");
     }
 }

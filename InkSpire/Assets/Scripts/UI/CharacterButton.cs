@@ -20,6 +20,7 @@ public class CharacterButton : MonoBehaviour
     {
         chapter_list.SetActive(true);
         // CharacterListModal 컴포넌트를 찾아서 SetChapter 함수 호출
+        Debug.Log("char_id: " + char_id);
         chapter_list.GetComponent<CharacterListModal>().SetChapter(character_name.text, char_id);
         PlayerPrefs.SetInt("character_id", char_id);
     }
