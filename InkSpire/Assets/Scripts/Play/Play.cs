@@ -14,6 +14,7 @@ public class Play : MonoBehaviour
     [SerializeField] private Button send_button;
     [SerializeField] private Button look_around_button;
     [SerializeField] private GameObject map_modal;
+    [SerializeField] private ButtonTextChange buttonTextChange;
 
 
     private List<ChatMessage> messages = new();
@@ -312,5 +313,6 @@ Narrator (내레이터):
         text_scroll.InitStoryObj(messages);
 
         map_modal.SetActive(true);
+        buttonTextChange.InitButton();
     }
 }

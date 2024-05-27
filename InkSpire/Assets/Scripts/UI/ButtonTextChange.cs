@@ -12,17 +12,26 @@ public class ButtonTextChange : MonoBehaviour
 
     void Start()
     {
+        // 초기 버튼의 텍스트 색상 설정
+        InitButton();
+    }
+
+    public void InitButton()
+    {
+        lastClickedButton = null;
         buttons = GetComponentsInChildren<Button>();
         buttonTexts = GetComponentsInChildren<TextMeshProUGUI>();
 
         foreach (Button button in buttons)
         {
+            Debug.Log(button.name);
             button.onClick.AddListener(() => OnClickButton_ChangeColor(button));
         }
 
         // 초기 버튼의 텍스트 색상 설정
         foreach (TextMeshProUGUI buttonText in buttonTexts)
         {
+            Debug.Log(buttonText.text);
             buttonText.color = Color.black;
         }
     }
