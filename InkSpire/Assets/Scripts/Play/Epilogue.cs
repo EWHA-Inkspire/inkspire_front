@@ -47,7 +47,7 @@ public class Epilogue : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Escape))
             {
-                SceneManager.LoadScene("2_CharacterList");
+                OnClickBack();
             }
         }
     }
@@ -236,9 +236,16 @@ public class Epilogue : MonoBehaviour
         PlayerPrefs.DeleteKey("script_id");
         PlayerPrefs.DeleteKey("character_id");
         PlayerPrefs.DeleteKey("character_name");
+
+        ScriptManager.script_manager.SetInitScript(false);
     }
 
     public void OnClickStart(){
         SceneManager.LoadScene("1_Start");
+        PlayerPrefs.DeleteKey("script_id");
+        PlayerPrefs.DeleteKey("character_id");
+        PlayerPrefs.DeleteKey("character_name");
+
+        ScriptManager.script_manager.SetInitScript(false);
     }
 }

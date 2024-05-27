@@ -14,7 +14,7 @@ public class Login : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Escape))
             {
-                SceneManager.LoadScene("1_Start");
+                OnClickBack();
             }
         }
     }
