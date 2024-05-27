@@ -72,7 +72,6 @@ public class ItemWindow : MonoBehaviour
 
         int inventory_size = InventoryManager.i_manager.GetInventorySize();
         int idx = Mathf.Max(0, inventory_size);
-        Debug.Log("slots 사이즈: " + slots.Count + ", 인벤토리 사이즈: " + inventory_size + ", idx: " + idx);
         slots[idx].SetItem(item);
         InventoryManager.i_manager.AddItem(item);
     }

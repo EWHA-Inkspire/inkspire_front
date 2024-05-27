@@ -115,29 +115,17 @@ public class PlayAPI : MonoBehaviour
         CharacterStatInfo stat_info = new(stats.GetStatAmount(StatType.Attack), stats.GetStatAmount(StatType.Defence), stats.GetStatAmount(StatType.Luck), stats.GetStatAmount(StatType.Mental), stats.GetStatAmount(StatType.Dexterity), stats.GetStatAmount(StatType.Hp));
         string json = JsonUtility.ToJson(stat_info);
         
-        StartCoroutine(APIManager.api.PutRequest<Null>("/characters/"+character_id+"/stat", json, (response) => {
-            Debug.Log(response.success);
-        }));
+        StartCoroutine(APIManager.api.PutRequest<Null>("/characters/"+character_id+"/stat", json, (response) => {}));
     }
 
     public void UpdateGoalSuccess(int goal_id)
     {
-        StartCoroutine(APIManager.api.PutRequest<Goal>("/goals/" + goal_id + "/success", null, (response) => {
-            if (response.success)
-            {
-                Debug.Log("Goal Success");
-            }
-        }));
+        StartCoroutine(APIManager.api.PutRequest<Goal>("/goals/" + goal_id + "/success", null, (response) => {}));
     }
 
     public void UpdateCurrPlace(int place_id)
     {
-        StartCoroutine(APIManager.api.PutRequest<Place>("/maps/" + PlayerPrefs.GetInt("script_id") + "/" + place_id + "/visited", null, (response) => {
-            if (response.success)
-            {
-                Debug.Log("Place Updated");
-            }
-        }));
+        StartCoroutine(APIManager.api.PutRequest<Place>("/maps/" + PlayerPrefs.GetInt("script_id") + "/" + place_id + "/visited", null, (response) => {}));
     }
 
     public void GetInventory()
@@ -171,22 +159,12 @@ public class PlayAPI : MonoBehaviour
         };
 
         string json = JsonUtility.ToJson(postInventory);
-        StartCoroutine(APIManager.api.PostRequest<Item>("/inventory", json, (response) => {
-            if (response.success)
-            {
-                Debug.Log("Item Added");
-            }
-        }));
+        StartCoroutine(APIManager.api.PostRequest<Item>("/inventory", json, (response) => {}));
     }
 
     public void DeleteInventory(int item_id)
     {
-        StartCoroutine(APIManager.api.DeleteRequest<Item>("/inventory/" + PlayerPrefs.GetInt("character_id") + "/" + item_id, (response) => {
-            if (response.success)
-            {
-                Debug.Log("Item Deleted");
-            }
-        }));
+        StartCoroutine(APIManager.api.DeleteRequest<Item>("/inventory/" + PlayerPrefs.GetInt("character_id") + "/" + item_id, (response) => {}));
     }
 
     public void InitSaveIdx()

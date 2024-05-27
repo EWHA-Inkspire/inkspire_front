@@ -88,8 +88,6 @@ public class Script
             }
         });
 
-        Debug.Log("IntroImageGPT: " + response);
-
         IntroImageGPT(response, 1);
     }
 

@@ -199,12 +199,7 @@ public class ScriptAPI : MonoBehaviour
     public void UpdateAchievement(string achievement)
     {
         string json = JsonUtility.ToJson(new Achivement { achievement = achievement });
-        StartCoroutine(APIManager.api.PutRequest<Null>("/characters/" + PlayerPrefs.GetInt("character_id") + "/achievement", json, (response) => {
-            if (response.success)
-            {
-                Debug.Log("Achievement Updated");
-            }
-        }));
+        StartCoroutine(APIManager.api.PutRequest<Null>("/characters/" + PlayerPrefs.GetInt("character_id") + "/achievement", json, (response) => {}));
     }
 
     // 챕터별 이미지 정보 저장
@@ -225,12 +220,7 @@ public class ScriptAPI : MonoBehaviour
     // 게임 클리어 업데이트
     public void UpdateGameClear()
     {
-        StartCoroutine(APIManager.api.PutRequest<Null>("/scripts/"+PlayerPrefs.GetInt("script_id")+"/isEnd", "", (response) => {
-            if (response.success)
-            {
-                Debug.Log("Game Clear Updated");
-            }
-        }));
+        StartCoroutine(APIManager.api.PutRequest<Null>("/scripts/"+PlayerPrefs.GetInt("script_id")+"/isEnd", "", (response) => {}));
     }
 
     private string ConvertGoalType(int type)

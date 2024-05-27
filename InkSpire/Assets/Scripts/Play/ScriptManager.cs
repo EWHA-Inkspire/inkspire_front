@@ -103,7 +103,6 @@ public class ScriptManager : MonoBehaviour
 
         achivement = await script.AchivementGPT();
         ScriptAPI.script_api.UpdateAchievement(achivement);
-        Debug.Log("업적명:" + achivement);
         await script.IntroGPT(pro_npc, anta_npc, map[0].place_name, map[0].place_info, this.char_name);
         ScriptAPI.script_api.PutIntroInfo(script);
         init_script = true;
@@ -154,7 +153,6 @@ public class ScriptManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             // 목표 정보 전달
-            Debug.Log("장소 idx: "+(place_base + i));
             await items[place_base + i].InitItem(script, goals[curr_chapter], game_events[place_base + i].type);
             await map[place_base + i].InitPlace(place_base + i, script, items[place_base + i], game_events[place_base + i].type, place_names);
             place_names[place_base + i] = map[place_base + i].place_name;
@@ -348,7 +346,6 @@ public class ScriptManager : MonoBehaviour
         }
 
         curr_chapter = map_list.maps[^1].chapter - 1;
-        Debug.Log("현재 챕터: "+curr_chapter);
     }
 
     public void SetItemId(int id, int map_id)

@@ -28,7 +28,6 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(Item item)
     {
-        Debug.Log("아이템 추가: \n" + item.name + ", " + item.id);
         inventory.Add(item);
 
         // 인벤토리 아이템 등록

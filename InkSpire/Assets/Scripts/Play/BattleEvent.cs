@@ -520,7 +520,6 @@ public class BattleEvent : MonoBehaviour
         if(result==0){
             result_str = "WIN\n";
             Item map_item = ScriptManager.script_manager.GetCurrItem();
-            Debug.Log("맵 아이템 이름:" + map_item.name);
             item_window.AddSlotPrefab(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
 

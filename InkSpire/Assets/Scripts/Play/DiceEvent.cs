@@ -34,12 +34,10 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
         ones_dice.text = "00";
 
         req_value = val;
-        Debug.Log(">>set dice event call");
     }
 
     public void RollDice()
     {
-        Debug.Log(">>roll dice event call");
         int ones = Random.Range(0, 10);
         int tens = Random.Range(0, 10);
 
@@ -76,7 +74,6 @@ public class DiceEvent : MonoBehaviour, IPointerClickHandler
         {
             result_txt.text = "<color=#074AB0>Success</color>";
             result_msg.Content += "성공";
-            Debug.Log("맵 아이템 이름:" + map_item.name);
             item_window.AddSlotPrefab(map_item);
             ScriptManager.script_manager.SetPlaceClear(true);
             play_manager.AddToMessagesGPT(result_msg);

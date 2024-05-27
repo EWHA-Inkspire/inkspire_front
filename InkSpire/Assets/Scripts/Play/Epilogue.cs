@@ -107,12 +107,10 @@ public class Epilogue : MonoBehaviour
         });
 
         ImageData image = await GptManager.gpt.CallDALLE(response) ?? new ImageData();
-        Debug.Log(">>이미지 url: "+image.Url);
 
         ScriptAPI.script_api.GetImageTexture(image.Url, (texture) => {
             image_texture = texture;
             text_scroll.ApplyTextureToGameObject(image_texture);
-            Debug.Log(">>이미지 텍스쳐: "+texture);
         });
 
         text_scroll.AppendMsg(new ChatMessage() { Role = "assistant", Content = epilogue }, true);
@@ -181,7 +179,6 @@ public class Epilogue : MonoBehaviour
 
     public async Task FailOutroGPT(Npc pro_npc, Npc anta_npc, Script script)
     {
-        Debug.Log("FailOutroGPT");
         gpt_messages.Clear();
 
         var newMessage = new ChatMessage()

@@ -220,8 +220,6 @@ public class Goal
         obj_string = obj_string.Replace("챕터목표:", "#");
         obj_string = obj_string.Replace("챕터목표 설명:", "#");
 
-        Debug.Log(">>목표 생성 결과\n" + obj_string);
-
         obj_arr = obj_string.Split('#');
         type = int.Parse(obj_arr[1].Trim('\n'));
         title = obj_arr[2].Trim('\n');
