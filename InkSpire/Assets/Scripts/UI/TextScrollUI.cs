@@ -11,6 +11,17 @@ public class TextScrollUI : MonoBehaviour
     [SerializeField] private GameObject assi_chat;
     [SerializeField] private GameObject user_chat;
     private readonly float TYPING_SPEED = 0.03f;
+    private bool typingInterrupted = false;
+
+    private Coroutine typingCoroutine;
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
+        {
+            typingInterrupted = true;
+        }
+    }
 
     public void AppendMsg(ChatMessage msg, bool isTyping)
     {
@@ -21,12 +32,16 @@ public class TextScrollUI : MonoBehaviour
 
         if (msg.Role == "assistant" && isTyping)
         {
-            StartCoroutine(TypeMessage(msg.Content));
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+            }
+            typingCoroutine = StartCoroutine(TypeMessage(msg.Content));
         }
         else if (msg.Role == "assistant")
         {
             // msg.Content를 \n\n으로 나눠서 각각 생성
-            string[] split_msg = msg.Content.Split(new[] { "\n\n" }, System.StringSplitOptions.None);
+            string[] split_msg = msg.Content.Split("\n\n");
             foreach (var split in split_msg)
             {
                 GameObject new_chat = Instantiate(assi_chat, scroll.content);
@@ -46,6 +61,7 @@ public class TextScrollUI : MonoBehaviour
 
     private IEnumerator TypeMessage(string message)
     {
+        typingInterrupted = false; // Reset interruption flag
         string[] splitMessages = message.Split("\n\n");
 
         foreach (string splitMessage in splitMessages)
@@ -53,8 +69,27 @@ public class TextScrollUI : MonoBehaviour
             TextMeshProUGUI textComponent = Instantiate(assi_chat, scroll.content).GetComponentInChildren<TextMeshProUGUI>();
             textComponent.text = "";
 
+            if (typingInterrupted)
+            {
+                textComponent.text = splitMessage;
+
+                // 스크롤 위치 업데이트
+                LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
+                StartCoroutine(UpdateScrollPosition());
+            }
+
             foreach (char letter in splitMessage.ToCharArray())
             {
+                if (typingInterrupted)
+                {
+                    textComponent.text += splitMessage[textComponent.text.Length..];
+
+                    // 스크롤 위치 업데이트
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
+                    StartCoroutine(UpdateScrollPosition());
+                    break;
+                }
+
                 textComponent.text += letter;
                 yield return new WaitForSeconds(TYPING_SPEED);
                 scroll.verticalNormalizedPosition = 0f;
@@ -62,6 +97,7 @@ public class TextScrollUI : MonoBehaviour
 
             yield return new WaitForSeconds(TYPING_SPEED); // 각 메시지의 끝에 추가 딜레이
         }
+        typingInterrupted = false; // Reset interruption flag after typing is complete
     }
 
     private IEnumerator UpdateScrollPosition()
