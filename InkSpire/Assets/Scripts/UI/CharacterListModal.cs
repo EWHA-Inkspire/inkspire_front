@@ -49,8 +49,19 @@ public class CharacterListModal : MonoBehaviour
                 case 5:
                     chapter_5.SetActive(true);
                     break;
-                
             }
         }
+    }
+
+    public void CloseButton()
+    {
+        PlayerPrefs.DeleteKey("character_id");
+        PlayerPrefs.DeleteKey("character_name");
+
+        chapter_1.SetActive(false);
+        chapter_2.SetActive(false);
+        chapter_3.SetActive(false);
+        chapter_4.SetActive(false);
+        chapter_5.SetActive(false);
     }
 }
