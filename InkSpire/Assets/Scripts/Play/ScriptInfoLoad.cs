@@ -86,17 +86,6 @@ public class ScriptInfoLoad : MonoBehaviour
             return;
         }
         ScriptManager.script_manager.SetGoalList(response.data);
-
-        // 챕터 순으로 정렬
-        response.data.goals.Sort((a, b) => a.chapter.CompareTo(b.chapter));
-
-        // 목표들 중 성공하지 못한 목표가 있는 챕터를 현재 챕터로 설정
-        foreach (var goal in response.data.goals) {
-            if (!goal.success) {
-                ScriptManager.script_manager.SetCurrChap(goal.chapter - 1);
-                break;
-            }
-        }
     }
 
     private void ProcessNpcList(Response<GetNpcList> response) {

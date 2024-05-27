@@ -83,9 +83,9 @@ public class ItemWindow : MonoBehaviour
 
         switch (target_item.type) {
             case ItemType.Recover:
-                battle.AppendMsg(">> 아이템 사용: 체력 회복(+"+target_item.stat.ToString()+")\n");
+                battle.AppendMsg(">> 아이템 사용: 체력 회복(+"+(target_item.stat*10).ToString()+")\n");
                 PlayerStatManager.playerstat
-                .SetStatAmount(StatType.Hp, PlayerStatManager.playerstat.GetStatAmount(StatType.Hp)+target_item.stat);
+                .SetStatAmount(StatType.Hp, PlayerStatManager.playerstat.GetStatAmount(StatType.Hp)+(target_item.stat*10));
                 slots[target_idx].DelSprites();
                 break;
             case ItemType.Mob:

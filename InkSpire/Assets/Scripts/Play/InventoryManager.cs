@@ -50,13 +50,13 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        inventory.RemoveAt(target_idx);
-        // 인벤토리 아이템 삭제
-        PlayAPI.play_api.DeleteInventory(inventory[target_idx].id);
+        DeleteTargetItem();
     }
 
     public void DeleteTargetItem()
     {
+        // 인벤토리 아이템 삭제
+        PlayAPI.play_api.DeleteInventory(inventory[target_idx].id);
         inventory.RemoveAt(target_idx);
     }
 
