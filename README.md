@@ -117,7 +117,7 @@
 
 ## 🖇️ Docs
 
-🫧 [기획]()
+🫧 [기획](https://wiry-elderberry-3bf.notion.site/Inkspire-81453fd99d9548a381f6a23cf9925279?pvs=4)
 
 👩🏻‍💻 [그라운드 룰](https://wiry-elderberry-3bf.notion.site/217575c6650a40c79933bbf52f3b1f8c?pvs=4)
 
