@@ -82,11 +82,12 @@
 
 ### Environment
 ![Intellij](https://img.shields.io/badge/IntelliJ_IDEA-EA4065.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)
+![Unity](https://img.shields.io/badge/Unity-100000?style=for-the-badge&logo=unity&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
 ![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)             
 
 ### FrontEnd
-![Unity](https://img.shields.io/badge/Unity-100000?style=for-the-badge&logo=unity&logoColor=white)
+![C#](https://img.shields.io/badge/-C%23-000000?style=for-the-badge&logo=Csharp&logoColor=white)
 
 ### BackEnd
 ![SpringBoot](https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=Springboot&logoColor=white)
