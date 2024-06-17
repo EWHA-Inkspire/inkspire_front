@@ -30,6 +30,49 @@
 
 <br/>
 
+## Getting Started
+- 제출된 **apk 파일을 설치**하거나 **프로젝트를 직접 빌드**하여 실행할 수 있습니다. 
+### Build:
+- 현재 레포지토리를 클론하여 로컬에서 빌드할 수 있습니다.
+```bash
+git clone https://github.com/EWHA-Inkspire/inkspire_front.git
+```
+- 빌드를 진행하기 위해서는 Unity Hub와 Unity, VS Code\(혹은 VisualStudio)의 설치가 필요합니다.
+  - [Unity Hub 다운로드](https://unity.com/kr/download)
+  - [Unity 다운로드](https://unity.com/kr/releases/editor/archive) \(버전명 2021.3.15f1)
+
+0. 프로젝트 폴더 내 두 C# 스크립트에 localhost 주소와 gpt-api key 추가 \(그로쓰 Git-Repo URL 폼에 별도 제출)
+![0-1](https://github.com/EWHA-Inkspire/inkspire_front/assets/96673257/d28cc3ee-2b4f-4f9f-b99a-6af6f20968bc)
+![0-2](https://github.com/EWHA-Inkspire/inkspire_front/assets/96673257/1d766830-db73-486b-a7d2-5d129d80d097)
+
+1. Unity Hub 실행 및 좌측 탭에서 Project 선택 후 우상단 "Add"버튼 옆 역삼각형 버튼 클릭
+![1](https://github.com/EWHA-Inkspire/inkspire_front/assets/96673257/3af464a7-75a4-4858-a3f0-4a045af340a3)
+
+2. "Add project from disk"버튼 클릭 후 프로젝트 레포지토리 폴더 내 "InkSpire" 폴더 선택, "Add Project"버튼 클릭
+![2](https://github.com/EWHA-Inkspire/inkspire_front/assets/96673257/82dc8cf6-0391-4117-b1c0-17a96b916331)
+![3](https://github.com/EWHA-Inkspire/inkspire_front/assets/96673257/9fad50b0-ca95-4c54-89a2-c3c1fd00c3ea)
+
+3. Unity Hub에 추가된 "InkSpire" 프로젝트 실행
+![4](https://github.com/EWHA-Inkspire/inkspire_front/assets/96673257/48277834-bf36-42e9-b4a3-b3903219d5ab)
+
+4. Unity 상단 메뉴 "File" 중 "Build Settings..." 선택
+![5](https://github.com/EWHA-Inkspire/inkspire_front/assets/96673257/20c5c102-6065-49f2-bfa4-ce62cadd00e1)
+
+5. 팝업창의 "Android" 선택, "Switch Platform" 버튼 클릭 후 팝업창을 닫으면 플랫폼 변경 Unity에서 자동 진행
+![6](https://github.com/EWHA-Inkspire/inkspire_front/assets/96673257/a3dd3c68-2ffa-4a6d-a8de-5d241eff7ca3)
+
+6. 다시 항목4의 빌드 셋팅 창을 연 후 "Build" 버튼 클릭 후 apk파일을 저장할 경로 지정
+![7](https://github.com/EWHA-Inkspire/inkspire_front/assets/96673257/44519e8d-00b3-41c9-ae79-e139bfd8d147)
+
+### Install:
+1. 안드로이드OS 모바일 환경에 apk파일 다운로드 후 실행
+2. 팝업: "이 앱을 설치하시겠습니까?" -> "설치" 선택
+3. 팝업: "출처를 알 수 없는 앱 설치" -> "무시하고 설치" 선택
+4. Google Play 프로텍트 팝업: "앱 검사 권장됨" -> "세부정보 더보기" 클릭 -> "검사 없이 설치" 선택
+5. app 설치 확인 후 실행
+<br/>
+
+
 ## 📪 기능 소개
 ### 1. 개인화된 세계관 생성
 플레이어가 입력한 장르와 시간/공간적 배경에 따라 각기 다른 세계관을 기반으로 한 게임을 생성한다.
