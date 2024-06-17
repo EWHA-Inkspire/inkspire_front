@@ -63,7 +63,11 @@ public class Epilogue : MonoBehaviour
         else{
             succ_group.gameObject.SetActive(false);
             fail_group.gameObject.SetActive(true);
-            for(int i = 0; i<Const.CHAPTER; i++){
+            for(int i = 0; i<5; i++){
+                if(i>=Const.CHAPTER){
+                    fail_group.transform.GetChild(i+3).gameObject.SetActive(false);
+                    continue;
+                }
                 if(!ScriptManager.script_manager.GetGoal(i).GetClear()){
                     if(return_chap==-1){
                         return_chap = i;

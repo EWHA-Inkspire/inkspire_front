@@ -7,12 +7,11 @@ public class StatusGraph : MonoBehaviour
     [SerializeField] private Material radarMaterial;
     [SerializeField] private GameObject mesh_object;
 
-
     private Stats stats;
     private CanvasRenderer radarMeshCanvasRenderer;
 
     private void Awake(){
-        radarMeshCanvasRenderer = mesh_object.GetComponent<CanvasRenderer>();
+        SetMeshObject(mesh_object);
     }
 
     public void SetStats(Stats stats){
@@ -25,21 +24,42 @@ public class StatusGraph : MonoBehaviour
         UpdateStatsVisual();
     }
 
+    public void SetMeshObject(GameObject newMeshObject){
+        mesh_object = newMeshObject;
+        radarMeshCanvasRenderer = mesh_object?.GetComponent<CanvasRenderer>();
+
+        if (radarMeshCanvasRenderer == null && mesh_object != null) {
+            Debug.LogWarning("CanvasRenderer를 찾을 수 없습니다.");
+        }
+    }
+
     private void UpdateStatsVisual(){
+        // radarMeshCanvasRenderer가 null인지 확인하고 다시 설정
+        if (radarMeshCanvasRenderer == null) {
+            if (mesh_object != null) {
+                radarMeshCanvasRenderer = mesh_object.GetComponent<CanvasRenderer>();
+            }
+
+            if (radarMeshCanvasRenderer == null) {
+                Debug.LogWarning("CanvasRenderer를 찾을 수 없습니다. UpdateStatsVisual을 중단합니다.");
+                return;
+            }
+        }
+
         Mesh mesh = new Mesh();
 
         Vector3[] vertices = new Vector3[6];
         Vector2[] uv = new Vector2[6];
         int[] triangles = new int[3*5];
 
-        float angle = 360f/5;
+        float angle = 360f / 5;
         float radarChartSize = 172f;
 
-        Vector3 vertex_luk = Quaternion.Euler(0,0,-angle*0)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(StatType.Luck);
-        Vector3 vertex_def = Quaternion.Euler(0,0,-angle*1)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(StatType.Defence);
-        Vector3 vertex_int = Quaternion.Euler(0,0,-angle*2)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(StatType.Mental);
-        Vector3 vertex_dex = Quaternion.Euler(0,0,-angle*3)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(StatType.Dexterity);
-        Vector3 vertex_atk = Quaternion.Euler(0,0,-angle*4)*Vector3.up*radarChartSize*stats.GetStatAmountNormalized(StatType.Attack);
+        Vector3 vertex_luk = Quaternion.Euler(0, 0, -angle * 0) * Vector3.up * radarChartSize * stats.GetStatAmountNormalized(StatType.Luck);
+        Vector3 vertex_def = Quaternion.Euler(0, 0, -angle * 1) * Vector3.up * radarChartSize * stats.GetStatAmountNormalized(StatType.Defence);
+        Vector3 vertex_int = Quaternion.Euler(0, 0, -angle * 2) * Vector3.up * radarChartSize * stats.GetStatAmountNormalized(StatType.Mental);
+        Vector3 vertex_dex = Quaternion.Euler(0, 0, -angle * 3) * Vector3.up * radarChartSize * stats.GetStatAmountNormalized(StatType.Dexterity);
+        Vector3 vertex_atk = Quaternion.Euler(0, 0, -angle * 4) * Vector3.up * radarChartSize * stats.GetStatAmountNormalized(StatType.Attack);
 
         int idx_luk = 1;
         int idx_def = 2;
@@ -86,7 +106,6 @@ public class StatusGraph : MonoBehaviour
         mesh.triangles = triangles;
 
         radarMeshCanvasRenderer.SetMesh(mesh);
-        radarMeshCanvasRenderer.SetMaterial(radarMaterial,null);
-        
+        radarMeshCanvasRenderer.SetMaterial(radarMaterial, null);
     }
 }
