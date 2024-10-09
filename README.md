@@ -15,7 +15,7 @@
 |      개발(FE), UI         |      개발(FE)       |          개발(FE,BE)         |                                                                                                            
 | :------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | <img width="160px" src="https://avatars.githubusercontent.com/u/95266994?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/96673257?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/90602694?v=4"/> |
-| [@billy0904](https://github.com/billy0904) | [shl4869](https://github.com/shl4869) | [@SuHyeon00](https://github.com/SuHyeon00) |
+| [@billy0904](https://github.com/billy0904) | [@cottonlee331](https://github.com/cottonlee331) | [@SuHyeon00](https://github.com/SuHyeon00) |
 | 이가빈 | 이소민 | 오수현 |
 
 </div>
